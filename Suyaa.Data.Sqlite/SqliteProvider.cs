@@ -16,7 +16,7 @@ namespace Suyaa.Data.Sqlite
         /// <summary>
         /// 查询供应商
         /// </summary>
-        public IDatabaseQueryProvider QueryProvider { get; }
+        public IDbQueryProvider QueryProvider { get; }
 
         /// <summary>
         /// PostgreSQL数据库语法供应器

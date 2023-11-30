@@ -20,7 +20,7 @@ namespace Suyaa.EFCore.SqlServer.Helpers
         /// <returns></returns>
         public static DbContextOptions GetSqliteContextOptions(this DbConnectionDescriptor descriptor)
         {
-            if (descriptor.DatabaseType != DbTypes.MicrosoftSqlServer) throw new DbException($"DatabaseType '{descriptor.DatabaseType}' not supported.");
+            if (descriptor.DatabaseType != DatabaseType.MicrosoftSqlServer) throw new DbException($"DatabaseType '{descriptor.DatabaseType}' not supported.");
             // 添加数据库上下文配置
             var optionsBuilder = new DbContextOptionsBuilder<DbDescriptorContext>();
             optionsBuilder.UseSqlite(descriptor.ToConnectionString());

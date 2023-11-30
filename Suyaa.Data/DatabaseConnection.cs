@@ -40,39 +40,6 @@ namespace Suyaa.Data
         #region [=====函数=====]
 
         /// <summary>
-        /// 获取受支持的标准数据库供应商
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static IDatabaseProvider GetDatabaseProvider(DbTypes type)
-        {
-            string providerName = string.Empty;
-            string providerDllPath = string.Empty;
-            switch (type)
-            {
-                case DbTypes.PostgreSQL:
-                    providerName = "Suyaa.Data.PostgreSQL.NpgsqlProvider";
-                    providerDllPath = "Suyaa.Data.PostgreSQL";
-                    break;
-                case DbTypes.Sqlite:
-                case DbTypes.Sqlite3:
-                    providerName = "Suyaa.Data.Sqlite.SqliteProvider";
-                    providerDllPath = "Suyaa.Data.Sqlite";
-                    break;
-                default: throw new DbException($"不支持的数据库类型\'{type.ToString()}\'");
-            }
-            string dllPath = sy.IO.GetExecutionPath(providerDllPath);
-            Type? providerType = sy.Assembly.FindType(providerName, dllPath);
-            if (providerType is null)
-            {
-                sy.IO.CreateFolder(dllPath);
-                throw new DbException($"未找到供应商\'{providerName}\'");
-            }
-            //return (IDatabaseProvider)Activator.CreateInstance(providerType);
-            return providerType.Create<IDatabaseProvider>();
-        }
-
-        /// <summary>
         /// 连接数据库
         /// </summary>
         public void Open()
@@ -518,10 +485,10 @@ namespace Suyaa.Data
         /// </summary>
         /// <param name="type"></param>
         /// <param name="connectionString"></param>
-        public DatabaseConnection(DbTypes type, string connectionString)
+        public DatabaseConnection(DatabaseType type, string connectionString)
         {
             // 设置数据库供应商
-            Provider = GetDatabaseProvider(type);
+            Provider = type.GetDatabaseProvider();
             // 设置连接字符串
             ConnectionString = connectionString;
             // 设置基础连接

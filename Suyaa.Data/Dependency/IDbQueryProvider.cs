@@ -8,7 +8,7 @@ namespace Suyaa.Data.Dependency
     /// <summary>
     /// 数据库查询供应商
     /// </summary>
-    public interface IDatabaseQueryProvider
+    public interface IDbQueryProvider
     {
         /// <summary>
         /// 执行查询

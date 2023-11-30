@@ -5,7 +5,7 @@ namespace Suyaa.Data
     /// <summary>
     /// 数据库类型
     /// </summary>
-    public enum DbTypes : int
+    public enum DatabaseType : int
     {
         /// <summary>
         /// 未知

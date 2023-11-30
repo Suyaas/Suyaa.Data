@@ -50,16 +50,16 @@ namespace Suyaa.Data
             // 获取数据库类型
             this.DatabaseType = dbType.ToLower() switch
             {
-                "sqlite" => DbTypes.Sqlite,
-                "sqlite3" => DbTypes.Sqlite3,
-                "mssql" => DbTypes.MicrosoftSqlServer,
-                "sqlserver" => DbTypes.MicrosoftSqlServer,
-                "pqsql" => DbTypes.PostgreSQL,
-                "postgresql" => DbTypes.PostgreSQL,
-                "postgres" => DbTypes.PostgreSQL,
-                "mysql" => DbTypes.MySQL,
-                "access" => DbTypes.MicrosoftOfficeAccess,
-                "access12" => DbTypes.MicrosoftOfficeAccessV12,
+                "sqlite" => DatabaseType.Sqlite,
+                "sqlite3" => DatabaseType.Sqlite3,
+                "mssql" => DatabaseType.MicrosoftSqlServer,
+                "sqlserver" => DatabaseType.MicrosoftSqlServer,
+                "pqsql" => DatabaseType.PostgreSQL,
+                "postgresql" => DatabaseType.PostgreSQL,
+                "postgres" => DatabaseType.PostgreSQL,
+                "mysql" => DatabaseType.MySQL,
+                "access" => DatabaseType.MicrosoftOfficeAccess,
+                "access12" => DatabaseType.MicrosoftOfficeAccessV12,
                 _ => throw new DbException(string.Format("Unsupported database type '{0}'.", dbType)),
             };
             Name = name;
@@ -70,7 +70,7 @@ namespace Suyaa.Data
         /// </summary>
         /// <param name="name"></param>
         /// <param name="databaseType"></param>
-        public DbConnectionDescriptor(string name, DbTypes databaseType)
+        public DbConnectionDescriptor(string name, DatabaseType databaseType)
         {
             Name = name;
             DatabaseType = databaseType;
@@ -82,7 +82,7 @@ namespace Suyaa.Data
         /// <param name="name"></param>
         /// <param name="databaseType"></param>
         /// <param name="connectionString"></param>
-        public DbConnectionDescriptor(string name, DbTypes databaseType, string connectionString)
+        public DbConnectionDescriptor(string name, DatabaseType databaseType, string connectionString)
         {
             // 解析连接字符串
             ParseConnectionString(connectionString);
@@ -98,7 +98,7 @@ namespace Suyaa.Data
         /// <summary>
         /// 数据库类型
         /// </summary>
-        public DbTypes DatabaseType { get; }
+        public DatabaseType DatabaseType { get; }
         /// <summary>
         /// 连接字符串
         /// </summary>

@@ -12,7 +12,7 @@ namespace Suyaa.Data.Dependency
         /// <summary>
         /// 数据库类型
         /// </summary>
-        DbTypes Type { get; }
+        DatabaseType Type { get; }
 
         /// <summary>
         /// 供应类名称

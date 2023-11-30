@@ -6,12 +6,12 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.Data.Sqlite
+namespace Suyaa.Data.Oracle.Providers
 {
     /// <summary>
     /// Sqlite查询供应商
     /// </summary>
-    public class SqliteQueryProvider : IDbQueryProvider
+    public class OracleQueryProvider : IDbQueryProvider
     {
         /// <summary>
         /// 获取

@@ -1,4 +1,5 @@
 using Suyaa.Data;
+using Suyaa.Data.Helpers;
 using Xunit.Abstractions;
 
 namespace SuyaaTest.Oracle
@@ -30,14 +31,13 @@ namespace SuyaaTest.Oracle
         public void Connect()
         {
             // 定义数据
-            string connectionString = $"data source={sy.IO.GetExecutionPath("temp.db")}";
+            string connectionString = $"Data Source=(DESCRIPTION = (ADDRESS_LIST= (ADDRESS = (PROTOCOL = TCP)(HOST =172.16.30.121)(PORT = 1521))) (CONNECT_DATA = (SERVICE_NAME = mesdb)));User ID=mesdb;Password=mesdb";
             // 执行方法
-            using (DatabaseConnection conn = new DatabaseConnection(DbTypes.Oracle, connectionString))
-            {
-                conn.Open();
-            }
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, connectionString);
+            var repo = work.GetSqlRepository();
+            var table = repo.GetDataTable("SELECT * FROM PRODUCTFAMILY PF");
             // 返回结果
-            _output.WriteLine("OK");
+            _output.WriteLine("R:" + table.Rows.Count);
         }
     }
 }

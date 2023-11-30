@@ -13,7 +13,7 @@ namespace Suyaa.Data.Queries
     public class EntityQueryProvider : IQueryProvider
     {
         // 数据库查询供应商
-        private readonly IDatabaseQueryProvider _provider;
+        private readonly IDbQueryProvider _provider;
 
         /// <summary>
         /// 创建查询
@@ -63,7 +63,7 @@ namespace Suyaa.Data.Queries
         /// 实例查询供应商
         /// </summary>
         /// <param name="provider"></param>
-        public EntityQueryProvider(IDatabaseQueryProvider provider)
+        public EntityQueryProvider(IDbQueryProvider provider)
         {
             _provider = provider;
         }

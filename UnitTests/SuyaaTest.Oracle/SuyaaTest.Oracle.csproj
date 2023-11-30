@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Suyaa.Data.Oracle\Suyaa.Data.Oracle.csproj" />
+    <ProjectReference Include="..\..\Suyaa.Data.Oracle\Suyaa.Data.Oracle.csproj" />
   </ItemGroup>
 
 </Project>

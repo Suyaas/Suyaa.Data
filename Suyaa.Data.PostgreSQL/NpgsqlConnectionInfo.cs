@@ -16,7 +16,7 @@ namespace Suyaa.Data.PostgreSQL
         /// <summary>
         /// 获取数据库类型
         /// </summary>
-        public DbTypes Type => DbTypes.PostgreSQL;
+        public DatabaseType Type => DatabaseType.PostgreSQL;
 
         /// <summary>
         /// 获取数据库供应类
