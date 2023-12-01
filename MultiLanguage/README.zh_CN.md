@@ -19,6 +19,10 @@
 | Suyaa.EFCore.PostgreSQL | .Net 6            | PostgreSQL EFCore组件 | [![NuGet version](https://badge.fury.io/nu/Suyaa.EFCore.PostgreSQL.svg)](https://badge.fury.io/nu/Suyaa.EFCore.PostgreSQL) |
 | Suyaa.EFCore.Sqlite     | .Net 6            | Sqlite  EFCore组件    | [![NuGet version](https://badge.fury.io/nu/Suyaa.EFCore.Sqlite.svg)](https://badge.fury.io/nu/Suyaa.EFCore.Sqlite)         |
 
+## 产品架构
+
+![Product Architecture](https://github.com/Suyaas/Suyaa.Data/blob/main/Doc/orm.png)
+
 ## Nuget包下载
 
 所有的组件均可以访问<https://www.nuget.org/profiles/inmount>进行下载
