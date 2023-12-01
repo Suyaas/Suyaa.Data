@@ -68,8 +68,8 @@ namespace SuyaaTest.Oracle
             using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
             var repo = work.GetSqlRepository();
             DbParameters keys = new DbParameters();
-            keys["Name"] = "9528";
-            var productFamily = repo.GetData<ProductFamily>("SELECT * FROM PRODUCTFAMILY PF WHERE PF.PRODUCTFAMILYNAME = :NAME", keys);
+            keys["P_1"] = "9528";
+            var productFamily = repo.GetData<ProductFamily>("SELECT * FROM PRODUCTFAMILY PF WHERE PF.PRODUCTFAMILYNAME = :P_1", keys);
             // ·µ»Ø½á¹û
             _output.WriteLine("Name:" + productFamily?.ProductFamilyName);
         }

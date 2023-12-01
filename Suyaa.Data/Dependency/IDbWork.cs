@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Suyaa.Data.Descriptors;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
@@ -37,5 +38,11 @@ namespace Suyaa.Data.Dependency
         /// 生效事务
         /// </summary>
         Task CommitAsync();
+        /// <summary>
+        /// 获取实例描述
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        EntityDescriptor GetEntityDescriptor(Type type);
     }
 }
