@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Suyaa.Data
+namespace Suyaa.Data.Enums
 {
     /// <summary>
     /// 数据库类型

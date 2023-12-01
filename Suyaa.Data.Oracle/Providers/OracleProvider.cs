@@ -39,7 +39,9 @@ namespace Suyaa.Data.Oracle.Providers
         {
             var work = _dbWorkProvider.GetCurrentWork();
             if (work is null) throw new DbException("Current db work not found.");
-            return new OracleConnection(work.ConnectionDescriptor.ToConnectionString());
+            var dbc = new OracleConnection(work.ConnectionDescriptor.ToConnectionString());
+            dbc.Open();
+            return dbc;
         }
 
         /// <summary>

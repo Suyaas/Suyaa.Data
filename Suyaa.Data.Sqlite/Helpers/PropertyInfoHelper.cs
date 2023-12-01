@@ -25,20 +25,20 @@ namespace Suyaa.Data.Sqlite.Helpers
             {
                 switch (dbColumnTypeAttr.ColumnType)
                 {
-                    case DbColumnTypes.Unknow: return dbColumnTypeAttr.Name;
-                    case DbColumnTypes.Text:
-                    case DbColumnTypes.Varchar:
-                    case DbColumnTypes.Char:
+                    case DatabaseColumnType.Unknow: return dbColumnTypeAttr.Name;
+                    case DatabaseColumnType.Text:
+                    case DatabaseColumnType.Varchar:
+                    case DatabaseColumnType.Char:
                         return "TEXT";
-                    case DbColumnTypes.Bool:
-                    case DbColumnTypes.TinyInt:
-                    case DbColumnTypes.SmallInt:
-                    case DbColumnTypes.Int:
-                    case DbColumnTypes.BigInt:
+                    case DatabaseColumnType.Bool:
+                    case DatabaseColumnType.TinyInt:
+                    case DatabaseColumnType.SmallInt:
+                    case DatabaseColumnType.Int:
+                    case DatabaseColumnType.BigInt:
                         return "INTEGER";
-                    case DbColumnTypes.Single:
-                    case DbColumnTypes.Double:
-                    case DbColumnTypes.Decimal:
+                    case DatabaseColumnType.Single:
+                    case DatabaseColumnType.Double:
+                    case DatabaseColumnType.Decimal:
                         return "REAL";
                 }
             }

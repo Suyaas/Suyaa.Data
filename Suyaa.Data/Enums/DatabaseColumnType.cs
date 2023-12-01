@@ -11,7 +11,7 @@ namespace Suyaa.Data.Enums
     /// 数据字段类型
     /// </summary>
     [Description("数据字段类型")]
-    public enum DbColumnTypes : int
+    public enum DatabaseColumnType : int
     {
         /// <summary>
         /// 未知类型

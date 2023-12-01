@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Suyaa.Data.Dependency
 {
@@ -16,6 +17,10 @@ namespace Suyaa.Data.Dependency
         /// <returns></returns>
         DbConnection Connection { get; }
         /// <summary>
+        /// 获取事务
+        /// </summary>
+        DbTransaction Transaction { get; }
+        /// <summary>
         /// 获取Sql仓库
         /// </summary>
         /// <returns></returns>
@@ -24,5 +29,13 @@ namespace Suyaa.Data.Dependency
         /// 数据库连接描述
         /// </summary>
         DbConnectionDescriptor ConnectionDescriptor { get; }
+        /// <summary>
+        /// 生效事务
+        /// </summary>
+        void Commit();
+        /// <summary>
+        /// 生效事务
+        /// </summary>
+        Task CommitAsync();
     }
 }

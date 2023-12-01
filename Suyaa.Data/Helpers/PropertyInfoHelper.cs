@@ -101,8 +101,8 @@ namespace Suyaa.Data.Helpers
                 if (name.IsNullOrWhiteSpace()) name = pro.Name;
                 switch (dbColumnAttr.Convert)
                 {
-                    case DbNameConvertTypes.UnderlineLower: return name.ToLowerDbName();
-                    case DbNameConvertTypes.UnderlineUpper: return name.ToUpperDbName();
+                    case NameConvertType.UnderlineLower: return name.ToLowerDbName();
+                    case NameConvertType.UnderlineUpper: return name.ToUpperDbName();
                     default: return name;
                 }
             }

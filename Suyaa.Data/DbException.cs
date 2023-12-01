@@ -10,16 +10,35 @@ namespace Suyaa.Data
     public class DbException : Exception
     {
         /// <summary>
-        /// 数据库处理异常
+        /// 原始异常消息
         /// </summary>
-        /// <param name="message">异常信息</param>
-        public DbException(string message) : base(message) { }
+        public string OriginalMessage { get; }
+
+        /// <summary>
+        /// 原始参数集合
+        /// </summary>
+        public string[]? OriginalParameters { get; }
 
         /// <summary>
         /// 数据库处理异常
         /// </summary>
         /// <param name="message">异常信息</param>
+        /// <param name="args"></param>
+        public DbException(string message, params string[] args) : base(string.Format(message, args))
+        {
+            this.OriginalMessage = message;
+            this.OriginalParameters = args;
+        }
+
+        /// <summary>
+        /// 数据库处理异常
+        /// </summary>
+        /// <param name="message">异常信息</param>
+        /// <param name="args"></param>
         /// <param name="innerException">包含的异常</param>
-        public DbException(string message, Exception innerException) : base(message, innerException) { }
+        public DbException(Exception innerException, string message, params string[] args) : base(string.Format(message, args), innerException) {
+            this.OriginalMessage = message;
+            this.OriginalParameters = args;
+        }
     }
 }

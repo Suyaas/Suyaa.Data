@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Suyaa.Data.Oracle.Repositories
 {
@@ -80,7 +81,6 @@ namespace Suyaa.Data.Oracle.Repositories
         {
             DataSet dataSet = new DataSet();
             using var sqlCommand = GetDbCommand(sql);
-            using var reader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.Default);
             var sqlDataAdapter = new OracleDataAdapter { SelectCommand = (OracleCommand)sqlCommand };
             sqlDataAdapter.Fill(dataSet);
             return dataSet;
@@ -95,7 +95,6 @@ namespace Suyaa.Data.Oracle.Repositories
         {
             DataSet dataSet = new DataSet();
             using var sqlCommand = GetDbCommand(sql, parameters);
-            using var reader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.Default);
             var sqlDataAdapter = new OracleDataAdapter { SelectCommand = (OracleCommand)sqlCommand };
             sqlDataAdapter.Fill(dataSet);
             return dataSet;

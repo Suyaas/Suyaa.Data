@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Suyaa.Data.Dependency;
+using Suyaa.Data.Enums;
 
 namespace Suyaa.Data.PostgreSQL
 {

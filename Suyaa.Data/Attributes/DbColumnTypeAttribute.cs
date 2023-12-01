@@ -23,7 +23,7 @@ namespace Suyaa.Data.Attributes
         /// <summary>
         /// 字段类型
         /// </summary>
-        public DbColumnTypes ColumnType { get; }
+        public DatabaseColumnType ColumnType { get; }
 
         /// <summary>
         /// 字段长度
@@ -38,7 +38,7 @@ namespace Suyaa.Data.Attributes
         // 校验有效性
         private void Verify()
         {
-            var type = typeof(DbColumnTypes);
+            var type = typeof(DatabaseColumnType);
             string columnTypeName = ColumnType.ToString();
             var field = type.GetFields().Where(d => d.Name == columnTypeName).FirstOrDefault();
             if (field is null) throw new DbException($"数据类型'{columnTypeName}'不受支持");
@@ -53,7 +53,7 @@ namespace Suyaa.Data.Attributes
         public DbColumnTypeAttribute(string name)
         {
             Name = name;
-            ColumnType = DbColumnTypes.Unknow;
+            ColumnType = DatabaseColumnType.Unknow;
             Size = 0;
             Float = 0;
         }
@@ -62,7 +62,7 @@ namespace Suyaa.Data.Attributes
         /// 数据字段类型
         /// </summary>
         /// <param name="columnType"></param>
-        public DbColumnTypeAttribute(DbColumnTypes columnType)
+        public DbColumnTypeAttribute(DatabaseColumnType columnType)
         {
             Name = string.Empty;
             ColumnType = columnType;
@@ -77,7 +77,7 @@ namespace Suyaa.Data.Attributes
         /// </summary>
         /// <param name="columnType"></param>
         /// <param name="size"></param>
-        public DbColumnTypeAttribute(DbColumnTypes columnType, int size)
+        public DbColumnTypeAttribute(DatabaseColumnType columnType, int size)
         {
             Name = string.Empty;
             ColumnType = columnType;

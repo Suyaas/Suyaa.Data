@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Suyaa.Data.Helpers
 {
@@ -22,14 +23,14 @@ namespace Suyaa.Data.Helpers
         /// <param name="repository"></param>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static int ExecuteNonQuery(this ISqlRepository repository, string sql)
+        public static async Task<int> ExecuteNonQueryAsync(this ISqlRepository repository, string sql)
         {
             var work = repository.GetDbWork();
             using var sqlCommand = repository.GetDbCommand(sql);
             sqlCommand.Transaction = work.Transaction;
             try
             {
-                var res = sqlCommand.ExecuteNonQuery();
+                var res = await sqlCommand.ExecuteNonQueryAsync();
                 return res;
             }
             catch (Exception ex)
@@ -45,14 +46,14 @@ namespace Suyaa.Data.Helpers
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static int ExecuteNonQuery(this ISqlRepository repository, string sql, DbParameters parameters)
+        public static async Task<int> ExecuteNonQueryAsync(this ISqlRepository repository, string sql, DbParameters parameters)
         {
             var work = repository.GetDbWork();
             using var sqlCommand = repository.GetDbCommand(sql, parameters);
             sqlCommand.Transaction = work.Transaction;
             try
             {
-                var res = sqlCommand.ExecuteNonQuery();
+                var res = await sqlCommand.ExecuteNonQueryAsync();
                 return res;
             }
             catch (Exception ex)
@@ -68,10 +69,10 @@ namespace Suyaa.Data.Helpers
         /// <param name="sql"></param>
         /// <param name="actionDbDataReader"></param>
         /// <returns></returns>
-        public static void ExecuteReader(this ISqlRepository repository, string sql, Action<DbDataReader> actionDbDataReader)
+        public static async Task ExecuteReaderAsync(this ISqlRepository repository, string sql, Action<DbDataReader> actionDbDataReader)
         {
             using var sqlCommand = repository.GetDbCommand(sql);
-            using var reader = sqlCommand.ExecuteReader(CommandBehavior.Default);
+            using var reader = await sqlCommand.ExecuteReaderAsync(CommandBehavior.Default);
             actionDbDataReader(reader);
             reader.Close();
         }
@@ -83,53 +84,28 @@ namespace Suyaa.Data.Helpers
         /// <param name="parameters"></param>
         /// <param name="actionDbDataReader"></param>
         /// <returns></returns>
-        public static void ExecuteReader(this ISqlRepository repository, string sql, DbParameters parameters, Action<DbDataReader> actionDbDataReader)
+        public static async Task ExecuteReaderAsync(this ISqlRepository repository, string sql, DbParameters parameters, Action<DbDataReader> actionDbDataReader)
         {
             using var sqlCommand = repository.GetDbCommand(sql, parameters);
-            using var reader = sqlCommand.ExecuteReader(CommandBehavior.Default);
+            using var reader = await sqlCommand.ExecuteReaderAsync(CommandBehavior.Default);
             actionDbDataReader(reader);
             reader.Close();
         }
         /// <summary>
-        /// 执行原始数据读取
-        /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        public static DataTable GetDataTable(this ISqlRepository repository, string sql)
-        {
-            var dataSet = repository.GetDataSet(sql);
-            if (dataSet is null) return new DataTable();
-            return dataSet.Tables[0];
-        }
-        /// <summary>
-        /// 执行原始数据读取
-        /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public static DataTable GetDataTable(this ISqlRepository repository, string sql, DbParameters parameters)
-        {
-            var dataSet = repository.GetDataSet(sql, parameters);
-            if (dataSet is null) return new DataTable();
-            return dataSet.Tables[0];
-        }
-        /// <summary>
         /// 执行数据集合读取
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="repository"></param>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static List<T> GetDatas<T>(this ISqlRepository repository, string sql)
+        public static async Task<List<T>> GetDatasAsync<T>(this ISqlRepository repository, string sql)
         {
             List<T> datas = new List<T>();
             // 执行读取
-            repository.ExecuteReader(sql, reader =>
-            {
-                reader.FillDatas(datas);
-            });
+            await repository.ExecuteReaderAsync(sql, reader =>
+             {
+                 reader.FillDatas(datas);
+             });
             return datas;
         }
         /// <summary>
@@ -140,15 +116,15 @@ namespace Suyaa.Data.Helpers
         /// <param name="sql"></param>
         /// <returns></returns>
         [return: MaybeNull]
-        public static T GetData<T>(this ISqlRepository repository, string sql)
+        public static async Task<T> GetDataAsync<T>(this ISqlRepository repository, string sql)
         {
             T data = default;
             // 执行读取
-            repository.ExecuteReader(sql, reader =>
+            await repository.ExecuteReaderAsync(sql, reader =>
             {
                 data = reader.GetData<T>();
             });
-            return data;
+            return data!;
         }
         /// <summary>
         /// 执行数据集合读取
@@ -158,11 +134,11 @@ namespace Suyaa.Data.Helpers
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static List<T> GetDatas<T>(this ISqlRepository repository, string sql, DbParameters parameters)
+        public static async Task<List<T>> GetDatasAsync<T>(this ISqlRepository repository, string sql, DbParameters parameters)
         {
             List<T> datas = new List<T>();
             // 执行读取
-            repository.ExecuteReader(sql, parameters, reader =>
+            await repository.ExecuteReaderAsync(sql, parameters, reader =>
             {
                 reader.FillDatas(datas);
             });
@@ -177,15 +153,15 @@ namespace Suyaa.Data.Helpers
         /// <param name="parameters"></param>
         /// <returns></returns>
         [return: MaybeNull]
-        public static T GetData<T>(this ISqlRepository repository, string sql, DbParameters parameters)
+        public static async Task<T> GetDataAsync<T>(this ISqlRepository repository, string sql, DbParameters parameters)
         {
             T data = default;
             // 执行读取
-            repository.ExecuteReader(sql, parameters, reader =>
+            await repository.ExecuteReaderAsync(sql, parameters, reader =>
             {
                 data = reader.GetData<T>();
             });
-            return data;
+            return data!;
         }
     }
 }

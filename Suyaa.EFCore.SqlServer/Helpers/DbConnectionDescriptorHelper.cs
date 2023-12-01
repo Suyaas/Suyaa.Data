@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
+using Suyaa.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

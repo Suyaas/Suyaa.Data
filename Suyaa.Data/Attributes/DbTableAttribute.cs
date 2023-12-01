@@ -26,7 +26,7 @@ namespace Suyaa.Data.Attributes
         /// <summary>
         /// 转换类型
         /// </summary>
-        public DbNameConvertTypes Convert { get; set; } = DbNameConvertTypes.None;
+        public NameConvertType Convert { get; set; } = NameConvertType.None;
 
         /// <summary>
         /// 数据表特性

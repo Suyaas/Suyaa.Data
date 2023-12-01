@@ -48,16 +48,16 @@ namespace Suyaa.Data.Descriptors
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// 所属架构
         /// </summary>
-        public string Schema { get; set; }
+        public string Schema { get; }
 
         /// <summary>
         /// 字段集合
         /// </summary>
-        public List<FieldDescriptor> Fields { get; set; }
+        public List<FieldDescriptor> Fields { get; }
     }
 }

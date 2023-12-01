@@ -1,5 +1,6 @@
 ﻿using Suyaa;
 using Suyaa.Data.Dependency;
+using Suyaa.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;

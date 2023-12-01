@@ -9,7 +9,7 @@ namespace Suyaa.Data.Enums
     /// 名称转换类型
     /// </summary>
     [Description("名称转换类型")]
-    public enum DbNameConvertTypes : int
+    public enum NameConvertType : int
     {
         /// <summary>
         /// 不转换

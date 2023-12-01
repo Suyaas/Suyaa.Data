@@ -17,7 +17,13 @@ namespace Suyaa.Data.Descriptors
         public FieldDescriptor(PropertyInfo property) : base(property.GetMetaDatas())
         {
             PropertyInfo = property;
+            this.Name = property.GetColumnName();
         }
+
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get; }
 
         /// <summary>
         /// 属性信息

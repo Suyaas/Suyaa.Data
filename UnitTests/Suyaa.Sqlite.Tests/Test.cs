@@ -10,6 +10,7 @@ using Suyaa.Data.Queries;
 using Suyaa.Data.Sqlite;
 using Suyaa.EFCore;
 using SqlServerDemo.Entities;
+using Suyaa.Data.Enums;
 
 namespace Suyaa.Sqlite.Tests
 {
