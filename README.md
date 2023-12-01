@@ -19,6 +19,10 @@ Development components compatible with various databases based on dotnet
 | Suyaa.EFCore.PostgreSQL | .Net 6            | PostgreSQL EFCore Component   | [![NuGet version](https://badge.fury.io/nu/Suyaa.EFCore.PostgreSQL.svg)](https://badge.fury.io/nu/Suyaa.EFCore.PostgreSQL) |
 | Suyaa.EFCore.Sqlite     | .Net 6            | Sqlite EFCore Component       | [![NuGet version](https://badge.fury.io/nu/Suyaa.EFCore.Sqlite.svg)](https://badge.fury.io/nu/Suyaa.EFCore.Sqlite)         |
 
+## Product Architecture
+
+![Product Architecture](https://github.com/Suyaas/Suyaa.Data/blob/main/Doc/orm.png)
+
 ## Nuget Package Download
 
 All components can be accessed and download in  <https://www.nuget.org/profiles/inmount>
