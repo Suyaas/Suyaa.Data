@@ -21,7 +21,7 @@ namespace Suyaa.EFCore.PostgreSQL.Helpers
         /// <returns></returns>
         public static DbContextOptions GetPostgreSqlContextOptions(this DbConnectionDescriptor descriptor)
         {
-            if (descriptor.DatabaseType != DatabaseType.MicrosoftSqlServer) throw new DbException($"DatabaseType '{descriptor.DatabaseType}' not supported.");
+            if (descriptor.DatabaseType != DatabaseType.PostgreSQL) throw new DbException($"DatabaseType '{descriptor.DatabaseType}' not supported.");
             // 添加数据库上下文配置
             var optionsBuilder = new DbContextOptionsBuilder<DbDescriptorContext>();
             optionsBuilder.UseNpgsql(descriptor.ToConnectionString());
