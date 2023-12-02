@@ -4,7 +4,30 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Version>1.7.2312.33</Version>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Wenling Lianyi Network Technology Co., Ltd.</Authors>
+    <Description>舒雅套件中服务于Oracle数据库的辅助开发组件</Description>
+    <Copyright>Copyright © Wenling Lianyi Network Technology Co., Ltd. 2014</Copyright>
+    <PackageProjectUrl>https://github.com/Suyaas/Suyaa.Data</PackageProjectUrl>
+    <PackageIcon>Suyaa_red_128.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Suyaas/Suyaa.Data</RepositoryUrl>
+    <PackageTags>orm,oracle</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\icon\Suyaa_red_128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" />

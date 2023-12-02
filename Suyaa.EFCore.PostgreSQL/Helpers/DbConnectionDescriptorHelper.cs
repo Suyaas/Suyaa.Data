@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.EFCore.SqlServer.Helpers
+namespace Suyaa.EFCore.PostgreSQL.Helpers
 {
     /// <summary>
     /// 主机数据库上下文配置助手

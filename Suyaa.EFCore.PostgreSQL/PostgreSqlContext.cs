@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
-using Suyaa.EFCore.SqlServer.Helpers;
+using Suyaa.EFCore.PostgreSQL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.EFCore.SqlServer
+namespace Suyaa.EFCore.PostgreSQL
 {
     /// <summary>
     /// SqlServer数据库上下文

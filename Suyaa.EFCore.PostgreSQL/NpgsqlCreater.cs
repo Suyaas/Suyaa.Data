@@ -5,7 +5,7 @@ using Suyaa.Data.PostgreSQL.Helpers;
 using Suyaa.EFCore.Helpers;
 using Suyaa.EFCore.Dependency;
 
-namespace Suyaa.EFCore
+namespace Suyaa.EFCore.PostgreSQL
 {
     /// <summary>
     /// PostgreSQL数据库创建器
@@ -171,6 +171,16 @@ namespace Suyaa.EFCore
             }
             sb.AppendLine("end; $$");
             return sb.ToString();
+        }
+
+        public Task<bool> EnsureCreated(DbContextBase context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetEnsureCreatedSql(DbContextBase context)
+        {
+            throw new NotImplementedException();
         }
     }
 }
