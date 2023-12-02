@@ -92,6 +92,11 @@ namespace Suyaa.EFCore
             return true;
         }
 
+        public Task<bool> EnsureCreated(DbContextBase context)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// 获取数据列创建语句
         /// </summary>
@@ -191,6 +196,11 @@ namespace Suyaa.EFCore
                 }
             }
             return sb.ToString();
+        }
+
+        public string GetEnsureCreatedSql(DbContextBase context)
+        {
+            throw new NotImplementedException();
         }
     }
 }
