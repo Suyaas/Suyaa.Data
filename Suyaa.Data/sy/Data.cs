@@ -1,4 +1,5 @@
-﻿using Suyaa.Data;
+﻿using Suyaa;
+using Suyaa.Data;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.SimpleDbWorks;
@@ -15,6 +16,38 @@ namespace sy
     {
         // 简单的数据库管理器
         private static SimpleDbWorkManager? _simpleDbWorkManager;
+        // 数据库工厂
+        private static IDbFactory? _dbFactory;
+        // 数据库实例供应商集合
+        private static List<IDbEntityProvider> _dbEntityProviders = new List<IDbEntityProvider>();
+
+        /// <summary>
+        /// 注册数据库工厂
+        /// </summary>
+        /// <param name="dbFactory"></param>
+        public static void UseFactory(IDbFactory dbFactory)
+        {
+            _dbFactory = dbFactory;
+        }
+
+        /// <summary>
+        /// 注册数据库实例供应商
+        /// </summary>
+        /// <param name="dbEntityProvider"></param>
+        public static void UseEntityProvider(IDbEntityProvider dbEntityProvider)
+        {
+            _dbEntityProviders.Add(dbEntityProvider);
+        }
+
+        /// <summary>
+        /// 注册数据库实例供应商
+        /// </summary>
+        /// <typeparam name="TProvider"></typeparam>
+        public static void UseEntityProvider<TProvider>()
+            where TProvider : class, IDbEntityProvider, new()
+        {
+            UseEntityProvider(sy.Assembly.Create<TProvider>());
+        }
 
         /// <summary>
         /// 创建工作者
@@ -23,7 +56,8 @@ namespace sy
         /// <returns></returns>
         public static IDbWork CreateWork(DbConnectionDescriptor descriptor)
         {
-            _simpleDbWorkManager ??= new SimpleDbWorkManager(descriptor);
+            _dbFactory ??= new SimpleDbFactory(descriptor, _dbEntityProviders);
+            _simpleDbWorkManager ??= new SimpleDbWorkManager(_dbFactory, descriptor);
             return _simpleDbWorkManager.CreateWork();
         }
 

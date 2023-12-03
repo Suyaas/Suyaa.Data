@@ -114,6 +114,18 @@ namespace Suyaa.Data.Helpers
         }
 
         /// <summary>
+        /// 获取是否自增字段
+        /// </summary>
+        /// <param name="pro"></param>
+        /// <returns></returns>
+        public static bool GetAutoIncrement(this PropertyInfo pro)
+        {
+            var databaseGenerated = pro.GetCustomAttribute<DatabaseGeneratedAttribute>();
+            if (databaseGenerated is null) return false;
+            return databaseGenerated.DatabaseGeneratedOption == DatabaseGeneratedOption.Identity;
+        }
+
+        /// <summary>
         /// 获取列描述名称
         /// </summary>
         /// <param name="pro"></param>

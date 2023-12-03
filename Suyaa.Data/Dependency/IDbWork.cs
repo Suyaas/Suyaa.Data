@@ -13,6 +13,10 @@ namespace Suyaa.Data.Dependency
     public interface IDbWork : IDisposable
     {
         /// <summary>
+        /// 数据库工厂
+        /// </summary>
+        IDbFactory Factory { get; }
+        /// <summary>
         /// 获取数据库连接
         /// </summary>
         /// <returns></returns>
@@ -26,6 +30,19 @@ namespace Suyaa.Data.Dependency
         /// </summary>
         /// <returns></returns>
         ISqlRepository GetSqlRepository();
+        /// <summary>
+        /// 获取Sql仓库
+        /// </summary>
+        /// <returns></returns>
+        IRepository<TEntity> GetRepository<TEntity>() 
+            where TEntity : IEntity, new();
+        /// <summary>
+        /// 获取Sql仓库
+        /// </summary>
+        /// <returns></returns>
+        IRepository<TEntity, TId> GetRepository<TEntity, TId>()
+            where TEntity : IEntity<TId>, new()
+            where TId : notnull;
         /// <summary>
         /// 数据库连接描述
         /// </summary>

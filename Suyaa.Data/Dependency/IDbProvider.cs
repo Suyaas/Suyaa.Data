@@ -15,6 +15,10 @@ namespace Suyaa.Data.Dependency
         /// </summary>
         IDbQueryProvider QueryProvider { get; }
         /// <summary>
+        /// 脚本供应商
+        /// </summary>
+        IDbScriptProvider ScriptProvider { get; }
+        /// <summary>
         /// 获取一个数据库连接
         /// </summary>
         /// <returns></returns>

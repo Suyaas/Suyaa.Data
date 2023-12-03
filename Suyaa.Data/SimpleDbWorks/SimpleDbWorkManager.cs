@@ -10,15 +10,18 @@ namespace Suyaa.Data.SimpleDbWorks
     /// </summary>
     public sealed class SimpleDbWorkManager : IDbWorkManager
     {
+        private readonly IDbFactory _factory;
         private readonly DbConnectionDescriptor _descriptor;
 
         /// <summary>
         /// 简单的数据库工作者管理器
         /// </summary>
         public SimpleDbWorkManager(
+            IDbFactory factory,
             DbConnectionDescriptor descriptor
             )
         {
+            _factory = factory;
             _descriptor = descriptor;
         }
 
@@ -28,9 +31,8 @@ namespace Suyaa.Data.SimpleDbWorks
         /// <returns></returns>
         public IDbWork CreateWork()
         {
-            var dbWorkProvider = new SimpleDbWorkProvider();
-            var work = dbWorkProvider.CreateWork(_descriptor);
-            dbWorkProvider.SetCurrentWork(work);
+            var work = _factory.WorkProvider.CreateWork(_descriptor);
+            _factory.WorkProvider.SetCurrentWork(work);
             return work;
         }
     }

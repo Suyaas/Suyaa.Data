@@ -33,11 +33,6 @@ namespace Suyaa.Data.Descriptors
             this.Schema = type.GetSchemaName() ?? string.Empty;
             // 初始化字段集合
             this.Fields = new List<FieldDescriptor>();
-            var pros = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var prop in pros)
-            {
-                this.Fields.Add(new FieldDescriptor(prop));
-            }
         }
 
         /// <summary>

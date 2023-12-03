@@ -58,10 +58,10 @@ namespace Suyaa.Data.Helpers
             string providerDllPath = string.Empty;
             switch (type)
             {
-                //case DatabaseType.PostgreSQL:
-                //    providerName = "Suyaa.Data.PostgreSQL.NpgsqlProvider";
-                //    providerDllPath = "Suyaa.Data.PostgreSQL";
-                //    break;
+                case DatabaseType.PostgreSQL:
+                    providerName = "Suyaa.Data.PostgreSQL.Providers.PostgreSqlProvider";
+                    providerDllPath = "Suyaa.Data.PostgreSQL";
+                    break;
                 //case DatabaseType.Sqlite:
                 //case DatabaseType.Sqlite3:
                 //    providerName = "Suyaa.Data.Sqlite.SqliteProvider";

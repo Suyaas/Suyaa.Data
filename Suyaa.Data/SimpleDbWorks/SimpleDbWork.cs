@@ -13,6 +13,7 @@ namespace Suyaa.Data.SimpleDbWorks
     /// </summary>
     public sealed class SimpleDbWork : Disposable, IDbWork
     {
+        private readonly IDbFactory _dbFactory;
         private readonly IDbWorkProvider _dbWorkProvider;
         private readonly IDbProvider _dbProvider;
         private DbConnection? _connection;
@@ -22,13 +23,14 @@ namespace Suyaa.Data.SimpleDbWorks
         /// 简单的数据库工作着
         /// </summary>
         public SimpleDbWork(
-            IDbWorkProvider dbWorkProvider,
+            IDbFactory dbFactory,
             DbConnectionDescriptor dbConnectionDescriptor
             )
         {
-            _dbWorkProvider = dbWorkProvider;
+            _dbFactory = dbFactory;
+            _dbWorkProvider = dbFactory.WorkProvider;
             ConnectionDescriptor = dbConnectionDescriptor;
-            _dbProvider = _dbWorkProvider.GetDbProvider(ConnectionDescriptor.DatabaseType);
+            _dbProvider = dbFactory.Provider;
         }
 
         /// <summary>
@@ -45,6 +47,11 @@ namespace Suyaa.Data.SimpleDbWorks
         /// 事务
         /// </summary>
         public DbTransaction Transaction => _transaction ??= Connection.BeginTransaction();
+
+        /// <summary>
+        /// 数据库工厂
+        /// </summary>
+        public IDbFactory Factory => _dbFactory;
 
         /// <summary>
         /// 生效事务
@@ -68,6 +75,30 @@ namespace Suyaa.Data.SimpleDbWorks
             await _transaction.CommitAsync();
             _transaction.Dispose();
             _transaction = null;
+        }
+
+        /// <summary>
+        /// 获取数据仓库
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
+        public IRepository<TEntity> GetRepository<TEntity>()
+            where TEntity : IEntity, new()
+        {
+            return new SimpleRepository<TEntity>(this);
+        }
+
+        /// <summary>
+        /// 获取带主键的数据仓库
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TId"></typeparam>
+        /// <returns></returns>
+        public IRepository<TEntity, TId> GetRepository<TEntity, TId>()
+            where TEntity : IEntity<TId>, new()
+            where TId : notnull
+        {
+            return new SimpleRepository<TEntity, TId>(this);
         }
 
         /// <summary>

@@ -148,7 +148,7 @@ namespace Suyaa.Data
             //    // 保存数据
             //    await uow.CompleteAsync();
             //}
-            return true;
+            return await Task.FromResult(true);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Suyaa.Data
             //// 当前如果没有事务单元，则直接执行，有事务单元，则将代码添加到事务中
             //if (this.UnitOfWork is null) return await this.DatabaseConnectionBase.ExecuteNonQueryAsync(sql);
             //this.UnitOfWork.Add(sql);
-            return 0;
+            return await Task.FromResult(0);
         }
 
         #endregion
@@ -472,6 +472,10 @@ namespace Suyaa.Data
             return res;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
         public void EndUnitOfWork()
         {
             throw new NotImplementedException();

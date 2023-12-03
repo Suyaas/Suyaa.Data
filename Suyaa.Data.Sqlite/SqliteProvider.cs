@@ -1,6 +1,5 @@
 ﻿using Suyaa.Data.Helpers;
 using Suyaa.Data.Sqlite.Helpers;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Reflection;
 using System.Text;

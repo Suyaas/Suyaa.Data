@@ -9,17 +9,21 @@ using System.Text;
 namespace Suyaa.Data.SimpleDbWorks
 {
     /// <summary>
-    /// 简单的数据库工作者供应商
+    /// 简单的数据库供应商
     /// </summary>
     public sealed class SimpleDbWorkProvider : IDbWorkProvider
     {
+        private readonly IDbFactory _dbFactory;
         private IDbWork? _work;
 
         /// <summary>
         /// 简单的数据库工作者供应商
         /// </summary>
-        public SimpleDbWorkProvider()
+        public SimpleDbWorkProvider(
+            IDbFactory dbFactory
+            )
         {
+            _dbFactory = dbFactory;
         }
 
         /// <summary>
@@ -28,7 +32,7 @@ namespace Suyaa.Data.SimpleDbWorks
         /// <returns></returns>
         public IDbWork CreateWork(DbConnectionDescriptor dbConnectionDescriptor)
         {
-            return new SimpleDbWork(this, dbConnectionDescriptor);
+            return new SimpleDbWork(_dbFactory, dbConnectionDescriptor);
         }
 
         /// <summary>

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Suyaa.Data.Enums;
+using Suyaa.Data.Dependency;
 
 namespace Suyaa.Data
 {
     /// <summary>
     /// 数据库连接描述
     /// </summary>
-    public class DbConnectionDescriptor : Dictionary<string, string>
+    public class DbConnectionDescriptor : Dictionary<string, string>, IDbConnectionDescriptor
     {
 
         /// <summary>
