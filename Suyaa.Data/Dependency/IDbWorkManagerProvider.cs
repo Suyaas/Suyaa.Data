@@ -7,14 +7,14 @@ using Suyaa.Data.Enums;
 namespace Suyaa.Data.Dependency
 {
     /// <summary>
-    /// 工作者供应商
+    /// 工作者管理器供应商
     /// </summary>
-    public interface IDbWorkProvider
+    public interface IDbWorkManagerProvider
     {
         /// <summary>
-        /// 创建一个工作者
+        /// 创建一个工作者管理器
         /// </summary>
         /// <returns></returns>
-        IDbWork CreateWork(IDbWorkManager dbWorkManager);
+        IDbWorkManager CreateManager(DbConnectionDescriptor dbConnectionDescriptor);
     }
 }

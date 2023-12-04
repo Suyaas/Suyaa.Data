@@ -30,9 +30,9 @@ namespace Suyaa.Data.SimpleDbWorks
         /// 创建一个工作者
         /// </summary>
         /// <returns></returns>
-        public IDbWork CreateWork(DbConnectionDescriptor dbConnectionDescriptor)
+        public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new SimpleDbWork(_dbFactory, dbConnectionDescriptor);
+            return new SimpleDbWork(dbWorkManager);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Suyaa.Data.SimpleDbWorks
         /// <returns></returns>
         public IDbProvider GetDbProvider(DatabaseType databaseType)
         {
-            return databaseType.GetDbProvider(this);
+            return databaseType.GetDbProvider();
         }
 
         /// <summary>

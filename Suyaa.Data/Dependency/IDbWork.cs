@@ -17,6 +17,10 @@ namespace Suyaa.Data.Dependency
         /// </summary>
         IDbFactory Factory { get; }
         /// <summary>
+        /// 工作者管理器
+        /// </summary>
+        IDbWorkManager WorkManager { get; }
+        /// <summary>
         /// 获取数据库连接
         /// </summary>
         /// <returns></returns>
@@ -46,7 +50,7 @@ namespace Suyaa.Data.Dependency
         /// <summary>
         /// 数据库连接描述
         /// </summary>
-        DbConnectionDescriptor ConnectionDescriptor { get; }
+        IDbConnectionDescriptor ConnectionDescriptor { get; }
         /// <summary>
         /// 生效事务
         /// </summary>

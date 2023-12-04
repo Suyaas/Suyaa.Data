@@ -32,7 +32,8 @@ namespace Suyaa.Data.SimpleDbWorks
             _dbConnectionDescriptor = dbConnectionDescriptor;
             _dbEntityProviders = dbEntityProviders;
             this.WorkProvider = new SimpleDbWorkProvider(this);
-            this.Provider = dbConnectionDescriptor.DatabaseType.GetDbProvider(this.WorkProvider);
+            this.Provider = dbConnectionDescriptor.DatabaseType.GetDbProvider();
+            this.WorkManagerProvider = new SimpleDbWorkManagerProvider(this);
             _indexer = 0;
         }
 
@@ -50,6 +51,11 @@ namespace Suyaa.Data.SimpleDbWorks
         /// 数据库供应商
         /// </summary>
         public IDbProvider Provider { get; }
+
+        /// <summary>
+        /// 工作者管理器供应商
+        /// </summary>
+        public IDbWorkManagerProvider WorkManagerProvider { get; }
 
         /// <summary>
         /// 获取新的参数索引号

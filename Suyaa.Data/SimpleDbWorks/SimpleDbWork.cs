@@ -16,6 +16,7 @@ namespace Suyaa.Data.SimpleDbWorks
         private readonly IDbFactory _dbFactory;
         private readonly IDbWorkProvider _dbWorkProvider;
         private readonly IDbProvider _dbProvider;
+        private readonly IDbWorkManager _dbWorkManager;
         private DbConnection? _connection;
         private DbTransaction? _transaction;
 
@@ -23,25 +24,25 @@ namespace Suyaa.Data.SimpleDbWorks
         /// 简单的数据库工作着
         /// </summary>
         public SimpleDbWork(
-            IDbFactory dbFactory,
-            DbConnectionDescriptor dbConnectionDescriptor
+            IDbWorkManager dbWorkManager
             )
         {
-            _dbFactory = dbFactory;
-            _dbWorkProvider = dbFactory.WorkProvider;
-            ConnectionDescriptor = dbConnectionDescriptor;
-            _dbProvider = dbFactory.Provider;
+            _dbFactory = dbWorkManager.Factory;
+            _dbWorkProvider = _dbFactory.WorkProvider;
+            ConnectionDescriptor = dbWorkManager.ConnectionDescriptor;
+            _dbProvider = _dbFactory.Provider;
+            _dbWorkManager = dbWorkManager;
         }
 
         /// <summary>
         /// 连接信息
         /// </summary>
-        public DbConnectionDescriptor ConnectionDescriptor { get; }
+        public IDbConnectionDescriptor ConnectionDescriptor { get; }
 
         /// <summary>
         /// 数据库连接
         /// </summary>
-        public DbConnection Connection => _connection ??= _dbProvider.GetDbConnection();
+        public DbConnection Connection => _connection ??= _dbProvider.GetDbConnection(_dbWorkManager);
 
         /// <summary>
         /// 事务
@@ -52,6 +53,11 @@ namespace Suyaa.Data.SimpleDbWorks
         /// 数据库工厂
         /// </summary>
         public IDbFactory Factory => _dbFactory;
+
+        /// <summary>
+        /// 工作者管理器
+        /// </summary>
+        public IDbWorkManager WorkManager => _dbWorkManager;
 
         /// <summary>
         /// 生效事务
@@ -85,7 +91,7 @@ namespace Suyaa.Data.SimpleDbWorks
         public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : IEntity, new()
         {
-            return new SimpleRepository<TEntity>(this);
+            return new SimpleRepository<TEntity>(_dbWorkManager);
         }
 
         /// <summary>
@@ -98,7 +104,7 @@ namespace Suyaa.Data.SimpleDbWorks
             where TEntity : IEntity<TId>, new()
             where TId : notnull
         {
-            return new SimpleRepository<TEntity, TId>(this);
+            return new SimpleRepository<TEntity, TId>(_dbWorkManager);
         }
 
         /// <summary>
@@ -107,7 +113,7 @@ namespace Suyaa.Data.SimpleDbWorks
         /// <returns></returns>
         public ISqlRepository GetSqlRepository()
         {
-            return _dbProvider.GetSqlRepository();
+            return _dbProvider.GetSqlRepository(_dbWorkManager);
         }
 
         /// <summary>
@@ -117,7 +123,7 @@ namespace Suyaa.Data.SimpleDbWorks
         {
             base.OnManagedDispose();
             // 释放工作者
-            _dbWorkProvider.ReleaseWork();
+            _dbWorkManager.ReleaseWork();
             // 断开连接
             if (!(_connection is null))
             {

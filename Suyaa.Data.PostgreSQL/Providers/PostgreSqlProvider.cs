@@ -10,19 +10,9 @@ namespace Suyaa.Data.PostgreSQL.Providers
     /// </summary>
     public class PostgreSqlProvider : IDbProvider
     {
-        private readonly IDbWorkProvider _dbWorkProvider;
+
         private PostgreSqlQueryProvider? _queryProvider;
         private PostgreSqlScriptProvider? _scriptProvider;
-
-        /// <summary>
-        /// Oracle数据库供应商
-        /// </summary>
-        public PostgreSqlProvider(
-            IDbWorkProvider dbWorkProvider
-            )
-        {
-            _dbWorkProvider = dbWorkProvider;
-        }
 
         /// <summary>
         /// 查询供应商
@@ -38,9 +28,9 @@ namespace Suyaa.Data.PostgreSQL.Providers
         /// 获取一个数据库连接
         /// </summary>
         /// <returns></returns>
-        public DbConnection GetDbConnection()
+        public DbConnection GetDbConnection(IDbWorkManager dbWorkManager)
         {
-            var work = _dbWorkProvider.GetCurrentWork();
+            var work = dbWorkManager.GetCurrentWork();
             if (work is null) throw new DbException("Current db work not found.");
             var dbc = new NpgsqlConnection(work.ConnectionDescriptor.ToConnectionString());
             dbc.Open();
@@ -51,9 +41,9 @@ namespace Suyaa.Data.PostgreSQL.Providers
         /// 获取一个Sql仓库
         /// </summary>
         /// <returns></returns>
-        public ISqlRepository GetSqlRepository()
+        public ISqlRepository GetSqlRepository(IDbWorkManager dbWorkManager)
         {
-            return new PostgreSqlRepository(_dbWorkProvider);
+            return new PostgreSqlRepository(dbWorkManager);
         }
     }
 }

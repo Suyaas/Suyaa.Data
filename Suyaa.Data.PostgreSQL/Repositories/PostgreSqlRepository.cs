@@ -10,16 +10,16 @@ namespace Suyaa.Data.PostgreSQL.Repositories
     /// </summary>
     public sealed class PostgreSqlRepository : ISqlRepository
     {
-        private readonly IDbWorkProvider _dbWorkProvider;
+        private readonly IDbWorkManager _dbWorkManager;
 
         /// <summary>
         /// Postgre Sql 仓库
         /// </summary>
         public PostgreSqlRepository(
-            IDbWorkProvider dbWorkProvider
+            IDbWorkManager dbWorkManager
             )
         {
-            _dbWorkProvider = dbWorkProvider;
+            _dbWorkManager = dbWorkManager;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Suyaa.Data.PostgreSQL.Repositories
         /// <exception cref="DbException"></exception>
         public IDbWork GetDbWork()
         {
-            var work = _dbWorkProvider.GetCurrentWork();
+            var work = _dbWorkManager.GetCurrentWork();
             if (work is null) throw new DbException("Repository db work not found.");
             return work;
         }

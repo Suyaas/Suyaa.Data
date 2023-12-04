@@ -49,10 +49,9 @@ namespace Suyaa.Data.Helpers
         /// 获取数据库供应商
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="dbWorkProvider"></param>
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
-        public static IDbProvider GetDbProvider(this DatabaseType type, IDbWorkProvider dbWorkProvider)
+        public static IDbProvider GetDbProvider(this DatabaseType type)
         {
             string providerName = string.Empty;
             string providerDllPath = string.Empty;
@@ -80,7 +79,7 @@ namespace Suyaa.Data.Helpers
                 sy.IO.CreateFolder(dllPath);
                 throw new DbException($"未找到供应商\'{providerName}\'");
             }
-            return providerType.Create<IDbProvider>(new object[] { dbWorkProvider });
+            return providerType.Create<IDbProvider>(new object[] { });
         }
     }
 }

@@ -14,8 +14,6 @@ namespace sy
     /// </summary>
     public static class Data
     {
-        // 简单的数据库管理器
-        private static SimpleDbWorkManager? _simpleDbWorkManager;
         // 数据库工厂
         private static IDbFactory? _dbFactory;
         // 数据库实例供应商集合
@@ -57,8 +55,7 @@ namespace sy
         public static IDbWork CreateWork(DbConnectionDescriptor descriptor)
         {
             _dbFactory ??= new SimpleDbFactory(descriptor, _dbEntityProviders);
-            _simpleDbWorkManager ??= new SimpleDbWorkManager(_dbFactory, descriptor);
-            return _simpleDbWorkManager.CreateWork();
+            return _dbFactory.WorkManagerProvider.CreateManager(descriptor).CreateWork();
         }
 
         /// <summary>

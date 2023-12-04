@@ -17,22 +17,41 @@ namespace Suyaa.Data.SimpleDbWorks
     public class SimpleRepository<TEntity> : IRepository<TEntity>
         where TEntity : IEntity, new()
     {
-        private readonly IDbWork _dbWork;
         private readonly EntityDescriptor _entity;
-        private readonly ISqlRepository _sqlRepository;
         private readonly IDbProvider _dbProvider;
+        private readonly IDbWorkManager _dbWorkManager;
 
         /// <summary>
         /// 简单的数据仓库
         /// </summary>
         public SimpleRepository(
-            IDbWork dbWork
+            IDbWorkManager dbWorkManager
             )
         {
-            _dbWork = dbWork;
-            _entity = dbWork.Factory.GetEntity<TEntity>();
-            _sqlRepository = dbWork.GetSqlRepository();
-            _dbProvider = dbWork.Factory.Provider;
+            _entity = dbWorkManager.Factory.GetEntity<TEntity>();
+            _dbProvider = dbWorkManager.Factory.Provider;
+            _dbWorkManager = dbWorkManager;
+        }
+
+        /// <summary>
+        /// 获取数据库工作者
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="DbException"></exception>
+        public IDbWork GetDbWork()
+        {
+            var work = _dbWorkManager.GetCurrentWork();
+            if (work is null) throw new DbException("Repository db work not found.");
+            return work;
+        }
+
+        /// <summary>
+        /// 获取Sql仓库
+        /// </summary>
+        /// <returns></returns>
+        public ISqlRepository GetSqlRepository()
+        {
+            return GetDbWork().GetSqlRepository();
         }
 
         public void Delete(Expression<Func<TEntity, bool>> predicate)
@@ -56,7 +75,7 @@ namespace Suyaa.Data.SimpleDbWorks
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本
-            _sqlRepository.ExecuteNonQuery(sql, parameters);
+            GetSqlRepository().ExecuteNonQuery(sql, parameters);
         }
 
         /// <summary>
@@ -71,7 +90,7 @@ namespace Suyaa.Data.SimpleDbWorks
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本
-            await _sqlRepository.ExecuteNonQueryAsync(sql, parameters);
+            await GetSqlRepository().ExecuteNonQueryAsync(sql, parameters);
         }
 
         /// <summary>
@@ -113,8 +132,8 @@ namespace Suyaa.Data.SimpleDbWorks
         /// <summary>
         /// 简单的数据仓库
         /// </summary>
-        /// <param name="dbWork"></param>
-        public SimpleRepository(IDbWork dbWork) : base(dbWork)
+        /// <param name="dbWorkManager"></param>
+        public SimpleRepository(IDbWorkManager dbWorkManager) : base(dbWorkManager)
         {
         }
     }

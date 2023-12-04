@@ -22,11 +22,11 @@ namespace Suyaa.Data.Dependency
         /// 获取一个数据库连接
         /// </summary>
         /// <returns></returns>
-        DbConnection GetDbConnection();
+        DbConnection GetDbConnection(IDbWorkManager dbWorkManager);
         /// <summary>
         /// 获取Sql仓库
         /// </summary>
         /// <returns></returns>
-        ISqlRepository GetSqlRepository();
+        ISqlRepository GetSqlRepository(IDbWorkManager dbWorkManager);
     }
 }

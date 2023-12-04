@@ -25,6 +25,10 @@ namespace Suyaa.Data.Dependency
         /// </summary>
         IDbWorkProvider WorkProvider { get; }
         /// <summary>
+        /// 工作者管理器供应商
+        /// </summary>
+        IDbWorkManagerProvider WorkManagerProvider { get; }
+        /// <summary>
         /// 数据库供应商
         /// </summary>
         IDbProvider Provider { get; }
