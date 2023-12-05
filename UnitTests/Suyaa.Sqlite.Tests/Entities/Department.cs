@@ -20,8 +20,8 @@ namespace Suyaa.Sqlite.Tests.Entities
         /// <summary>
         /// 名称
         /// </summary>
-        [DbColumn(Convert = NameConvertType.UnderlineLower)]
-        [DbColumnType(DatabaseColumnType.Varchar, 128)]
+        [Column(Convert = NameConvertType.UnderlineLower)]
+        [ColumnType(ColumnValueType.Varchar, 128)]
         [StringLength(128)]
         public virtual string Name { get; set; } = string.Empty;
     }

@@ -11,7 +11,7 @@ namespace Suyaa.Data.Enums
     /// 数据字段类型
     /// </summary>
     [Description("数据字段类型")]
-    public enum DatabaseColumnType : int
+    public enum ColumnValueType : int
     {
         /// <summary>
         /// 未知类型
@@ -29,13 +29,13 @@ namespace Suyaa.Data.Enums
         /// 变长字符串，需指定长度
         /// </summary>
         [Description("变长字符串")]
-        [DbNeedSize]
+        [NeedSize]
         Varchar = 0x11,
         /// <summary>
         /// 定长字符串
         /// </summary>
         [Description("定长字符串")]
-        [DbNeedSize]
+        [NeedSize]
         Char = 0x12,
         #endregion
 
@@ -82,7 +82,7 @@ namespace Suyaa.Data.Enums
         /// 十进制浮点型，需指定长度和精度
         /// </summary>
         [Description("十进制浮点型")]
-        [DbNeedSize]
+        [NeedSize]
         Decimal = 0x32,
         #endregion
 
@@ -104,13 +104,13 @@ namespace Suyaa.Data.Enums
         /// 定长二进制类型，需指定长度
         /// </summary>
         [Description("定长二进制类型")]
-        [DbNeedSize]
+        [NeedSize]
         Binary = 0x50,
         /// <summary>
         /// 变长二进制类型，需指定长度
         /// </summary>
         [Description("变长二进制类型")]
-        [DbNeedSize]
+        [NeedSize]
         Vbinary = 0x51,
         /// <summary>
         /// 变长二进制数据

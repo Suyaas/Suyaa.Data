@@ -30,20 +30,6 @@ namespace Suyaa.Data.Helpers
         /// <returns></returns>
         public static string GetTableName(this Type type)
         {
-            #region 兼容 DbTable 特性
-            var dbTableAttr = type.GetCustomAttribute<DbTableAttribute>();
-            if (dbTableAttr != null)
-            {
-                string name = dbTableAttr.Name;
-                if (name.IsNullOrWhiteSpace()) name = type.Name;
-                switch (dbTableAttr.Convert)
-                {
-                    case NameConvertType.UnderlineLower: return name.ToLowerDbName();
-                    case NameConvertType.UnderlineUpper: return name.ToUpperDbName();
-                    default: return name;
-                }
-            }
-            #endregion
             var tableAttr = type.GetCustomAttribute<TableAttribute>();
             if (tableAttr is null) return type.Name;
             if (tableAttr.Name.IsNullOrWhiteSpace()) return type.Name;
@@ -57,14 +43,6 @@ namespace Suyaa.Data.Helpers
         /// <returns></returns>
         public static string? GetSchemaName(this Type type)
         {
-            #region 兼容 DbTable 特性
-            var dbTableAttr = type.GetCustomAttribute<DbTableAttribute>();
-            if (dbTableAttr != null)
-            {
-                string schema = dbTableAttr.Schema;
-                if (!schema.IsNullOrWhiteSpace()) return schema;
-            }
-            #endregion
             var tableAttr = type.GetCustomAttribute<TableAttribute>();
             if (tableAttr is null) return null;
             if (tableAttr.Schema.IsNullOrWhiteSpace()) return null;

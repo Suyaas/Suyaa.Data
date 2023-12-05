@@ -36,7 +36,7 @@ namespace Suyaa.Data.PostgreSQL.Repositories
                 sqlCommand.CommandTimeout = 600;
                 return sqlCommand;
             }
-            throw new DbException("Repository db connection is not for Oracle.");
+            throw new TypeNotSupportedException(work.Connection.GetType());
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Suyaa.Data.PostgreSQL.Repositories
         public IDbWork GetDbWork()
         {
             var work = _dbWorkManager.GetCurrentWork();
-            if (work is null) throw new DbException("Repository db work not found.");
+            if (work is null) throw new NotExistException<IDbWork>();
             return work;
         }
 

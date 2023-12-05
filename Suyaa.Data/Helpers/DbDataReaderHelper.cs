@@ -1,6 +1,4 @@
 ﻿using Suyaa.Data.Descriptors;
-using sy;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;

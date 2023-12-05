@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Suyaa.EFCore.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -18,14 +19,14 @@ namespace Suyaa.EFCore
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        Task<bool> EnsureCreated(DbContextBase context);
+        Task<bool> EnsureCreated(BaseDbContext context);
 
         /// <summary>
         /// 获取数据库确保创建语句
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        string GetEnsureCreatedSql(DbContextBase context);
+        string GetEnsureCreatedSql(BaseDbContext context);
 
         /// <summary>
         /// 获取数据表创建语句

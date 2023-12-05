@@ -12,7 +12,7 @@ namespace Suyaa.Data.Attributes
     /// 数据字段类型
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class DbColumnTypeAttribute : Attribute
+    public class ColumnTypeAttribute : Attribute
     {
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Suyaa.Data.Attributes
         /// <summary>
         /// 字段类型
         /// </summary>
-        public DatabaseColumnType ColumnType { get; }
+        public ColumnValueType ColumnType { get; }
 
         /// <summary>
         /// 字段长度
@@ -38,22 +38,22 @@ namespace Suyaa.Data.Attributes
         // 校验有效性
         private void Verify()
         {
-            var type = typeof(DatabaseColumnType);
+            var type = typeof(ColumnValueType);
             string columnTypeName = ColumnType.ToString();
             var field = type.GetFields().Where(d => d.Name == columnTypeName).FirstOrDefault();
-            if (field is null) throw new DbException($"数据类型'{columnTypeName}'不受支持");
-            var dbNeedSize = field.GetCustomAttribute<DbNeedSizeAttribute>();
-            if (dbNeedSize != null && Size <= 0) throw new DbException($"数据类型'{columnTypeName}'必须设定长度");
+            if (field is null) throw new DbException("ColumnType.NotSupported", "Column type '{0}' does not supported.", columnTypeName);
+            var dbNeedSize = field.GetCustomAttribute<NeedSizeAttribute>();
+            if (dbNeedSize != null && Size <= 0) throw new DbException("ColumnType.NeedSize", "Column type '{0}' missing size.", columnTypeName);
         }
 
         /// <summary>
         /// 数据字段类型
         /// </summary>
         /// <param name="name">自定义名称</param>
-        public DbColumnTypeAttribute(string name)
+        public ColumnTypeAttribute(string name)
         {
             Name = name;
-            ColumnType = DatabaseColumnType.Unknow;
+            ColumnType = ColumnValueType.Unknow;
             Size = 0;
             Float = 0;
         }
@@ -62,7 +62,7 @@ namespace Suyaa.Data.Attributes
         /// 数据字段类型
         /// </summary>
         /// <param name="columnType"></param>
-        public DbColumnTypeAttribute(DatabaseColumnType columnType)
+        public ColumnTypeAttribute(ColumnValueType columnType)
         {
             Name = string.Empty;
             ColumnType = columnType;
@@ -77,7 +77,7 @@ namespace Suyaa.Data.Attributes
         /// </summary>
         /// <param name="columnType"></param>
         /// <param name="size"></param>
-        public DbColumnTypeAttribute(DatabaseColumnType columnType, int size)
+        public ColumnTypeAttribute(ColumnValueType columnType, int size)
         {
             Name = string.Empty;
             ColumnType = columnType;

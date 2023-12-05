@@ -76,7 +76,7 @@ namespace Suyaa.Data.Sqlite
             using (var sqlCommand = GetCommand(sql))
             {
                 return await sqlCommand.ExecuteNonQueryAsync();
-            }    
+            }
         }
 
         #endregion
@@ -131,8 +131,12 @@ namespace Suyaa.Data.Sqlite
         /// <exception cref="DbException"></exception>
         public void Open()
         {
-            if (this.IsOpened) throw new DbException($"数据库已存在连接");
-            if (_dbc != null) throw new DbException($"数据库已存在连接");
+            if (this.IsOpened) return;
+            if (_dbc != null)
+            {
+                _dbc.Dispose();
+                _dbc = null;
+            }
             _dbc = new SqliteConnection(_connectionString);
             _dbc.Open();
             this.IsOpened = true;

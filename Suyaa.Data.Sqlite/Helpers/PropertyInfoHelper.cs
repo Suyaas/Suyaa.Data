@@ -20,32 +20,32 @@ namespace Suyaa.Data.Sqlite.Helpers
         public static string GetColumnAttributeType(this PropertyInfo pro)
         {
             #region 兼容 DbColumnType 特性
-            var dbColumnTypeAttr = pro.GetCustomAttribute<DbColumnTypeAttribute>();
+            var dbColumnTypeAttr = pro.GetCustomAttribute<ColumnTypeAttribute>();
             if (dbColumnTypeAttr != null)
             {
                 switch (dbColumnTypeAttr.ColumnType)
                 {
-                    case DatabaseColumnType.Unknow: return dbColumnTypeAttr.Name;
-                    case DatabaseColumnType.Text:
-                    case DatabaseColumnType.Varchar:
-                    case DatabaseColumnType.Char:
+                    case ColumnValueType.Unknow: return dbColumnTypeAttr.Name;
+                    case ColumnValueType.Text:
+                    case ColumnValueType.Varchar:
+                    case ColumnValueType.Char:
                         return "TEXT";
-                    case DatabaseColumnType.Bool:
-                    case DatabaseColumnType.TinyInt:
-                    case DatabaseColumnType.SmallInt:
-                    case DatabaseColumnType.Int:
-                    case DatabaseColumnType.BigInt:
+                    case ColumnValueType.Bool:
+                    case ColumnValueType.TinyInt:
+                    case ColumnValueType.SmallInt:
+                    case ColumnValueType.Int:
+                    case ColumnValueType.BigInt:
                         return "INTEGER";
-                    case DatabaseColumnType.Single:
-                    case DatabaseColumnType.Double:
-                    case DatabaseColumnType.Decimal:
+                    case ColumnValueType.Single:
+                    case ColumnValueType.Double:
+                    case ColumnValueType.Decimal:
                         return "REAL";
                 }
             }
             #endregion
 
             #region 兼容 Column 特性
-            var columnAttr = pro.GetCustomAttribute<ColumnAttribute>();
+            var columnAttr = pro.GetCustomAttribute<System.ComponentModel.DataAnnotations.Schema.ColumnAttribute>();
             if (columnAttr != null)
                 if (!columnAttr.TypeName.IsNullOrWhiteSpace())
                     return columnAttr.TypeName ?? string.Empty;
@@ -70,7 +70,7 @@ namespace Suyaa.Data.Sqlite.Helpers
                 case TypeCode.String:
                     return "TEXT";
                 default:
-                    throw new DbException($"不支持的数据格式'{proTypeCode}'");
+                    throw new TypeNotSupportedException(proType);
             }
             #endregion
         }

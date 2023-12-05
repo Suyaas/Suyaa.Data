@@ -52,7 +52,7 @@ namespace Suyaa.Data.Oracle.Helpers
                 case TypeCode.DateTime:
                     return "timestamp without time zone";
                 default:
-                    throw new DbException($"不支持的数据格式'{proTypeCode}'");
+                    throw new TypeNotSupportedException(proType);
             }
         }
     }

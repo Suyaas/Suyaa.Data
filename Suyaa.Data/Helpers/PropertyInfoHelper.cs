@@ -40,36 +40,52 @@ namespace Suyaa.Data.Helpers
         }
 
         /// <summary>
-        /// 是否含有AutoIncrement特性
+        /// 是否含有DatabaseGenerated(Identity)特性
         /// </summary>
         /// <param name="pro"></param>
         /// <returns></returns>
         public static bool IsAutoIncrement(this PropertyInfo pro)
         {
-            return pro.GetCustomAttributes<DbAutoIncrementAttribute>().Any();
+            var attr = pro.GetCustomAttribute<DatabaseGeneratedAttribute>();
+            if (attr is null) return false;
+            return attr.DatabaseGeneratedOption == DatabaseGeneratedOption.Identity;
         }
 
         /// <summary>
-        /// 是否含有Index特性
+        /// 是否为索引
         /// </summary>
         /// <param name="pro"></param>
         /// <returns></returns>
         public static bool IsIndex(this PropertyInfo pro)
         {
-            return pro.GetCustomAttributes<DbIndexAttribute>().Any();
+            var attr = pro.GetCustomAttribute<ColumnIndexAttribute>();
+            if (attr is null) return false;
+            return attr.Type != ColumnIndexType.None;
         }
 
 
         /// <summary>
-        /// 是否含有Index特性并有唯一属性
+        /// 是否为唯一索引
         /// </summary>
         /// <param name="pro"></param>
         /// <returns></returns>
         public static bool IsUniqueIndex(this PropertyInfo pro)
         {
-            var indexAttr = pro.GetCustomAttribute<DbIndexAttribute>();
-            if (indexAttr is null) return false;
-            return indexAttr.Unique;
+            var attr = pro.GetCustomAttribute<ColumnIndexAttribute>();
+            if (attr is null) return false;
+            return attr.Type == ColumnIndexType.Unique;
+        }
+
+        /// <summary>
+        /// 是否为组合索引
+        /// </summary>
+        /// <param name="pro"></param>
+        /// <returns></returns>
+        public static bool IsGroupIndex(this PropertyInfo pro)
+        {
+            var attr = pro.GetCustomAttribute<ColumnIndexAttribute>();
+            if (attr is null) return false;
+            return attr.Type == ColumnIndexType.Group;
         }
 
         /// <summary>
@@ -79,7 +95,7 @@ namespace Suyaa.Data.Helpers
         /// <returns></returns>
         public static string GetIndexName<T>(this PropertyInfo pro)
         {
-            var indexAttr = pro.GetCustomAttribute<DbIndexAttribute>();
+            var indexAttr = pro.GetCustomAttribute<ColumnIndexAttribute>();
             if (!indexAttr.Name.IsNullOrWhiteSpace()) return indexAttr.Name;
             string tableName = typeof(T).GetTableName();
             string columnName = pro.GetColumnName();
@@ -93,36 +109,10 @@ namespace Suyaa.Data.Helpers
         /// <returns></returns>
         public static string GetColumnName(this PropertyInfo pro)
         {
-            #region 兼容 DbColumn 特性
-            var dbColumnAttr = pro.GetCustomAttribute<DbColumnAttribute>();
-            if (dbColumnAttr != null)
-            {
-                string name = dbColumnAttr.Name;
-                if (name.IsNullOrWhiteSpace()) name = pro.Name;
-                switch (dbColumnAttr.Convert)
-                {
-                    case NameConvertType.UnderlineLower: return name.ToLowerDbName();
-                    case NameConvertType.UnderlineUpper: return name.ToUpperDbName();
-                    default: return name;
-                }
-            }
-            #endregion
             var columnAttr = pro.GetCustomAttribute<ColumnAttribute>();
             if (columnAttr is null) return pro.Name;
             if (columnAttr.Name.IsNullOrWhiteSpace()) return pro.Name;
             return columnAttr.Name ?? string.Empty;
-        }
-
-        /// <summary>
-        /// 获取是否自增字段
-        /// </summary>
-        /// <param name="pro"></param>
-        /// <returns></returns>
-        public static bool GetAutoIncrement(this PropertyInfo pro)
-        {
-            var databaseGenerated = pro.GetCustomAttribute<DatabaseGeneratedAttribute>();
-            if (databaseGenerated is null) return false;
-            return databaseGenerated.DatabaseGeneratedOption == DatabaseGeneratedOption.Identity;
         }
 
         /// <summary>

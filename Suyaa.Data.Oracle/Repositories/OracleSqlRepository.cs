@@ -1,11 +1,7 @@
 ﻿using Oracle.ManagedDataAccess.Client;
 using Suyaa.Data.Dependency;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Suyaa.Data.Oracle.Repositories
 {
@@ -14,16 +10,16 @@ namespace Suyaa.Data.Oracle.Repositories
     /// </summary>
     public sealed class OracleSqlRepository : ISqlRepository
     {
-        private readonly IDbWorkProvider _dbWorkProvider;
+        private readonly IDbWorkManager _dbWorkManager;
 
         /// <summary>
         /// Oracle Sql 仓库
         /// </summary>
         public OracleSqlRepository(
-            IDbWorkProvider dbWorkProvider
+            IDbWorkManager dbWorkManager
             )
         {
-            _dbWorkProvider = dbWorkProvider;
+            _dbWorkManager = dbWorkManager;
         }
 
         /// <summary>
@@ -40,7 +36,7 @@ namespace Suyaa.Data.Oracle.Repositories
                 sqlCommand.CommandTimeout = 600;
                 return sqlCommand;
             }
-            throw new DbException("Repository db connection is not for Oracle.");
+            throw new TypeNotSupportedException(work.Connection.GetType());
         }
 
         /// <summary>
@@ -67,8 +63,8 @@ namespace Suyaa.Data.Oracle.Repositories
         /// <exception cref="DbException"></exception>
         public IDbWork GetDbWork()
         {
-            var work = _dbWorkProvider.GetCurrentWork();
-            if (work is null) throw new DbException("Repository db work not found.");
+            var work = _dbWorkManager.GetCurrentWork();
+            if (work is null) throw new NotExistException<IDbWork>();
             return work;
         }
 

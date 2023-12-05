@@ -11,13 +11,13 @@ namespace Suyaa.EFCore
     /// </summary>
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        private readonly DbContext _context;
+        private readonly Microsoft.EntityFrameworkCore.DbContext _context;
 
         /// <summary>
         /// 工作单元
         /// </summary>
         /// <param name="context"></param>
-        public UnitOfWork(DbContext context)
+        public UnitOfWork(Microsoft.EntityFrameworkCore.DbContext context)
         {
             _context = context;
         }

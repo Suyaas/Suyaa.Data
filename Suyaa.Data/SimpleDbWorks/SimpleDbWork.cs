@@ -1,10 +1,6 @@
 ﻿using Suyaa.Data.Dependency;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace Suyaa.Data.SimpleDbWorks
 {

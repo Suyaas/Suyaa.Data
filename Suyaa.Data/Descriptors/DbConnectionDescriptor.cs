@@ -42,10 +42,10 @@ namespace Suyaa.Data
         /// <param name="connectionDefine">以[dbtype]connectionString形式定义的连接描述</param>
         public DbConnectionDescriptor(string name, string connectionDefine)
         {
-            if (connectionDefine.IsNullOrWhiteSpace()) throw new DbException("connectionDefine not found.");
-            if (connectionDefine[0] != '[') throw new DbException(string.Format("connectionDefine must start with '[dbtype]'."));
+            if (connectionDefine.IsNullOrWhiteSpace()) throw new NullException("connectionDefine");
+            if (connectionDefine[0] != '[') throw new DbException("Descriptor.StartRule", "connectionDefine must start with '[dbtype]'.");
             int idx = connectionDefine.IndexOf(']');
-            if (idx < 0) throw new DbException(string.Format("ConnectionString must start with '[dbtype]'."));
+            if (idx < 0) throw new DbException("Descriptor.StartRule", "connectionDefine must start with '[dbtype]'.");
             string dbType = connectionDefine.Substring(1, idx - 1);
             // 获取连接字符串
             ParseConnectionString(connectionDefine.Substring(idx + 1));
@@ -62,7 +62,7 @@ namespace Suyaa.Data
                 "mysql" => DatabaseType.MySQL,
                 "access" => DatabaseType.MicrosoftOfficeAccess,
                 "access12" => DatabaseType.MicrosoftOfficeAccessV12,
-                _ => throw new DbException(string.Format("Unsupported database type '{0}'.", dbType)),
+                _ => throw new DbTypeNotSupportedException(this.DatabaseType),
             };
             Name = name;
         }

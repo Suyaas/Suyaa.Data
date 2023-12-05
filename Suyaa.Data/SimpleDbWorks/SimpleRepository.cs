@@ -1,11 +1,10 @@
 ﻿using Suyaa.Data.Dependency;
 using Suyaa.Data.Descriptors;
+using Suyaa.Data.Entities;
 using Suyaa.Data.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Suyaa.Data.SimpleDbWorks
@@ -41,7 +40,7 @@ namespace Suyaa.Data.SimpleDbWorks
         public IDbWork GetDbWork()
         {
             var work = _dbWorkManager.GetCurrentWork();
-            if (work is null) throw new DbException("Repository db work not found.");
+            if (work is null) throw new NotExistException<IDbWork>();
             return work;
         }
 
@@ -54,14 +53,33 @@ namespace Suyaa.Data.SimpleDbWorks
             return GetDbWork().GetSqlRepository();
         }
 
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="predicate"></param>
         public void Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            // 生成sql
+            var sql = _dbProvider.ScriptProvider.GetEntityDelete(_entity, predicate);
+            // 生成参数
+            //var parameters = _entity.GetParameters(entity);
+            // 执行脚本
+            GetSqlRepository().ExecuteNonQuery(sql);
         }
 
-        public Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            // 生成sql
+            var sql = _dbProvider.ScriptProvider.GetEntityDelete(_entity, predicate);
+            // 生成参数
+            //var parameters = _entity.GetParameters(entity);
+            // 执行脚本
+            await GetSqlRepository().ExecuteNonQueryAsync(sql);
         }
 
         /// <summary>
@@ -102,24 +120,68 @@ namespace Suyaa.Data.SimpleDbWorks
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="predicate"></param>
         public void Update(TEntity entity, Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            // 生成sql
+            var sql = _dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.Fields, predicate);
+            // 生成参数
+            var parameters = _entity.GetParameters(entity);
+            // 执行脚本
+            GetSqlRepository().ExecuteNonQuery(sql, parameters);
         }
 
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="selector"></param>
+        /// <param name="predicate"></param>
         public void Update(TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            // 生成sql
+            var sql = _dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.GetEntityUpdateFields(selector), predicate);
+            // 生成参数
+            var parameters = _entity.GetParameters(entity);
+            // 执行脚本
+            GetSqlRepository().ExecuteNonQuery(sql, parameters);
         }
 
-        public Task UpdateAsync(TEntity entity, Expression<Func<TEntity, bool>> predicate)
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task UpdateAsync(TEntity entity, Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            // 生成sql
+            var sql = _dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.Fields, predicate);
+            // 生成参数
+            var parameters = _entity.GetParameters(entity);
+            // 执行脚本
+            await GetSqlRepository().ExecuteNonQueryAsync(sql, parameters);
         }
 
-        public Task UpdateAsync(TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="selector"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task UpdateAsync(TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            // 生成sql
+            var sql = _dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.GetEntityUpdateFields(selector), predicate);
+            // 生成参数
+            var parameters = _entity.GetParameters(entity);
+            // 执行脚本
+            await GetSqlRepository().ExecuteNonQueryAsync(sql, parameters);
         }
     }
     /// <summary>

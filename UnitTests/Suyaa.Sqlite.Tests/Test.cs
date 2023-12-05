@@ -134,7 +134,7 @@ namespace Suyaa.Sqlite.Tests
         {
             // 定义数据
             string connectionString = $"data source={sy.IO.GetExecutionPath("temp.db")}";
-            var optionsBuilder = new DbContextOptionsBuilder<DbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<Microsoft.EntityFrameworkCore.DbContext>();
             optionsBuilder.UseSqlite(connectionString);
             // 执行方法
             //using (TestDbContext context = new TestDbContext(optionsBuilder.Options, connectionString))
@@ -202,7 +202,7 @@ namespace Suyaa.Sqlite.Tests
             };
             // 执行方法
             using var testDbContext = new TestDbContext(descriptor);
-            using var context = new DbDescriptorTypeContext(testDbContext.ConnectionDescriptor, testDbContext.Options, types);
+            using var context = new DescriptorTypeDbContext(testDbContext.ConnectionDescriptor, testDbContext.Options, types);
             {
                 //IRepository<People, string> peopleRepository = new EFCore.Dbsets.Repository<People, string>(context);
                 //IRepository<Department, string> departmentRepository = new EFCore.Dbsets.Repository<Department, string>(context);

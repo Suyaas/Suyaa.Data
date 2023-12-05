@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
+using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
+using Suyaa.EFCore.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +21,11 @@ namespace Suyaa.EFCore.PostgreSQL.Helpers
         /// </summary>
         /// <param name="descriptor"></param>
         /// <returns></returns>
-        public static DbContextOptions GetPostgreSqlContextOptions(this DbConnectionDescriptor descriptor)
+        public static DbContextOptions GetPostgreSqlContextOptions(this IDbConnectionDescriptor descriptor)
         {
-            if (descriptor.DatabaseType != DatabaseType.PostgreSQL) throw new DbException($"DatabaseType '{descriptor.DatabaseType}' not supported.");
+            if (descriptor.DatabaseType != DatabaseType.PostgreSQL) throw new DbTypeNotSupportedException(descriptor.DatabaseType);
             // 添加数据库上下文配置
-            var optionsBuilder = new DbContextOptionsBuilder<DbDescriptorContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<DescriptorDbContext>();
             optionsBuilder.UseNpgsql(descriptor.ToConnectionString());
             return optionsBuilder.Options;
         }

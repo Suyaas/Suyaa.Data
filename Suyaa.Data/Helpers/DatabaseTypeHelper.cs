@@ -1,8 +1,6 @@
 ﻿using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Suyaa.Data.Helpers
 {
@@ -32,16 +30,15 @@ namespace Suyaa.Data.Helpers
                     providerName = "Suyaa.Data.Sqlite.SqliteProvider";
                     providerDllPath = "Suyaa.Data.Sqlite";
                     break;
-                default: throw new DbException($"不支持的数据库类型\'{type.ToString()}\'");
+                default: throw new DbTypeNotSupportedException(type);
             }
             string dllPath = sy.IO.GetExecutionPath(providerDllPath);
             Type? providerType = sy.Assembly.FindType(providerName, dllPath);
             if (providerType is null)
             {
                 sy.IO.CreateFolder(dllPath);
-                throw new DbException($"未找到供应商\'{providerName}\'");
+                throw new DbProviderNotExistException(providerName);
             }
-            //return (IDatabaseProvider)Activator.CreateInstance(providerType);
             return providerType.Create<IDatabaseProvider>();
         }
 
@@ -70,14 +67,14 @@ namespace Suyaa.Data.Helpers
                     providerName = "Suyaa.Data.Oracle.Providers.OracleProvider";
                     providerDllPath = "Suyaa.Data.Oracle";
                     break;
-                default: throw new DbException($"不支持的数据库类型\'{type.ToString()}\'");
+                default: throw new DbTypeNotSupportedException(type);
             }
             string dllPath = sy.IO.GetExecutionPath(providerDllPath);
             Type? providerType = sy.Assembly.FindType(providerName, dllPath);
             if (providerType is null)
             {
                 sy.IO.CreateFolder(dllPath);
-                throw new DbException($"未找到供应商\'{providerName}\'");
+                throw new DbProviderNotExistException(providerName);
             }
             return providerType.Create<IDbProvider>(new object[] { });
         }

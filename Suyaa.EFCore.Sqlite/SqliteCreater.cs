@@ -5,6 +5,7 @@ using Suyaa.Data.Sqlite;
 using Suyaa.EFCore.Helpers;
 using Suyaa;
 using Suyaa.EFCore.Dependency;
+using Suyaa.EFCore.Contexts;
 
 namespace Suyaa.EFCore
 {
@@ -29,7 +30,7 @@ namespace Suyaa.EFCore
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<bool> EnsureCreated(DbDescriptorContext context)
+        public async Task<bool> EnsureCreated(DescriptorDbContext context)
         {
             // 获取数据库连接
             System.Data.Common.DbConnection conn = context.Database.GetDbConnection();
@@ -92,7 +93,7 @@ namespace Suyaa.EFCore
             return true;
         }
 
-        public Task<bool> EnsureCreated(DbContextBase context)
+        public Task<bool> EnsureCreated(BaseDbContext context)
         {
             throw new NotImplementedException();
         }
@@ -175,7 +176,7 @@ namespace Suyaa.EFCore
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>        
-        public string GetEnsureCreatedSql(DbDescriptorContext context)
+        public string GetEnsureCreatedSql(DescriptorDbContext context)
         {
             StringBuilder sb = new StringBuilder();
             // 获取根类型
@@ -198,7 +199,7 @@ namespace Suyaa.EFCore
             return sb.ToString();
         }
 
-        public string GetEnsureCreatedSql(DbContextBase context)
+        public string GetEnsureCreatedSql(BaseDbContext context)
         {
             throw new NotImplementedException();
         }

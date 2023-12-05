@@ -1,17 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
+using Suyaa.Data.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.EFCore
+namespace Suyaa.EFCore.Contexts
 {
     /// <summary>
-    /// 类型数据库上下文
+    /// 带描述和类型集合数据库上下文
     /// </summary>
-    public sealed class DbDescriptorTypeContext : DbDescriptorContext
+    public sealed class DescriptorTypeDbContext : DescriptorDbContext
     {
         // 所有类型
         private readonly IEnumerable<Type> _types;
@@ -21,12 +22,16 @@ namespace Suyaa.EFCore
         /// </summary>
         /// <param name="descriptor"></param>
         /// <param name="options"></param>
-        public DbDescriptorTypeContext(DbConnectionDescriptor descriptor, DbContextOptions options, IEnumerable<Type> types) : base(descriptor, options)
+        /// <param name="types"></param>
+        public DescriptorTypeDbContext(IDbConnectionDescriptor descriptor, DbContextOptions options, IEnumerable<Type> types) : base(descriptor, options)
         {
             _types = types;
         }
 
-        // 创建模型构建器
+        /// <summary>
+        /// 创建模型构建器
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             foreach (var type in _types)

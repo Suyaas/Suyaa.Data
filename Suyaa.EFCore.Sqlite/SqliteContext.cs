@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
+using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.SqlServer.Helpers;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Suyaa.EFCore.SqlServer
     /// <summary>
     /// SqlServer数据库上下文
     /// </summary>
-    public abstract class SqliteContext : DbDescriptorContext
+    public abstract class SqliteContext : DescriptorDbContext
     {
         /// <summary>
         /// SqlServer数据库上下文

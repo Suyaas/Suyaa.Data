@@ -1,8 +1,5 @@
-﻿using Suyaa;
-using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Suyaa.Data.Sqlite
@@ -46,7 +43,7 @@ namespace Suyaa.Data.Sqlite
             // 动态拼接连接字符串
             StringBuilder sb = new StringBuilder();
             // 设置存储路径
-            if (path.IsNullOrWhiteSpace()) throw new DbException($"缺少必要的存储路径配置");
+            if (path.IsNullOrWhiteSpace()) throw new NotExistException(path);
             sb.Append($"Data Source={path};");
             if (!password.IsNullOrWhiteSpace())
                 sb.Append($"Password={password};");

@@ -35,41 +35,35 @@ namespace Suyaa.PostgreSQL.Tests
         {
             using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connString);
             var repository = work.GetRepository<People, string>();
-            repository.Insert(new People()
-            {
-                Age = 10,
-                Name = "张三",
-            });
+            repository.Insert(new People() { Age = 10, Name = "张三" });
             work.Commit();
-            //// 执行方法
-            //using (DatabaseConnection conn = new DatabaseConnection(DatabaseType.PostgreSQL, _connString))
-            //{
-            //    conn.Open();
-            //    People people = new People()
-            //    {
-            //        Age = 10,
-            //        Name = "张三",
-            //    };
-            //    IRepository<People, string> repository = new Repository<People, string>(conn);
-            //    repository.Insert(people);
-            //}
-            // 返回结果
-            _output.WriteLine("OK");
         }
 
         [Fact]
-        public void Query()
+        public void Delete()
         {
-            //// 执行方法
-            //using (DatabaseConnection conn = new DatabaseConnection(DatabaseType.PostgreSQL, _connString))
-            //{
-            //    conn.Open();
-            //    IRepository<People, string> repository = new Repository<People, string>(conn);
-            //    var peoples = repository.GetRows(d => d.Age > 8);
-            //    // 返回结果
-            //    _output.WriteLine($"peoples: {peoples.Count}");
-            //}
+            using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connString);
+            var repository = work.GetRepository<People, string>();
+            repository.Delete(d => d.Age < 10);
+            work.Commit();
+        }
 
+        [Fact]
+        public void Update()
+        {
+            using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connString);
+            var repository = work.GetRepository<People, string>();
+            repository.Update(new People() { Age = 10, Name = "张三" }, d => d.Age < 10);
+            work.Commit();
+        }
+
+        [Fact]
+        public void UpdateFields()
+        {
+            using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connString);
+            var repository = work.GetRepository<People, string>();
+            repository.Update(new People() { Age = 10 }, d => d.Age, d => d.Age < 10);
+            work.Commit();
         }
     }
 }

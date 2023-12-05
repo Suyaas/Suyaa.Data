@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
 using Suyaa.Data.Dependency;
@@ -73,6 +74,7 @@ namespace Suyaa.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
+        [return: MaybeNull]
         T GetValue<T>(string sql);
 
         /// <summary>
@@ -81,6 +83,7 @@ namespace Suyaa.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
+        [return: MaybeNull]
         Task<T> GetValueAsync<T>(string sql);
 
         /// <summary>

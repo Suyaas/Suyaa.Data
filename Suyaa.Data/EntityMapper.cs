@@ -26,6 +26,7 @@ namespace Suyaa.Data
         public EntityMapper()
         {
             _type = typeof(T);
+            this.IsValue = _type.IsValueType;
             _properties = _type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
         }
 
@@ -56,7 +57,7 @@ namespace Suyaa.Data
         /// <returns></returns>
         public T Map(Func<PropertyInfo, object?> getValue)
         {
-            if (this.IsValue) throw new DbException("不支持值类型自由映射");
+            if (this.IsValue) throw new TypeNotSupportedException(_type);
             var obj = Activator.CreateInstance(_type);
             for (int i = 0; i < _properties.Length; i++)
             {

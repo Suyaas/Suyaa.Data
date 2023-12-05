@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Suyaa.Data
 {
@@ -331,6 +332,7 @@ namespace Suyaa.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
+        [return: MaybeNull]
         public T GetValue<T>(string sql)
         {
             T res = default(T);
@@ -341,7 +343,7 @@ namespace Suyaa.Data
                 res = reader.ToValue<T>();
                 found = true;
             });
-            if (res is null) throw new DbException("获取结果失败");
+            //if (res is null) throw new DbException("获取结果失败");
             return res;
         }
 
@@ -351,6 +353,7 @@ namespace Suyaa.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
+        [return: MaybeNull]
         public async Task<T> GetValueAsync<T>(string sql)
         {
             T res = default(T);
@@ -361,8 +364,8 @@ namespace Suyaa.Data
                  res = reader.ToValue<T>();
                  found = true;
              });
-            if (res is null) throw new DbException("获取结果失败");
-            return res;
+            //if (res is null) throw new DbException("获取结果失败");
+            return res!;
         }
 
         /// <summary>
@@ -508,7 +511,7 @@ namespace Suyaa.Data
         {
             // 设置数据库供应商
             var type = sy.Assembly.FindType(info.ProviderName, sy.Assembly.ExecutionDirectory);
-            if (type is null) throw new DbException($"Database provider '{info.ProviderName}' type not found.");
+            if (type is null) throw new DbProviderNotExistException(info.ProviderName);
             Provider = (IDatabaseProvider)Activator.CreateInstance(type);
             // 设置连接字符串
             ConnectionString = info.ToConnectionString();

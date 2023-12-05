@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using Suyaa.Data;
 using Suyaa.Data.Attributes;
+using Suyaa.Data.Helpers;
 
 namespace Suyaa.EFCore.Helpers
 {
@@ -22,7 +23,7 @@ namespace Suyaa.EFCore.Helpers
         public static bool IsAutoIncrement(this IProperty pro)
         {
             if (pro.PropertyInfo is null) return false;
-            return pro.PropertyInfo.GetCustomAttributes<DbAutoIncrementAttribute>().Any();
+            return pro.PropertyInfo.IsAutoIncrement();
         }
     }
 }

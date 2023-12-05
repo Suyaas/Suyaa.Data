@@ -19,7 +19,7 @@ namespace Suyaa.Data.Descriptors
             Index = index;
             PropertyInfo = property;
             this.Name = property.GetColumnName();
-            this.IsAutoIncrement = property.GetAutoIncrement();
+            this.IsAutoIncrement = property.IsAutoIncrement();
         }
 
         /// <summary>

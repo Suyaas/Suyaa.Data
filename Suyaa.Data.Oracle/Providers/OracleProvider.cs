@@ -2,9 +2,7 @@
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Oracle.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Text;
 
 namespace Suyaa.Data.Oracle.Providers
 {
@@ -13,32 +11,25 @@ namespace Suyaa.Data.Oracle.Providers
     /// </summary>
     public class OracleProvider : IDbProvider
     {
-        private readonly IDbWorkProvider _dbWorkProvider;
         private OracleQueryProvider? _queryProvider;
-
-        /// <summary>
-        /// Oracle数据库供应商
-        /// </summary>
-        public OracleProvider(
-            IDbWorkProvider dbWorkProvider
-            )
-        {
-            _dbWorkProvider = dbWorkProvider;
-        }
 
         /// <summary>
         /// 查询供应商
         /// </summary>
         public IDbQueryProvider QueryProvider => _queryProvider ??= new OracleQueryProvider();
 
+        public IDbScriptProvider ScriptProvider => throw new NotImplementedException();
+
         /// <summary>
-        /// 获取一个数据库连接
+        /// 获取数据库连接
         /// </summary>
+        /// <param name="dbWorkManager"></param>
         /// <returns></returns>
-        public DbConnection GetDbConnection()
+        /// <exception cref="DbException"></exception>
+        public DbConnection GetDbConnection(IDbWorkManager dbWorkManager)
         {
-            var work = _dbWorkProvider.GetCurrentWork();
-            if (work is null) throw new DbException("Current db work not found.");
+            var work = dbWorkManager.GetCurrentWork();
+            if (work is null) throw new NotExistException<IDbWork>();
             var dbc = new OracleConnection(work.ConnectionDescriptor.ToConnectionString());
             dbc.Open();
             return dbc;
@@ -47,10 +38,11 @@ namespace Suyaa.Data.Oracle.Providers
         /// <summary>
         /// 获取一个Sql仓库
         /// </summary>
+        /// <param name="dbWorkManager"></param>
         /// <returns></returns>
-        public ISqlRepository GetSqlRepository()
+        public ISqlRepository GetSqlRepository(IDbWorkManager dbWorkManager)
         {
-            return new OracleSqlRepository(_dbWorkProvider);
+            return new OracleSqlRepository(dbWorkManager);
         }
     }
 }

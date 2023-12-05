@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Suyaa.EFCore
+namespace Suyaa.EFCore.Contexts
 {
     /// <summary>
     /// EFCore重写上下文
     /// </summary>
-    public abstract class DbContextBase : DbContext
+    public abstract class BaseDbContext : DbContext
     {
         /// <summary>
         /// 连接字符串
@@ -22,7 +22,7 @@ namespace Suyaa.EFCore
         /// </summary>
         /// <param name="options"></param>
         /// <param name="connectionString"></param>
-        public DbContextBase(DbContextOptions options, string connectionString) : base(options)
+        public BaseDbContext(DbContextOptions options, string connectionString) : base(options)
         {
             ConnectionString = connectionString;
         }

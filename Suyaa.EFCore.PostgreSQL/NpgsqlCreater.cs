@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Suyaa.Data.PostgreSQL.Helpers;
 using Suyaa.EFCore.Helpers;
 using Suyaa.EFCore.Dependency;
+using Suyaa.EFCore.Contexts;
 
 namespace Suyaa.EFCore.PostgreSQL
 {
@@ -18,7 +19,7 @@ namespace Suyaa.EFCore.PostgreSQL
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<bool> EnsureCreated(DbDescriptorContext context)
+        public async Task<bool> EnsureCreated(DescriptorDbContext context)
         {
             try
             {
@@ -54,13 +55,13 @@ namespace Suyaa.EFCore.PostgreSQL
             if (column.IsPrimaryKey())
             {
                 bool isAutoIncrement = column.IsAutoIncrement();
-                sb.AppendLine($"ALTER TABLE {table.GetSchemaQualifiedTableName()} ALTER COLUMN \"{column.GetColumnBaseName()}\" TYPE {(isAutoIncrement ? "serial" : column.GetColumnType())};");
-                sb.AppendLine($"ALTER TABLE {table.GetSchemaQualifiedTableName()} ALTER \"{column.GetColumnBaseName()}\" SET NOT NULL;");
+                sb.AppendLine($"ALTER TABLE {table.GetSchemaQualifiedTableName()} ALTER COLUMN \"{column.GetColumnName()}\" TYPE {(isAutoIncrement ? "serial" : column.GetColumnType())};");
+                sb.AppendLine($"ALTER TABLE {table.GetSchemaQualifiedTableName()} ALTER \"{column.GetColumnName()}\" SET NOT NULL;");
             }
             else
             {
-                sb.AppendLine($"ALTER TABLE {table.GetSchemaQualifiedTableName()} ALTER COLUMN \"{column.GetColumnBaseName()}\" TYPE {column.GetColumnType()};");
-                sb.AppendLine($"ALTER TABLE {table.GetSchemaQualifiedTableName()} ALTER \"{column.GetColumnBaseName()}\" {(column.IsColumnNullable() ? "DROP" : "SET")} NOT NULL;");
+                sb.AppendLine($"ALTER TABLE {table.GetSchemaQualifiedTableName()} ALTER COLUMN \"{column.GetColumnName()}\" TYPE {column.GetColumnType()};");
+                sb.AppendLine($"ALTER TABLE {table.GetSchemaQualifiedTableName()} ALTER \"{column.GetColumnName()}\" {(column.IsColumnNullable() ? "DROP" : "SET")} NOT NULL;");
             }
             return sb.ToString();
         }
@@ -77,11 +78,11 @@ namespace Suyaa.EFCore.PostgreSQL
             if (column.IsPrimaryKey())
             {
                 bool isAutoIncrement = column.IsAutoIncrement();
-                return $"\"{column.GetColumnBaseName()}\" {(isAutoIncrement ? "serial" : column.GetColumnType())} NOT NULL";
+                return $"\"{column.GetColumnName()}\" {(isAutoIncrement ? "serial" : column.GetColumnType())} NOT NULL";
             }
             else
             {
-                return $"\"{column.GetColumnBaseName()}\" {column.GetColumnType()} {(column.IsColumnNullable() ? "NULL" : "NOT NULL")}";
+                return $"\"{column.GetColumnName()}\" {column.GetColumnType()} {(column.IsColumnNullable() ? "NULL" : "NOT NULL")}";
             }
         }
 
@@ -104,7 +105,7 @@ namespace Suyaa.EFCore.PostgreSQL
             sb.Append($"CREATE TABLE IF NOT EXISTS {tableFullName}(\n");
             foreach (IProperty property in table.GetProperties())
             {
-                if (property.IsPrimaryKey()) primaryKey = property.GetColumnBaseName();
+                if (property.IsPrimaryKey()) primaryKey = property.GetColumnName();
                 if (isFirst) { isFirst = false; } else { sb.Append(','); sb.AppendLine(); }
                 sb.Append("    ");
                 sb.Append(GetColumnSql(table, property));
@@ -141,7 +142,7 @@ namespace Suyaa.EFCore.PostgreSQL
             {
                 if (!property.IsPrimaryKey())
                 {
-                    string columnName = property.GetColumnBaseName();
+                    string columnName = property.GetColumnName();
                     sb.AppendLine($"if not exists(select dtd_identifier from information_schema.columns WHERE table_schema = '{schmaName}' and table_name = '{tableName.ToLower()}' and column_name = '{columnName}') then");
                     sb.AppendLine(GetAddColumnSql(table, property));
                     sb.AppendLine("else");
@@ -157,7 +158,7 @@ namespace Suyaa.EFCore.PostgreSQL
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>        
-        public string GetEnsureCreatedSql(DbDescriptorContext context)
+        public string GetEnsureCreatedSql(DescriptorDbContext context)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("do $$");
@@ -173,12 +174,24 @@ namespace Suyaa.EFCore.PostgreSQL
             return sb.ToString();
         }
 
-        public Task<bool> EnsureCreated(DbContextBase context)
+        /// <summary>
+        /// 创建
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Task<bool> EnsureCreated(BaseDbContext context)
         {
             throw new NotImplementedException();
         }
 
-        public string GetEnsureCreatedSql(DbContextBase context)
+        /// <summary>
+        /// 获取创建Sql脚本
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetEnsureCreatedSql(BaseDbContext context)
         {
             throw new NotImplementedException();
         }

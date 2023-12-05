@@ -21,7 +21,7 @@ namespace Suyaa.EFCore.SqlServer.Helpers
         /// <returns></returns>
         public static DbContextOptions GetSqlServerContextOptions(this DbConnectionDescriptor descriptor)
         {
-            if (descriptor.DatabaseType != DatabaseType.MicrosoftSqlServer) throw new DbException($"DatabaseType '{descriptor.DatabaseType}' not supported.");
+            if (descriptor.DatabaseType != DatabaseType.MicrosoftSqlServer) throw new DbTypeNotSupportedException(descriptor.DatabaseType);
             // 添加数据库上下文配置
             var optionsBuilder = new DbContextOptionsBuilder<Microsoft.EntityFrameworkCore.DbContext>();
             optionsBuilder.UseSqlServer(descriptor.ToConnectionString());

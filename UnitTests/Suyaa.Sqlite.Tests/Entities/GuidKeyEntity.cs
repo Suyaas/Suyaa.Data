@@ -17,8 +17,8 @@ namespace SuyaaTest.Sqlite.Entities
         /// <summary>
         /// Id
         /// </summary>
-        [DbColumn(Convert = NameConvertType.UnderlineLower)]
-        [DbColumnType(DatabaseColumnType.Varchar, 32)]
+        [Column(Convert = NameConvertType.UnderlineLower)]
+        [ColumnType(ColumnValueType.Varchar, 32)]
         [StringLength(32)]
         public string Id { get; set; } = string.Empty;
 

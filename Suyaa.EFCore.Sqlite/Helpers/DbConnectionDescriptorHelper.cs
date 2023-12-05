@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
 using Suyaa.Data.Enums;
+using Suyaa.EFCore.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,9 @@ namespace Suyaa.EFCore.SqlServer.Helpers
         /// <returns></returns>
         public static DbContextOptions GetSqliteContextOptions(this DbConnectionDescriptor descriptor)
         {
-            if (descriptor.DatabaseType != DatabaseType.MicrosoftSqlServer) throw new DbException($"DatabaseType '{descriptor.DatabaseType}' not supported.");
+            if (descriptor.DatabaseType != DatabaseType.MicrosoftSqlServer) throw new DbTypeNotSupportedException(descriptor.DatabaseType);
             // 添加数据库上下文配置
-            var optionsBuilder = new DbContextOptionsBuilder<DbDescriptorContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<DescriptorDbContext>();
             optionsBuilder.UseSqlite(descriptor.ToConnectionString());
             return optionsBuilder.Options;
         }

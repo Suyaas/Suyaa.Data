@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data.Helpers;
+using Suyaa.EFCore.Contexts;
 using System;
 using System.Reflection;
 
@@ -10,7 +11,7 @@ namespace Suyaa.EFCore.Helpers
     /// </summary>
     public static class ModelBuilderHelper
     {
-        public static void BuildToLowerName<T>(this ModelBuilder modelBuilder) where T : DbDescriptorContext
+        public static void BuildToLowerName<T>(this ModelBuilder modelBuilder) where T : DescriptorDbContext
         {
             var list = typeof(T).GetRepositoryInfos();
             foreach (var item in list)

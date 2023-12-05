@@ -19,13 +19,13 @@ namespace Suyaa.EFCore.Sqlite
         /// <summary>
         /// DB上下文
         /// </summary>
-        public DbContext DbContext { get; }
+        public Microsoft.EntityFrameworkCore.DbContext DbContext { get; }
 
         /// <summary>
         /// 对象实例化
         /// </summary>
         /// <param name="context"></param>
-        public SqlRepository(DbContext context)
+        public SqlRepository(Microsoft.EntityFrameworkCore.DbContext context)
         {
             this.DbContext = context;
         }

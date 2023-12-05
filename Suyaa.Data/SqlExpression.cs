@@ -128,7 +128,7 @@ namespace Suyaa.Data
             {
                 "Contains" => GetContainsSql(methodCall),
                 "Equals" => GetEqualsSqlString(methodCall),
-                _ => throw new Exception($"SqlExpressionValue不支持的Call类型'{callMethod.Name}'"),
+                _ => throw new ExpressionNodeNotSupportedException($"Call.{callMethod.Name}"),
             };
         }
 
@@ -170,8 +170,7 @@ namespace Suyaa.Data
                     throw new Exception($"SqlExpressionValue不支持的Call类型'{callMethod.Name}'");
                 case ExpressionType.Convert: // 获取Convert函数
                     return GetConvertSql((UnaryExpression)exp);
-                default:
-                    throw new Exception($"SqlExpressionValue不支持的'{exp.NodeType}'节点类型");
+                default: throw new ExpressionNodeNotSupportedException(exp.NodeType);
             }
         }
 
@@ -228,7 +227,7 @@ namespace Suyaa.Data
                     break;
                 case ExpressionType.Coalesce:
                     return $"COALESCE({expLeft}, {expRight})";
-                default: throw new DbException($"SqlExpression不支持的'{exp.NodeType}'节点类型");
+                default: throw new ExpressionNodeNotSupportedException(exp.NodeType);
             }
             sb.Append(expRight);
             return sb.ToString();
@@ -245,7 +244,7 @@ namespace Suyaa.Data
             {
                 BinaryExpression binaryExpression => GetBinarySqlString(binaryExpression),
                 MethodCallExpression methodCallExpression => GetMethodCallSqlString(methodCallExpression),
-                _ => throw new DbException($"SqlExpression不支持的'{exp.NodeType}'节点类型"),
+                _ => throw new ExpressionNodeNotSupportedException(exp.NodeType),
             };
         }
 

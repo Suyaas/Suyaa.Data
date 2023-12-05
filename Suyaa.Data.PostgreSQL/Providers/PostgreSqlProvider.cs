@@ -31,7 +31,7 @@ namespace Suyaa.Data.PostgreSQL.Providers
         public DbConnection GetDbConnection(IDbWorkManager dbWorkManager)
         {
             var work = dbWorkManager.GetCurrentWork();
-            if (work is null) throw new DbException("Current db work not found.");
+            if (work is null) throw new NotExistException<IDbWork>();
             var dbc = new NpgsqlConnection(work.ConnectionDescriptor.ToConnectionString());
             dbc.Open();
             return dbc;

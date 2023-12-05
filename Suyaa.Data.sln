@@ -27,6 +27,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuyaaTest.Sqlite", "UnitTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuyaaTest.Oracle", "UnitTests\SuyaaTest.Oracle\SuyaaTest.Oracle.csproj", "{1BE1CD2A-47DE-4D3F-BEDF-C7DEA0890AD9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{4D7C7114-349B-4A2B-ADD8-B466E32ABC65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.PostgreSql", "Demo\Demo.PostgreSql\Demo.PostgreSql.csproj", "{80E3FE5C-BCE6-4108-A016-0279332A251E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +81,10 @@ Global
 		{1BE1CD2A-47DE-4D3F-BEDF-C7DEA0890AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BE1CD2A-47DE-4D3F-BEDF-C7DEA0890AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BE1CD2A-47DE-4D3F-BEDF-C7DEA0890AD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80E3FE5C-BCE6-4108-A016-0279332A251E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80E3FE5C-BCE6-4108-A016-0279332A251E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80E3FE5C-BCE6-4108-A016-0279332A251E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80E3FE5C-BCE6-4108-A016-0279332A251E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +93,7 @@ Global
 		{BB89FBB5-B767-4D93-9BEF-8EFCFD9F7B51} = {2FC109A2-1390-4501-869B-E127574E4EBB}
 		{DB3F30B2-8B5A-4371-A518-4D92261A45A3} = {2FC109A2-1390-4501-869B-E127574E4EBB}
 		{1BE1CD2A-47DE-4D3F-BEDF-C7DEA0890AD9} = {2FC109A2-1390-4501-869B-E127574E4EBB}
+		{80E3FE5C-BCE6-4108-A016-0279332A251E} = {4D7C7114-349B-4A2B-ADD8-B466E32ABC65}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD5514D4-9171-4EF9-8876-E7F9DC71BB7C}

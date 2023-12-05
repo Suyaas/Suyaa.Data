@@ -1,4 +1,5 @@
-﻿using Suyaa.Data.Helpers;
+﻿using Suyaa.Data.Dependency;
+using Suyaa.Data.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9,7 +10,7 @@ namespace Suyaa.Data.Descriptors
     /// <summary>
     /// 表描述
     /// </summary>
-    public sealed class EntityDescriptor : TypeDescriptor
+    public class EntityDescriptor : TypeDescriptor
     {
 
         /// <summary>

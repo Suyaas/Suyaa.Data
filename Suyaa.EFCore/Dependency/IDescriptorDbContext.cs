@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
+using Suyaa.Data.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,12 @@ namespace Suyaa.EFCore.Dependency
     /// <summary>
     /// 带描述的数据库上下文
     /// </summary>
-    public interface IDbDescriptorContext
+    public interface IDescriptorDbContext
     {
         /// <summary>
         /// 数据库连接描述
         /// </summary>
-        DbConnectionDescriptor ConnectionDescriptor { get; }
+        IDbConnectionDescriptor ConnectionDescriptor { get; }
 
         /// <summary>
         /// 数据库上下文配置

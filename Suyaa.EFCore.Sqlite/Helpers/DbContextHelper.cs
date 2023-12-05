@@ -1,8 +1,8 @@
-﻿using Suyaa.EFCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Suyaa.EFCore.Helpers;
+using Suyaa.EFCore.Contexts;
 
 namespace Suyaa.Data.PostgreSQL.Helpers
 {
@@ -25,7 +25,7 @@ namespace Suyaa.Data.PostgreSQL.Helpers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static async Task<int> ExecuteNonQueryAsync(this EFCore.DbDescriptorContext context, string sql)
+        public static async Task<int> ExecuteNonQueryAsync(this DescriptorDbContext context, string sql)
         {
             int res = 0;
             // 连接数据库
@@ -50,7 +50,7 @@ namespace Suyaa.Data.PostgreSQL.Helpers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static int ExecuteNonQuery(this EFCore.DbDescriptorContext context, string sql)
+        public static int ExecuteNonQuery(this DescriptorDbContext context, string sql)
         {
             return context.ExecuteNonQueryAsync(sql).Result;
         }

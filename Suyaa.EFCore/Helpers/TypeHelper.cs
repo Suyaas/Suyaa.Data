@@ -1,4 +1,5 @@
 ﻿using Suyaa.Data;
+using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.Dbsets;
 
 namespace Suyaa.EFCore.Helpers
@@ -27,7 +28,7 @@ namespace Suyaa.EFCore.Helpers
         /// <param name="type"></param>
         public static List<RepositoryInfo> GetRepositoryInfos(this Type type)
         {
-            if (!type.IsBased<DbDescriptorContext>()) throw new DbException($"类型 '{type.FullName}' 不是继承 'DbContextBase' 类型。");
+            if (!type.IsBased<DescriptorDbContext>()) throw new TypeNotSupportedException(type);
             List<RepositoryInfo> list = new List<RepositoryInfo>();
             var pros = type.GetProperties();
             foreach (var pro in pros)
