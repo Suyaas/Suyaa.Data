@@ -15,6 +15,6 @@ namespace Suyaa.Data.Dependency
         /// 创建一个工作者管理器
         /// </summary>
         /// <returns></returns>
-        IDbWorkManager CreateManager(DbConnectionDescriptor dbConnectionDescriptor);
+        IDbWorkManager CreateManager();
     }
 }

@@ -3,32 +3,33 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Suyaa.Data.SimpleDbWorks
+namespace Suyaa.Data
 {
     /// <summary>
     /// 简单的数据库工作者管理器
     /// </summary>
-    public sealed class SimpleDbWorkManager : IDbWorkManager
+    public sealed class DbWorkManager : IDbWorkManager
     {
         private IDbWork? _work;
         private static readonly object _lock = new object();
+        private readonly IDbFactory _factory;
+        private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
+        private readonly IDbWorkProvider _dbWorkProvider;
 
         /// <summary>
         /// 简单的数据库工作者管理器
         /// </summary>
-        public SimpleDbWorkManager(
+        public DbWorkManager(
             IDbFactory factory,
-            IDbConnectionDescriptor descriptor
+            IDbConnectionDescriptorManager dbConnectionDescriptorManager,
+            IDbWorkProvider dbWorkProvider
             )
         {
-            Factory = factory;
-            ConnectionDescriptor = descriptor;
+            _factory = factory;
+            _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
+            _dbWorkProvider = dbWorkProvider;
+            ConnectionDescriptor = dbConnectionDescriptorManager.GetCurrentConnection();
         }
-
-        /// <summary>
-        /// 数据库工厂
-        /// </summary>
-        public IDbFactory Factory { get; }
 
         /// <summary>
         /// 连接描述
@@ -41,7 +42,7 @@ namespace Suyaa.Data.SimpleDbWorks
         /// <returns></returns>
         public IDbWork CreateWork()
         {
-            var work = this.Factory.WorkProvider.CreateWork(this);
+            var work = _dbWorkProvider.CreateWork(this);
             SetCurrentWork(work);
             return work;
         }

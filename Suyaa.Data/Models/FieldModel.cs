@@ -4,22 +4,21 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Suyaa.Data.Descriptors
+namespace Suyaa.Data.Models
 {
     /// <summary>
     /// 表描述
     /// </summary>
-    public sealed class FieldDescriptor : TypeDescriptor
+    public sealed class FieldModel : PropertyInfoModel
     {
         /// <summary>
         /// 表描述
         /// </summary>
-        public FieldDescriptor(long index, PropertyInfo property) : base(property.GetMetaDatas())
+        public FieldModel(long index, PropertyInfo property) : base(property)
         {
             Index = index;
-            PropertyInfo = property;
-            this.Name = property.GetColumnName();
-            this.IsAutoIncrement = property.IsAutoIncrement();
+            Name = property.GetColumnName();
+            IsAutoIncrement = property.IsAutoIncrement();
         }
 
         /// <summary>
@@ -37,9 +36,5 @@ namespace Suyaa.Data.Descriptors
         /// </summary>
         public bool IsAutoIncrement { get; }
 
-        /// <summary>
-        /// 属性信息
-        /// </summary>
-        public PropertyInfo PropertyInfo { get; }
     }
 }

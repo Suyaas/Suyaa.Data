@@ -11,6 +11,11 @@ namespace Suyaa.EFCore.Helpers
     /// </summary>
     public static class ModelBuilderHelper
     {
+        /// <summary>
+        /// 使用最小化名称建模
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="modelBuilder"></param>
         public static void BuildToLowerName<T>(this ModelBuilder modelBuilder) where T : DescriptorDbContext
         {
             var list = typeof(T).GetRepositoryInfos();

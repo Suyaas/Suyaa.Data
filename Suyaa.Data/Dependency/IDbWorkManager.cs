@@ -10,10 +10,6 @@ namespace Suyaa.Data.Dependency
     public interface IDbWorkManager
     {
         /// <summary>
-        /// 数据库工厂
-        /// </summary>
-        IDbFactory Factory { get; }
-        /// <summary>
         /// 连接描述
         /// </summary>
         IDbConnectionDescriptor ConnectionDescriptor { get; }

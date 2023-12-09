@@ -1,4 +1,4 @@
-﻿using Suyaa.EFCore.Descriptors;
+﻿using Suyaa.EFCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,6 @@ namespace Suyaa.EFCore.Dependency
         /// 获取 DbSet 描述集合
         /// </summary>
         /// <returns></returns>
-        IEnumerable<DbSetDescriptor> GetDbSets();
+        IEnumerable<DbSetModel> GetDbSets();
     }
 }

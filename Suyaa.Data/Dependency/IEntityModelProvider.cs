@@ -1,4 +1,4 @@
-﻿using Suyaa.Data.Descriptors;
+﻿using Suyaa.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,21 +6,21 @@ using System.Text;
 namespace Suyaa.Data.Dependency
 {
     /// <summary>
-    /// 数据库实例供应商
+    /// 数据库实体建模供应商
     /// </summary>
-    public interface IDbEntityProvider
+    public interface IEntityModelProvider
     {
         /// <summary>
         /// 实例建模事件
         /// </summary>
         /// <param name="entity"></param>
-        void OnEntityModeling(EntityDescriptor entity);
+        void OnEntityModeling(EntityModel entity);
 
         /// <summary>
-        /// 字段建模事件
+        /// 属性建模事件
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="field"></param>
-        void OnFieldModeling(EntityDescriptor entity, FieldDescriptor field);
+        /// <param name="property"></param>
+        void OnPropertyModeling(EntityModel entity, PropertyInfoModel property);
     }
 }

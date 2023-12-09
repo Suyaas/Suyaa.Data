@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.EFCore.Dependency;
-using Suyaa.EFCore.Descriptors;
+using Suyaa.EFCore.Models;
 using System.Reflection;
 
 namespace Suyaa.EFCore.Factories
@@ -11,7 +11,7 @@ namespace Suyaa.EFCore.Factories
     public class DbSetFactory : IDbSetFactory
     {
 
-        private readonly List<DbSetDescriptor> _dbSets;
+        private readonly List<DbSetModel> _dbSets;
         private readonly IEnumerable<IDbSetProvider> _providers;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Suyaa.EFCore.Factories
             IEnumerable<IDbSetProvider> providers
             )
         {
-            _dbSets = new List<DbSetDescriptor>();
+            _dbSets = new List<DbSetModel>();
             _providers = providers;
             // 添加所有 Dbset 描述
             foreach (var provider in _providers)
@@ -40,7 +40,7 @@ namespace Suyaa.EFCore.Factories
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public DbSetDescriptor? GetDbSet(Type type)
+        public DbSetModel? GetDbSet(Type type)
         {
             return _dbSets.Where(d => d.Type == type).FirstOrDefault();
         }
@@ -49,7 +49,7 @@ namespace Suyaa.EFCore.Factories
         /// 获取实例
         /// </summary>
         /// <returns></returns>
-        public DbSetDescriptor? GetDbSet<TEntity>()
+        public DbSetModel? GetDbSet<TEntity>()
         {
             return GetDbSet(typeof(TEntity));
         }
@@ -59,7 +59,7 @@ namespace Suyaa.EFCore.Factories
         /// </summary>
         /// <param name="dbConnectionDescriptorName"></param>
         /// <returns></returns>
-        public IEnumerable<DbSetDescriptor> GetDbSets(string dbConnectionDescriptorName)
+        public IEnumerable<DbSetModel> GetDbSets(string dbConnectionDescriptorName)
         {
             return _dbSets.Where(d => d.ConnectionDescriptor.Name == dbConnectionDescriptorName).ToList();
         }

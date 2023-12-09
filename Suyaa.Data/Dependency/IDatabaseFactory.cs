@@ -1,4 +1,4 @@
-﻿using Suyaa.Data.Descriptors;
+﻿using Suyaa.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,7 +13,7 @@ namespace Suyaa.Data.Dependency
         /// <summary>
         /// 实例描述集合
         /// </summary>
-        IEnumerable<EntityDescriptor> Entities { get; }
+        IEnumerable<DbEntityModel> Entities { get; }
 
         /// <summary>
         /// 数据库集合

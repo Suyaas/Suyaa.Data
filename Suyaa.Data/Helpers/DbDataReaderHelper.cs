@@ -1,4 +1,4 @@
-﻿using Suyaa.Data.Descriptors;
+﻿using Suyaa.Data.Models;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
@@ -31,7 +31,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="ordinals"></param>
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
-        public static T ToInstance<T>(this DbDataReader reader, EntityDescriptor entity, IDictionary<string, int> ordinals)
+        public static T ToInstance<T>(this DbDataReader reader, DbEntityModel entity, IDictionary<string, int> ordinals)
         {
             var obj = sy.Assembly.Create(entity.Type);
             if (obj is null) throw new DbException("Type '{0}' instance fail.", entity.Type.FullName);
@@ -51,7 +51,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="reader"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static Dictionary<string, int> GetEntityOrdinals(this DbDataReader reader, EntityDescriptor entity)
+        public static Dictionary<string, int> GetEntityOrdinals(this DbDataReader reader, DbEntityModel entity)
         {
             Dictionary<string, int> ordinals = new Dictionary<string, int>();
             for (int i = 0; i < reader.FieldCount; i++)
@@ -77,8 +77,8 @@ namespace Suyaa.Data.Helpers
             if (!reader.HasRows) return;
             // 执行类型反射
             var type = typeof(T);
-            EntityDescriptor? entity = null;
-            if (!type.IsValueType) entity = new EntityDescriptor(type);
+            DbEntityModel? entity = null;
+            if (!type.IsValueType) entity = new DbEntityModel(type);
             Dictionary<string, int> ordinals = new Dictionary<string, int>();
             // 进行字段名称初始化
             if (entity != null) ordinals = reader.GetEntityOrdinals(entity);
@@ -109,8 +109,8 @@ namespace Suyaa.Data.Helpers
             if (!reader.HasRows) return default;
             // 执行类型反射
             var type = typeof(T);
-            EntityDescriptor? entity = null;
-            if (!type.IsValueType) entity = new EntityDescriptor(type);
+            DbEntityModel? entity = null;
+            if (!type.IsValueType) entity = new DbEntityModel(type);
             Dictionary<string, int> ordinals = new Dictionary<string, int>();
             // 进行字段名称初始化
             if (entity != null) ordinals = reader.GetEntityOrdinals(entity);

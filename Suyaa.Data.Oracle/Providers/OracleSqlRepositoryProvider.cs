@@ -3,33 +3,22 @@ using Suyaa.Data.Dependency;
 using System.Data;
 using System.Data.Common;
 
-namespace Suyaa.Data.Oracle.Repositories
+namespace Suyaa.Data.Oracle.Providers
 {
     /// <summary>
     /// Oracle Sql 仓库
     /// </summary>
-    public sealed class OracleSqlRepository : ISqlRepository
+    public sealed class OracleSqlRepositoryProvider : ISqlRepositoryProvider
     {
-        private readonly IDbWorkManager _dbWorkManager;
-
-        /// <summary>
-        /// Oracle Sql 仓库
-        /// </summary>
-        public OracleSqlRepository(
-            IDbWorkManager dbWorkManager
-            )
-        {
-            _dbWorkManager = dbWorkManager;
-        }
 
         /// <summary>
         /// 获取数据库命令管理器
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public DbCommand GetDbCommand(string sql)
+        public DbCommand GetDbCommand(IDbWork work, string sql)
         {
-            var work = GetDbWork();
             if (work.Connection is OracleConnection dbc)
             {
                 var sqlCommand = new OracleCommand(sql, dbc);
@@ -42,12 +31,13 @@ namespace Suyaa.Data.Oracle.Repositories
         /// <summary>
         /// 获取数据库命令管理器
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public DbCommand GetDbCommand(string sql, DbParameters parameters)
+        public DbCommand GetDbCommand(IDbWork work, string sql, DbParameters parameters)
         {
-            var sqlCommand = GetDbCommand(sql);
+            var sqlCommand = GetDbCommand(work, sql);
             sqlCommand.Parameters.Clear();
             foreach (var param in parameters)
             {
@@ -57,26 +47,15 @@ namespace Suyaa.Data.Oracle.Repositories
         }
 
         /// <summary>
-        /// 获取数据库工作者
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="DbException"></exception>
-        public IDbWork GetDbWork()
-        {
-            var work = _dbWorkManager.GetCurrentWork();
-            if (work is null) throw new NotExistException<IDbWork>();
-            return work;
-        }
-
-        /// <summary>
         /// 执行原始数据读取
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public DataSet GetDataSet(string sql)
+        public DataSet GetDataSet(IDbWork work, string sql)
         {
             DataSet dataSet = new DataSet();
-            using var sqlCommand = GetDbCommand(sql);
+            using var sqlCommand = GetDbCommand(work, sql);
             var sqlDataAdapter = new OracleDataAdapter { SelectCommand = (OracleCommand)sqlCommand };
             sqlDataAdapter.Fill(dataSet);
             return dataSet;
@@ -84,13 +63,14 @@ namespace Suyaa.Data.Oracle.Repositories
         /// <summary>
         /// 执行原始数据读取
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public DataSet GetDataSet(string sql, DbParameters parameters)
+        public DataSet GetDataSet(IDbWork work, string sql, DbParameters parameters)
         {
             DataSet dataSet = new DataSet();
-            using var sqlCommand = GetDbCommand(sql, parameters);
+            using var sqlCommand = GetDbCommand(work, sql, parameters);
             var sqlDataAdapter = new OracleDataAdapter { SelectCommand = (OracleCommand)sqlCommand };
             sqlDataAdapter.Fill(dataSet);
             return dataSet;

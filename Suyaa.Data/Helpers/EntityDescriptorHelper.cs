@@ -1,4 +1,4 @@
-﻿using Suyaa.Data.Descriptors;
+﻿using Suyaa.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="descriptor"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static DbParameters GetParameters<TEntity>(this EntityDescriptor descriptor, TEntity entity)
+        public static DbParameters GetParameters<TEntity>(this DbEntityModel descriptor, TEntity entity)
         {
             // 生成参数
             DbParameters parameters = new DbParameters();
@@ -32,9 +32,9 @@ namespace Suyaa.Data.Helpers
         }
 
         // 获取字段名称
-        private static string ConvertMemberToString(MemberInfo member, IList<FieldDescriptor> pros)
+        private static string ConvertMemberToString(MemberInfo member, IEnumerable<FieldModel> fields)
         {
-            var pro = pros.Where(d => d.PropertyInfo.Name == member.Name).FirstOrDefault();
+            var pro = fields.Where(d => d.PropertyInfo.Name == member.Name).FirstOrDefault();
             if (pro is null) throw new NotExistException(member.Name);
             return pro.Name;
         }
@@ -47,7 +47,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="selector"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static List<FieldDescriptor> GetEntityUpdateFields<TEntity>(this EntityDescriptor entity, Expression<Func<TEntity, object>> selector)
+        public static List<FieldModel> GetEntityUpdateFields<TEntity>(this DbEntityModel entity, Expression<Func<TEntity, object>> selector)
         {
             List<string> columns = new List<string>();
             var body = selector.Body;

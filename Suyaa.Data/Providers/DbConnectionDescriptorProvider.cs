@@ -36,6 +36,7 @@ namespace Suyaa.Data.Providers
         /// <param name="dbConnectionDescriptor"></param>
         public void AddDbConnection(IDbConnectionDescriptor dbConnectionDescriptor)
         {
+            if (_descriptors.Contains(dbConnectionDescriptor)) return;
             _descriptors.Add(dbConnectionDescriptor);
         }
     }

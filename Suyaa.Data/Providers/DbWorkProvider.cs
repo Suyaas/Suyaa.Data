@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace Suyaa.Data.SimpleDbWorks
+namespace Suyaa.Data.Providers
 {
     /// <summary>
     /// 简单的数据库供应商
     /// </summary>
-    public sealed class SimpleDbWorkProvider : IDbWorkProvider
+    public sealed class DbWorkProvider : IDbWorkProvider
     {
         private readonly IDbFactory _dbFactory;
         private IDbWork? _work;
@@ -19,7 +19,7 @@ namespace Suyaa.Data.SimpleDbWorks
         /// <summary>
         /// 简单的数据库工作者供应商
         /// </summary>
-        public SimpleDbWorkProvider(
+        public DbWorkProvider(
             IDbFactory dbFactory
             )
         {
@@ -32,7 +32,7 @@ namespace Suyaa.Data.SimpleDbWorks
         /// <returns></returns>
         public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new SimpleDbWork(dbWorkManager);
+            return new DbWork(_dbFactory, dbWorkManager);
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.EFCore.Dependency;
-using Suyaa.EFCore.Descriptors;
+using Suyaa.EFCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,9 +32,9 @@ namespace Suyaa.EFCore.Providers
         /// 获取 DbSet 集合
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DbSetDescriptor> GetDbSets()
+        public IEnumerable<DbSetModel> GetDbSets()
         {
-            List<DbSetDescriptor> descriptors = new List<DbSetDescriptor>();
+            List<DbSetModel> descriptors = new List<DbSetModel>();
             foreach (var dbContext in _dbContexts)
             {
                 var dbSets = GetDbContextDbSets(dbContext);
@@ -44,9 +44,9 @@ namespace Suyaa.EFCore.Providers
         }
 
         // 添加数据库实例
-        private List<DbSetDescriptor> GetDbContextDbSets(IDescriptorDbContext dbContext)
+        private List<DbSetModel> GetDbContextDbSets(IDescriptorDbContext dbContext)
         {
-            List<DbSetDescriptor> descriptors = new List<DbSetDescriptor>();
+            List<DbSetModel> descriptors = new List<DbSetModel>();
             var type = dbContext.GetType();
             var pros = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var prop in pros)
@@ -57,7 +57,7 @@ namespace Suyaa.EFCore.Providers
                 var genericType = prop.PropertyType.GetGenericTypeDefinition();
                 if (_dbSetType.IsAssignableFrom(genericType))
                 {
-                    descriptors.Add(new DbSetDescriptor(type, prop, dbContext.ConnectionDescriptor));
+                    descriptors.Add(new DbSetModel(type, prop, dbContext));
                 }
             }
             return descriptors;

@@ -1,6 +1,6 @@
 ﻿using Suyaa.Data.Dependency;
-using Suyaa.Data.Descriptors;
 using Suyaa.Data.Entities;
+using Suyaa.Data.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="provider"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static string GetEntityInsert(this IDbScriptProvider provider, EntityDescriptor entity)
+        public static string GetEntityInsert(this IDbScriptProvider provider, DbEntityModel entity)
         {
             StringBuilder columns = new StringBuilder();
             StringBuilder values = new StringBuilder();
@@ -58,7 +58,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="entity"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static string GetEntityDelete<TEntity>(this IDbScriptProvider provider, EntityDescriptor entity, Expression<Func<TEntity, bool>> predicate)
+        public static string GetEntityDelete<TEntity>(this IDbScriptProvider provider, DbEntityModel entity, Expression<Func<TEntity, bool>> predicate)
         {
             // 拼接sql脚本
             StringBuilder sql = new StringBuilder();
@@ -87,7 +87,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="fields"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static string GetEntityUpdate<TEntity>(this IDbScriptProvider provider, EntityDescriptor entity, IEnumerable<FieldDescriptor> fields, Expression<Func<TEntity, bool>> predicate)
+        public static string GetEntityUpdate<TEntity>(this IDbScriptProvider provider, DbEntityModel entity, IEnumerable<FieldModel> fields, Expression<Func<TEntity, bool>> predicate)
         {
             StringBuilder columns = new StringBuilder();
             foreach (var field in fields)
@@ -128,7 +128,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="entity"></param>
         /// <param name="exp"></param>
         /// <returns></returns>
-        public static string GetContainsMethodScript(this IDbScriptProvider provider, EntityDescriptor entity, MethodCallExpression exp)
+        public static string GetContainsMethodScript(this IDbScriptProvider provider, DbEntityModel entity, MethodCallExpression exp)
         {
             var callObj = (MemberExpression)exp.Object;
             var callObjValues = provider.GetExpressionValue(entity, callObj.Expression) ?? throw new NullException("MemberExpression.Object");
@@ -156,7 +156,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="entity"></param>
         /// <param name="exp"></param>
         /// <returns></returns>
-        public static string GetEqualsMethodScrip(this IDbScriptProvider provider, EntityDescriptor entity, MethodCallExpression exp)
+        public static string GetEqualsMethodScrip(this IDbScriptProvider provider, DbEntityModel entity, MethodCallExpression exp)
         {
             var callObj = (MemberExpression)exp.Object;
             object? value;
@@ -212,7 +212,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="exp"></param>
         /// <returns></returns>
         /// <exception cref="ExpressionNodeNotSupportedException"></exception>
-        public static string GetMethodCallExpressionScript(this IDbScriptProvider provider, EntityDescriptor entity, MethodCallExpression exp)
+        public static string GetMethodCallExpressionScript(this IDbScriptProvider provider, DbEntityModel entity, MethodCallExpression exp)
         {
             var callMethod = exp.Method;
             return callMethod.Name switch
@@ -231,7 +231,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="exp"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static string GetUnaryExpressionScript(this IDbScriptProvider provider, EntityDescriptor entity, UnaryExpression exp)
+        public static string GetUnaryExpressionScript(this IDbScriptProvider provider, DbEntityModel entity, UnaryExpression exp)
         {
             object? value = null;
             if (exp.Operand is UnaryExpression unaryExpression) value = provider.GetUnaryExpressionScript(entity, unaryExpression);
@@ -259,7 +259,7 @@ namespace Suyaa.Data.Helpers
         /// <returns></returns>
         /// <exception cref="NullException"></exception>
         /// <exception cref="ExpressionNodeNotSupportedException"></exception>
-        public static object? GetExpressionValue(this IDbScriptProvider provider, EntityDescriptor entity, Expression exp)
+        public static object? GetExpressionValue(this IDbScriptProvider provider, DbEntityModel entity, Expression exp)
         {
             switch (exp)
             {
@@ -303,7 +303,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="entity"></param>
         /// <param name="exp"></param>
         /// <returns></returns>
-        public static string GetBinaryExpressionScript(this IDbScriptProvider provider, EntityDescriptor entity, BinaryExpression exp)
+        public static string GetBinaryExpressionScript(this IDbScriptProvider provider, DbEntityModel entity, BinaryExpression exp)
         {
             StringBuilder sb = new StringBuilder();
             string expLeft = Convert.ToString(provider.GetExpressionValue(entity, exp.Left) ?? "");
@@ -364,7 +364,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="entity"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static string GetPredicate<TEntity>(this IDbScriptProvider provider, EntityDescriptor entity, Expression<Func<TEntity, bool>> predicate)
+        public static string GetPredicate<TEntity>(this IDbScriptProvider provider, DbEntityModel entity, Expression<Func<TEntity, bool>> predicate)
         {
             return predicate.Body switch
             {

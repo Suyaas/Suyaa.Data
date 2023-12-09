@@ -34,7 +34,7 @@ namespace Suyaa.PostgreSQL.Tests
         public void Insert()
         {
             using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connString);
-            var repository = work.GetRepository<People, string>();
+            var repository = sy.Data.CreateRepository<People, string>(work);
             repository.Insert(new People() { Age = 10, Name = "张三" });
             work.Commit();
         }
@@ -43,7 +43,7 @@ namespace Suyaa.PostgreSQL.Tests
         public void Delete()
         {
             using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connString);
-            var repository = work.GetRepository<People, string>();
+            var repository = sy.Data.CreateRepository<People, string>(work);
             repository.Delete(d => d.Age < 10);
             work.Commit();
         }
@@ -52,7 +52,7 @@ namespace Suyaa.PostgreSQL.Tests
         public void Update()
         {
             using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connString);
-            var repository = work.GetRepository<People, string>();
+            var repository = sy.Data.CreateRepository<People, string>(work);
             repository.Update(new People() { Age = 10, Name = "张三" }, d => d.Age < 10);
             work.Commit();
         }
@@ -61,7 +61,7 @@ namespace Suyaa.PostgreSQL.Tests
         public void UpdateFields()
         {
             using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connString);
-            var repository = work.GetRepository<People, string>();
+            var repository = sy.Data.CreateRepository<People, string>(work);
             repository.Update(new People() { Age = 10 }, d => d.Age, d => d.Age < 10);
             work.Commit();
         }

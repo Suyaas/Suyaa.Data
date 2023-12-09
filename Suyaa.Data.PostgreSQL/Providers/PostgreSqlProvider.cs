@@ -1,6 +1,5 @@
 ﻿using Npgsql;
 using Suyaa.Data.Dependency;
-using Suyaa.Data.PostgreSQL.Repositories;
 using System.Data.Common;
 
 namespace Suyaa.Data.PostgreSQL.Providers
@@ -13,6 +12,7 @@ namespace Suyaa.Data.PostgreSQL.Providers
 
         private PostgreSqlQueryProvider? _queryProvider;
         private PostgreSqlScriptProvider? _scriptProvider;
+        private PostgreSqlRepositoryProvider? _sqlRepositoryProvider;
 
         /// <summary>
         /// 查询供应商
@@ -25,25 +25,20 @@ namespace Suyaa.Data.PostgreSQL.Providers
         public IDbScriptProvider ScriptProvider => _scriptProvider ??= new PostgreSqlScriptProvider();
 
         /// <summary>
-        /// 获取一个数据库连接
+        /// Sql数据仓库
         /// </summary>
-        /// <returns></returns>
-        public DbConnection GetDbConnection(IDbWorkManager dbWorkManager)
-        {
-            var work = dbWorkManager.GetCurrentWork();
-            if (work is null) throw new NotExistException<IDbWork>();
-            var dbc = new NpgsqlConnection(work.ConnectionDescriptor.ToConnectionString());
-            dbc.Open();
-            return dbc;
-        }
+        public ISqlRepositoryProvider SqlRepositoryProvider => _sqlRepositoryProvider ??= new PostgreSqlRepositoryProvider();
 
         /// <summary>
-        /// 获取一个Sql仓库
+        /// 获取一个数据库连接
         /// </summary>
+        /// <param name="connectionString"></param>
         /// <returns></returns>
-        public ISqlRepository GetSqlRepository(IDbWorkManager dbWorkManager)
+        public DbConnection GetDbConnection(string connectionString)
         {
-            return new PostgreSqlRepository(dbWorkManager);
+            var dbc = new NpgsqlConnection(connectionString);
+            dbc.Open();
+            return dbc;
         }
     }
 }

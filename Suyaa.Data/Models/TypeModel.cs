@@ -1,15 +1,20 @@
-﻿using System;
+﻿using Suyaa.Data.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Suyaa.Data.Descriptors
+namespace Suyaa.Data.Models
 {
     /// <summary>
-    /// 类型描述
+    /// 类型建模
     /// </summary>
-    public abstract class TypeDescriptor
+    public abstract class TypeModel
     {
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public Type Type { get; }
 
         /// <summary>
         /// 元数据
@@ -19,9 +24,10 @@ namespace Suyaa.Data.Descriptors
         /// <summary>
         /// 基础描述
         /// </summary>
-        public TypeDescriptor(IEnumerable<object> metaDatas)
+        public TypeModel(Type type)
         {
-            MetaDatas = metaDatas;
+            Type = type;
+            MetaDatas = type.GetMetaDatas();
         }
     }
 }

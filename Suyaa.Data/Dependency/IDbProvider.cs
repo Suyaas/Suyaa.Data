@@ -19,14 +19,13 @@ namespace Suyaa.Data.Dependency
         /// </summary>
         IDbScriptProvider ScriptProvider { get; }
         /// <summary>
+        /// Sql脚本仓库供应商
+        /// </summary>
+        ISqlRepositoryProvider SqlRepositoryProvider { get; }
+        /// <summary>
         /// 获取一个数据库连接
         /// </summary>
         /// <returns></returns>
-        DbConnection GetDbConnection(IDbWorkManager dbWorkManager);
-        /// <summary>
-        /// 获取Sql仓库
-        /// </summary>
-        /// <returns></returns>
-        ISqlRepository GetSqlRepository(IDbWorkManager dbWorkManager);
+        DbConnection GetDbConnection(string connectionString);
     }
 }

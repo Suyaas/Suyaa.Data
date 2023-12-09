@@ -39,4 +39,8 @@
     <ProjectReference Include="..\Suyaa.Data\Suyaa.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Descriptors\" />
+  </ItemGroup>
+
 </Project>
