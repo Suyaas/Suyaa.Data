@@ -21,7 +21,7 @@ namespace Suyaa.EFCore.Contexts
         /// </summary>
         /// <param name="descriptor"></param>
         /// <param name="options"></param>
-        public DescriptorDbContext(IDbConnectionDescriptor descriptor, DbContextOptions options) : base(options, descriptor.ToConnectionString())
+        public DescriptorDbContext(IDbConnectionDescriptor descriptor, DbContextOptions options) : base(descriptor.DatabaseType.GetEFCoreProvider().DbContextOptionsProvider.GetDbContextOptions(descriptor.ToConnectionString()))
         {
             ConnectionDescriptor = descriptor;
             Options = options;

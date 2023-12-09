@@ -12,19 +12,13 @@ namespace Suyaa.EFCore.Contexts
     /// </summary>
     public abstract class BaseDbContext : DbContext
     {
-        /// <summary>
-        /// 连接字符串
-        /// </summary>
-        public string ConnectionString { get; }
 
         /// <summary>
         /// EFCore重写上下文
         /// </summary>
         /// <param name="options"></param>
-        /// <param name="connectionString"></param>
-        public BaseDbContext(DbContextOptions options, string connectionString) : base(options)
+        public BaseDbContext(DbContextOptions options) : base(options)
         {
-            ConnectionString = connectionString;
         }
 
     }
