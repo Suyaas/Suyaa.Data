@@ -11,10 +11,10 @@ namespace Suyaa.Data.Dependency
     public interface IEntityModelFactory
     {
         /// <summary>
-        /// 获取实例描述
+        /// 获取实例建模
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="source"></param>
         /// <returns></returns>
-        EntityModel GetEntity(Type type);
+        EntityModel GetEntity(IEntityModelSource source);
     }
 }

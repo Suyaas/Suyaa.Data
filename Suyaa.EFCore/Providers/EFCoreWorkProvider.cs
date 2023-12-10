@@ -10,7 +10,7 @@ using System.Text;
 namespace Suyaa.Data.Providers
 {
     /// <summary>
-    /// 简单的数据库供应商
+    /// EFCore作业供应商
     /// </summary>
     public sealed class EFCoreWorkProvider : IDbWorkProvider
     {
@@ -18,7 +18,7 @@ namespace Suyaa.Data.Providers
         private IDbWork? _work;
 
         /// <summary>
-        /// 简单的数据库工作者供应商
+        /// EFCore作业供应商
         /// </summary>
         public EFCoreWorkProvider(
             IDbFactory dbFactory
@@ -33,7 +33,7 @@ namespace Suyaa.Data.Providers
         /// <returns></returns>
         public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new DbWork(_dbFactory, dbWorkManager);
+            return new EFCoreWork(_dbFactory, dbWorkManager);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Suyaa.Data.Providers
         /// <returns></returns>
         public IEFCoreProvider GetDbProvider(DatabaseType databaseType)
         {
-            return databaseType.GetDbProvider();
+            return databaseType.GetEFCoreProvider();
         }
 
         /// <summary>

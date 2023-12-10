@@ -40,10 +40,10 @@ namespace Suyaa.Data.Models
         /// <summary>
         /// 添加字段描述
         /// </summary>
-        /// <param name="property"></param>
-        public void AddField(PropertyInfoModel property)
+        /// <param name="field"></param>
+        public void AddField(FieldModel field)
         {
-            base.AddProperty(property);
+            base.AddProperty(field);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Suyaa.Data.Models
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public class DbEntityModel<TEntity> : DbEntityModel
-        where TEntity : class, IEntity
+        where TEntity : class, IDbEntity
     {
         /// <summary>
         /// 实例建模

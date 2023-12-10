@@ -30,7 +30,7 @@ namespace Suyaa.Data.Helpers
             IDbUpdateProvider<TEntity> dbUpdateProvider,
             IDbQueryProvider<TEntity> dbQueryProvider
             )
-            where TEntity : IEntity, new()
+            where TEntity : IDbEntity, new()
         {
             return new Repository<TEntity>(entityModelFactory, work.WorkManager, dbInsertProvider, dbDeleteProvider, dbUpdateProvider, dbQueryProvider);
         }
@@ -46,7 +46,7 @@ namespace Suyaa.Data.Helpers
             IDbUpdateProvider<TEntity> dbUpdateProvider,
             IDbQueryProvider<TEntity> dbQueryProvider
             )
-            where TEntity : IEntity<TId>, new()
+            where TEntity : IDbEntity<TId>, new()
             where TId : notnull
         {
             return new Repository<TEntity, TId>(entityModelFactory, work.WorkManager, dbInsertProvider, dbDeleteProvider, dbUpdateProvider, dbQueryProvider);

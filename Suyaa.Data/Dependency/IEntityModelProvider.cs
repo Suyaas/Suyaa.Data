@@ -11,16 +11,21 @@ namespace Suyaa.Data.Dependency
     public interface IEntityModelProvider
     {
         /// <summary>
-        /// 实例建模事件
+        /// 执行优先级
         /// </summary>
-        /// <param name="entity"></param>
-        void OnEntityModeling(EntityModel entity);
-
+        int Priority { get; }
         /// <summary>
-        /// 属性建模事件
+        /// 尝试创建
         /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="property"></param>
-        void OnPropertyModeling(EntityModel entity, PropertyInfoModel property);
+        /// <param name="source"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        bool TryCreate(IEntityModelSource source, out EntityModel? model);
+        /// <summary>
+        /// 获取实体建模
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        EntityModel? GetEntityModel(IEntityModelSource source);
     }
 }

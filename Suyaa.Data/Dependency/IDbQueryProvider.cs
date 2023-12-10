@@ -23,7 +23,7 @@ namespace Suyaa.Data.Dependency
     /// 数据库查询供应商
     /// </summary>
     public interface IDbQueryProvider<TEntity> : IDbQueryable<TEntity>
-        where TEntity : IEntity
+        where TEntity : IDbEntity
     {
     }
 }

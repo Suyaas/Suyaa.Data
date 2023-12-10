@@ -66,7 +66,7 @@ namespace sy
         {
             _entityModelProviders.Add(dbEntityProvider);
             _dbFactory ??= new DbFactory();
-            _entityModelFactory = new EntityModelFactory(_dbFactory, _entityModelProviders);
+            _entityModelFactory = new EntityModelFactory(_entityModelProviders);
         }
 
         /// <summary>
@@ -123,11 +123,11 @@ namespace sy
         /// <param name="work"></param>
         /// <returns></returns>
         public static IRepository<TEntity> CreateRepository<TEntity>(IDbWork work)
-            where TEntity : IEntity, new()
+            where TEntity : IDbEntity, new()
         {
             var provider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             _dbFactory ??= new DbFactory();
-            _entityModelFactory ??= new EntityModelFactory(_dbFactory, _entityModelProviders);
+            _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository(
                 _entityModelFactory,
@@ -144,12 +144,12 @@ namespace sy
         /// <param name="work"></param>
         /// <returns></returns>
         public static IRepository<TEntity, TId> CreateRepository<TEntity, TId>(IDbWork work)
-            where TEntity : IEntity<TId>, new()
+            where TEntity : IDbEntity<TId>, new()
             where TId : notnull
         {
             var provider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             _dbFactory ??= new DbFactory();
-            _entityModelFactory ??= new EntityModelFactory(_dbFactory, _entityModelProviders);
+            _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository<TEntity, TId>(
                 _entityModelFactory,

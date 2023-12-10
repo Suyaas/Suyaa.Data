@@ -9,7 +9,7 @@ namespace Suyaa.Data.Entities
     /// <summary>
     /// 带主键的实例
     /// </summary>
-    public abstract class Entity<TId> : IEntity<TId> 
+    public abstract class Entity<TId> : IDbEntity<TId> 
         where TId : notnull
     {
         /// <summary>

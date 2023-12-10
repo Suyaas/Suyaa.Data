@@ -9,7 +9,7 @@ namespace Suyaa.Data.Dependency
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public interface IDbDeleteProvider<TEntity> : IDbDeletable<TEntity>
-        where TEntity : IEntity
+        where TEntity : IDbEntity
     {
     }
 }

@@ -9,7 +9,7 @@ namespace Suyaa.Data.Dependency
     /// 可新增数据库操作对象
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public interface IDbInsertable<TEntity> where TEntity : IEntity
+    public interface IDbInsertable<TEntity> where TEntity : IDbEntity
     {
         /// <summary>
         /// 新增数据

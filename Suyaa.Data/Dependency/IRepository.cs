@@ -12,7 +12,7 @@ namespace Suyaa.Data.Dependency
     /// 数据仓库
     /// </summary>
     public interface IRepository<TEntity> : IDbInsertable<TEntity>, IDbDeletable<TEntity>, IDbUpdatable<TEntity>, IDbQueryable<TEntity>
-        where TEntity : IEntity, new()
+        where TEntity : IDbEntity, new()
     {
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Suyaa.Data.Dependency
     /// 带主键的数据仓库
     /// </summary>
     public interface IRepository<TEntity, TId> : IRepository<TEntity>
-        where TEntity : IEntity<TId>, new()
+        where TEntity : IDbEntity<TId>, new()
         where TId : notnull
     {
     }

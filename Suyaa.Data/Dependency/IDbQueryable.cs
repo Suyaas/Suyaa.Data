@@ -9,7 +9,7 @@ namespace Suyaa.Data.Dependency
     /// 可查询数据库操作对象
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public interface IDbQueryable<TEntity> where TEntity : IEntity
+    public interface IDbQueryable<TEntity> where TEntity : IDbEntity
     {
         /// <summary>
         /// 查询数据

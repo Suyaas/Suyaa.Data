@@ -14,7 +14,7 @@ namespace Suyaa.Data
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public class Repository<TEntity> : IRepository<TEntity>
-        where TEntity : IEntity, new()
+        where TEntity : IDbEntity, new()
     {
         private readonly DbEntityModel _entity;
         private readonly IEntityModelFactory _entityModelFactory;
@@ -173,7 +173,7 @@ namespace Suyaa.Data
     /// 数据仓库
     /// </summary>
     public class Repository<TEntity, TId> : Repository<TEntity>, IRepository<TEntity, TId>
-        where TEntity : IEntity<TId>, new()
+        where TEntity : IDbEntity<TId>, new()
         where TId : notnull
     {
         /// <summary>

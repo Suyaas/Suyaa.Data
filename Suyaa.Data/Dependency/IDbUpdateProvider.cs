@@ -8,7 +8,7 @@ namespace Suyaa.Data.Dependency
     /// 数据库更新操作供应商
     /// </summary>
     public interface IDbUpdateProvider<TEntity> : IDbUpdatable<TEntity>
-        where TEntity : IEntity
+        where TEntity : IDbEntity
     {
     }
 }

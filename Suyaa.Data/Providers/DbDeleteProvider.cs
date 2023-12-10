@@ -15,7 +15,7 @@ namespace Suyaa.Data.Providers
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public sealed class DbDeleteProvider<TEntity> : IDbDeleteProvider<TEntity>
-        where TEntity : IEntity
+        where TEntity : IDbEntity
     {
         private readonly IEntityModelFactory _entityModelFactory;
         private readonly IDbScriptProvider _dbScriptProvider;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Suyaa.Data.Dependency
 {
     /// <summary>
-    /// 数据库工作者
+    /// 数据库作业
     /// </summary>
     public interface IDbWork : IDisposable
     {

@@ -10,7 +10,7 @@ namespace Suyaa.Data.Dependency
     /// 可更新数据库操作对象
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public interface IDbDeletable<TEntity> where TEntity : IEntity
+    public interface IDbDeletable<TEntity> where TEntity : IDbEntity
     {
         /// <summary>
         /// 删除数据

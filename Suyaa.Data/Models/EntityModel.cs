@@ -53,13 +53,13 @@ namespace Suyaa.Data.Models
     /// 实例建模
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public class EntityModel1<TEntity> : EntityModel
+    public class EntityModel<TEntity> : EntityModel
         where TEntity : class
     {
         /// <summary>
         /// 实例建模
         /// </summary>
-        public EntityModel1() : base(typeof(TEntity))
+        public EntityModel() : base(typeof(TEntity))
         {
         }
     }

@@ -18,7 +18,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="repository"></param>
         /// <param name="entity"></param>
         public static void Update<TEntity, TId>(this IRepository<TEntity, TId> repository, TEntity entity)
-            where TEntity : IEntity<TId>, new()
+            where TEntity : IDbEntity<TId>, new()
             where TId : notnull
         {
             repository.Update(entity, d => d.Id.Equals(entity.Id));
@@ -31,7 +31,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="repository"></param>
         /// <param name="entity"></param>
         public static void Delete<TEntity, TId>(this IRepository<TEntity, TId> repository, TEntity entity)
-            where TEntity : IEntity<TId>, new()
+            where TEntity : IDbEntity<TId>, new()
             where TId : notnull
         {
             repository.Delete(d => d.Id.Equals(entity.Id));

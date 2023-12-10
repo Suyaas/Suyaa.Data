@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data.Dependency;
+using Suyaa.EFCore.Contexts;
+using Suyaa.EFCore.Dependency;
+using Suyaa.EFCore.Models;
 using System.Data.Common;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Suyaa.Data
@@ -11,21 +15,56 @@ namespace Suyaa.Data
     public sealed class EFCoreWork : Disposable, IDbWork
     {
         private readonly IDbFactory _dbFactory;
+        private readonly IDbContextFacotry _dbContextFacotry;
         private readonly IDbWorkManager _dbWorkManager;
         private DbConnection? _connection;
         private DbTransaction? _transaction;
+        private readonly DescriptorTypeDbContext _dbContext;
+        private static Type _dbSetType = typeof(DbSet<>);
 
         /// <summary>
         /// 简单的数据库工作着
         /// </summary>
         public EFCoreWork(
             IDbFactory dbFactory,
-            IDbWorkManager dbWorkManager
+            IDbContextFacotry dbContextFacotry,
+            IDbWorkManager dbWorkManager,
+            IDbContextOptionsProvider dbContextOptionsProvider
             )
         {
             ConnectionDescriptor = dbWorkManager.ConnectionDescriptor;
             _dbFactory = dbFactory;
+            _dbContextFacotry = dbContextFacotry;
             _dbWorkManager = dbWorkManager;
+            var types = GetDbContextsDbSets(_dbContextFacotry.DbContexts);
+            _dbContext = new DescriptorTypeDbContext(ConnectionDescriptor, dbContextOptionsProvider.GetDbContextOptions(ConnectionDescriptor.ToConnectionString()), types);
+        }
+
+        // 添加数据库实例
+        private List<Type> GetDbContextDbSets(IDescriptorDbContext dbContext)
+        {
+            List<Type> types = new List<Type>();
+            var type = dbContext.GetType();
+            var pros = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var prop in pros)
+            {
+                // 跳过非泛型
+                if (!prop.PropertyType.IsGenericType) continue;
+                if (!type.IsBased(_dbSetType)) continue;
+                types.Add(prop.PropertyType);
+            }
+            return types;
+        }
+
+        // 添加数据库上下文
+        private List<Type> GetDbContextsDbSets(IEnumerable<IDescriptorDbContext> dbContexts)
+        {
+            List<Type> types = new List<Type>();
+            foreach (var dbContext in dbContexts)
+            {
+                types.AddRange(GetDbContextDbSets(dbContext));
+            }
+            return types;
         }
 
         /// <summary>
@@ -53,7 +92,7 @@ namespace Suyaa.Data
         /// </summary>
         public void Commit()
         {
-            _context.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -63,7 +102,7 @@ namespace Suyaa.Data
         /// <exception cref="DbException"></exception>
         public async Task CommitAsync()
         {
-            await _context.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using Suyaa.Data.Dependency;
 using Suyaa.Data.Models;
+using Suyaa.Data.Sources;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Suyaa.Data.Helpers
         public static EntityModel GetEntity<TEntity>(this IEntityModelFactory factory)
             where TEntity : class
         {
-            return factory.GetEntity(typeof(TEntity));
+            return factory.GetEntity(new EntityModelSource(typeof(TEntity)));
         }
 
         /// <summary>
@@ -30,9 +31,9 @@ namespace Suyaa.Data.Helpers
         /// <param name="factory"></param>
         /// <returns></returns>
         public static DbEntityModel GetDbEntity<TEntity>(this IEntityModelFactory factory)
-            where TEntity : IEntity
+            where TEntity : IDbEntity
         {
-            return (DbEntityModel)factory.GetEntity(typeof(TEntity));
+            return (DbEntityModel)factory.GetEntity(new DbEntityModelSource(typeof(TEntity)));
         }
     }
 }

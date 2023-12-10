@@ -5,10 +5,9 @@ using System.Text;
 namespace Suyaa.Data.Dependency
 {
     /// <summary>
-    /// 数据新增操作供应商
+    /// 实体建模源
     /// </summary>
-    public interface IDbInsertProvider<TEntity> : IDbInsertable<TEntity>
-        where TEntity : IDbEntity
+    public interface IEntityModelSource
     {
     }
 }

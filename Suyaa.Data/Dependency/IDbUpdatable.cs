@@ -10,7 +10,7 @@ namespace Suyaa.Data.Dependency
     /// 可更新数据库操作对象
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public interface IDbUpdatable<TEntity> where TEntity : IEntity
+    public interface IDbUpdatable<TEntity> where TEntity : IDbEntity
     {
         /// <summary>
         /// 更新数据

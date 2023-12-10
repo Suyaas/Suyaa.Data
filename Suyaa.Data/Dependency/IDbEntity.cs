@@ -7,13 +7,13 @@ namespace Suyaa.Data.Dependency
     /// <summary>
     /// 实例对象
     /// </summary>
-    public interface IEntity
+    public interface IDbEntity
     {
     }
     /// <summary>
     /// 实例对象
     /// </summary>
-    public interface IEntity<TId> : IEntity where TId : notnull
+    public interface IDbEntity<TId> : IDbEntity where TId : notnull
     {
         /// <summary>
         /// 主键Id

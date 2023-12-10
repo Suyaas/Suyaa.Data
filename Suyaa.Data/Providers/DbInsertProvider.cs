@@ -14,7 +14,7 @@ namespace Suyaa.Data.Providers
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public sealed class DbInsertProvider<TEntity> : IDbInsertProvider<TEntity>
-        where TEntity : IEntity
+        where TEntity : IDbEntity
     {
         private readonly IEntityModelFactory _entityModelFactory;
         private readonly IDbScriptProvider _dbScriptProvider;

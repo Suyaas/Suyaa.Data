@@ -17,7 +17,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="repository"></param>
         /// <param name="entity"></param>
         public static async Task UpdateAsync<TEntity, TId>(this IRepository<TEntity, TId> repository, TEntity entity)
-            where TEntity : IEntity<TId>, new()
+            where TEntity : IDbEntity<TId>, new()
             where TId : notnull
         {
             await repository.UpdateAsync(entity, d => d.Id.Equals(entity.Id));
@@ -30,7 +30,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="repository"></param>
         /// <param name="entity"></param>
         public static async Task DeleteAsync<TEntity, TId>(this IRepository<TEntity, TId> repository, TEntity entity)
-            where TEntity : IEntity<TId>, new()
+            where TEntity : IDbEntity<TId>, new()
             where TId : notnull
         {
             await repository.DeleteAsync(d => d.Id.Equals(entity.Id));
