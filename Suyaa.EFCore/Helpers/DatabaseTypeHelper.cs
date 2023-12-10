@@ -23,7 +23,7 @@ namespace Suyaa.EFCore.Helpers
             switch (type)
             {
                 case DatabaseType.PostgreSQL:
-                    providerName = "Suyaa.EFCore.PostgreSQL.Providers.EFCoreProvider";
+                    providerName = "Suyaa.EFCore.PostgreSQL.Providers.EfCoreProvider";
                     providerDllPath = "Suyaa.EFCore.PostgreSQL";
                     break;
                 case DatabaseType.Sqlite:

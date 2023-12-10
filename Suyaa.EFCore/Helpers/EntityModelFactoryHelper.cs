@@ -3,6 +3,7 @@ using Suyaa.Data.Models;
 using Suyaa.Data.Sources;
 using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.Models;
+using Suyaa.EFCore.Sources;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,7 +25,7 @@ namespace Suyaa.Data.Helpers
         public static DbSetModel GetDbSet<TEntity>(this IEntityModelFactory factory, DescriptorTypeDbContext dbContext)
             where TEntity : IDbEntity
         {
-            return (DbSetModel)factory.GetEntity(new DbEntityModelSource(typeof(TEntity)));
+            return (DbSetModel)factory.GetEntity(new TypeDbContextModelSource(typeof(TEntity), dbContext));
         }
     }
 }

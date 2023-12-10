@@ -1,7 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Sqlite.Tests.Entities;
+using SuyaaTest.PostgreSQL;
 using Xunit.Abstractions;
 
 namespace Suyaa.PostgreSQL.Tests
@@ -63,6 +65,19 @@ namespace Suyaa.PostgreSQL.Tests
             using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connString);
             var repository = sy.Data.CreateRepository<People, string>(work);
             repository.Update(new People() { Age = 10 }, d => d.Age, d => d.Age < 10);
+            work.Commit();
+        }
+
+        [Fact]
+        public void Query()
+        {
+            using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connString));
+            using var work = sy.EFCore.CreateWork(dbContext);
+            var repository = sy.EFCore.CreateRepository<People, string>(work);
+            var query = from p in repository.Query()
+                        where p.Age > 10
+                        select p;
+            var datas = query.AsNoTracking().ToList();
             work.Commit();
         }
     }

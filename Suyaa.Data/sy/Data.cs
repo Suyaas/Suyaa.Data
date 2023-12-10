@@ -130,7 +130,6 @@ namespace sy
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository(
-                _entityModelFactory,
                 new DbInsertProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
                 new DbDeleteProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
                 new DbUpdateProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
@@ -152,7 +151,6 @@ namespace sy
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository<TEntity, TId>(
-                _entityModelFactory,
                 new DbInsertProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
                 new DbDeleteProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
                 new DbUpdateProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),

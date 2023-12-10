@@ -40,7 +40,7 @@ namespace Suyaa.EFCore.Providers
         /// <returns></returns>
         public IDbWorkManager CreateManager()
         {
-            return new DbWorkManager(_dbFactory, _dbConnectionDescriptorManager);
+            return new EfCoreWorkManager(_dbFactory, _dbContextFactory, _dbConnectionDescriptorManager);
         }
     }
 }

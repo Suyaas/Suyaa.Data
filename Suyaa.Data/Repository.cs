@@ -16,9 +16,6 @@ namespace Suyaa.Data
     public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : IDbEntity, new()
     {
-        private readonly DbEntityModel _entity;
-        private readonly IEntityModelFactory _entityModelFactory;
-        private readonly IDbWorkManager _dbWorkManager;
         private readonly IDbInsertProvider<TEntity> _dbInsertProvider;
         private readonly IDbDeleteProvider<TEntity> _dbDeleteProvider;
         private readonly IDbUpdateProvider<TEntity> _dbUpdateProvider;
@@ -28,38 +25,16 @@ namespace Suyaa.Data
         /// 数据仓库
         /// </summary>
         public Repository(
-            IEntityModelFactory entityModelFactory,
-            IDbWorkManager dbWorkManager,
             IDbInsertProvider<TEntity> dbInsertProvider,
             IDbDeleteProvider<TEntity> dbDeleteProvider,
             IDbUpdateProvider<TEntity> dbUpdateProvider,
             IDbQueryProvider<TEntity> dbQueryProvider
             )
         {
-            _entityModelFactory = entityModelFactory;
-            _dbWorkManager = dbWorkManager;
             _dbInsertProvider = dbInsertProvider;
             _dbDeleteProvider = dbDeleteProvider;
             _dbUpdateProvider = dbUpdateProvider;
             _dbQueryProvider = dbQueryProvider;
-            _entity = _entityModelFactory.GetDbEntity<TEntity>();
-        }
-
-        /// <summary>
-        /// 实体建模
-        /// </summary>
-        public DbEntityModel Entity => _entity;
-
-        /// <summary>
-        /// 获取数据库工作者
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="DbException"></exception>
-        public IDbWork GetDbWork()
-        {
-            var work = _dbWorkManager.GetCurrentWork();
-            if (work is null) throw new NotExistException<IDbWork>();
-            return work;
         }
 
         #region 新增
@@ -180,13 +155,11 @@ namespace Suyaa.Data
         /// 数据仓库
         /// </summary>
         public Repository(
-            IEntityModelFactory entityModelFactory,
-            IDbWorkManager dbWorkManager,
             IDbInsertProvider<TEntity> dbInsertProvider,
             IDbDeleteProvider<TEntity> dbDeleteProvider,
             IDbUpdateProvider<TEntity> dbUpdateProvider,
             IDbQueryProvider<TEntity> dbQueryProvider
-            ) : base(entityModelFactory, dbWorkManager, dbInsertProvider, dbDeleteProvider, dbUpdateProvider, dbQueryProvider)
+            ) : base(dbInsertProvider, dbDeleteProvider, dbUpdateProvider, dbQueryProvider)
         {
         }
     }

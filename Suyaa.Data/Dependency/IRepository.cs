@@ -14,12 +14,6 @@ namespace Suyaa.Data.Dependency
     public interface IRepository<TEntity> : IDbInsertable<TEntity>, IDbDeletable<TEntity>, IDbUpdatable<TEntity>, IDbQueryable<TEntity>
         where TEntity : IDbEntity, new()
     {
-
-        /// <summary>
-        /// 实例对象描述
-        /// </summary>
-        DbEntityModel Entity { get; }
-
     }
     /// <summary>
     /// 带主键的数据仓库

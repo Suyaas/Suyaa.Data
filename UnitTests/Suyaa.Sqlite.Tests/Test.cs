@@ -11,6 +11,7 @@ using Suyaa.Data.Sqlite;
 using Suyaa.EFCore;
 using SqlServerDemo.Entities;
 using Suyaa.Data.Enums;
+using Suyaa.EFCore.Contexts;
 
 namespace Suyaa.Sqlite.Tests
 {
@@ -130,7 +131,7 @@ namespace Suyaa.Sqlite.Tests
         }
 
         [Fact]
-        public async void EFQuery()
+        public void EFQuery()
         {
             // 定义数据
             string connectionString = $"data source={sy.IO.GetExecutionPath("temp.db")}";

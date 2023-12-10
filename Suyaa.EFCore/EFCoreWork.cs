@@ -53,8 +53,9 @@ namespace Suyaa.Data
             {
                 // 跳过非泛型
                 if (!prop.PropertyType.IsGenericType) continue;
-                if (!type.IsBased(_dbSetType)) continue;
-                types.Add(prop.PropertyType);
+                if (!prop.PropertyType.IsBased(_dbSetType)) continue;
+                var entityType = prop.PropertyType.GenericTypeArguments[0];  
+                types.Add(entityType);
             }
             return types;
         }

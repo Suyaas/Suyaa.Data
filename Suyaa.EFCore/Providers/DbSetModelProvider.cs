@@ -1,6 +1,8 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Microsoft.EntityFrameworkCore;
+using Suyaa.Data.Dependency;
 using Suyaa.Data.Factories;
 using Suyaa.Data.Models;
+using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Models;
 using Suyaa.EFCore.Sources;
 using System;
@@ -18,19 +20,49 @@ namespace Suyaa.EFCore.Providers
     {
         private readonly List<DbSetModel> _entities;
         private readonly IDbFactory _dbFactory;
+        private readonly IDbContextFactory _dbContextFactory;
         private readonly IEnumerable<IEntityModelConvention> _conventions;
+        private static Type _dbSetType = typeof(DbSet<>);
 
         /// <summary>
         /// 数据库实体建模工厂
         /// </summary>
         public DbSetModelProvider(
             IDbFactory dbFactory,
+            IDbContextFactory dbContextFactory,
             IEnumerable<IEntityModelConvention> conventions
             )
         {
             _entities = new List<DbSetModel>();
             _dbFactory = dbFactory;
+            _dbContextFactory = dbContextFactory;
             _conventions = conventions;
+            // 注册所有已知数据库上下文
+            AddDbContextsDbSets(_dbContextFactory.DbContexts);
+        }
+
+        // 添加数据库实例
+        private void AddDbContextDbSets(IDescriptorDbContext dbContext)
+        {
+            var type = dbContext.GetType();
+            var pros = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var prop in pros)
+            {
+                // 跳过非泛型
+                if (!prop.PropertyType.IsGenericType) continue;
+                if (!prop.PropertyType.IsBased(_dbSetType)) continue;
+                var entityType = prop.PropertyType.GenericTypeArguments[0];
+                AddEntityModel(new DbSetModelSource(entityType, prop, dbContext));
+            }
+        }
+
+        // 添加数据库上下文
+        private void AddDbContextsDbSets(IEnumerable<IDescriptorDbContext> dbContexts)
+        {
+            foreach (var dbContext in dbContexts)
+            {
+                AddDbContextDbSets(dbContext);
+            }
         }
 
         /// <summary>

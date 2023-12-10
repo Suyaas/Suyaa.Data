@@ -32,6 +32,8 @@ namespace sy
         private static IEntityModelFactory? _entityModelFactory;
         // 数据库上下文工厂
         private static IDbContextFactory? _dbContextFacotry;
+        // 数据库上下文供应商
+        private static DbContextProvider? _dbContextProvider;
         // 数据库实例供应商集合
         private static List<IEntityModelProvider> _entityModelProviders = new List<IEntityModelProvider>();
 
@@ -48,7 +50,7 @@ namespace sy
         /// 使用连接
         /// </summary>
         /// <param name="descriptor"></param>
-        public static void UseConnection(DbConnectionDescriptor descriptor)
+        public static void UseConnection(IDbConnectionDescriptor descriptor)
         {
             // 创建数据库连接描述供应商
             if (_connectionDescriptorProvider is null) _connectionDescriptorProvider = new DbConnectionDescriptorProvider();
@@ -86,31 +88,45 @@ namespace sy
         }
 
         /// <summary>
-        /// 创建工作者
+        /// 注册数据库实例供应商
         /// </summary>
-        /// <param name="descriptor"></param>
-        /// <returns></returns>
-        public static IDbWork CreateWork(DbConnectionDescriptor descriptor)
+        public static void UserDbContext(IDescriptorDbContext dbContext)
         {
-            // 使用连接
-            UseConnection(descriptor);
-            _dbFactory ??= new DbFactory();
-            _dbContextFacotry ??= new DbContextFacotry(new List<IDbContextProvider>() { new DbContextProvider() });
-            _dbWorkProvider ??= new EfCoreWorkProvider(_dbFactory, _dbContextFacotry);
-            var dbWorkManagerProvider = new EfCoreManagerProvider(_dbFactory, _dbContextFacotry, _dbConnectionDescriptorManager!);
-            return dbWorkManagerProvider.CreateManager().CreateWork();
+            UseConnection(dbContext.ConnectionDescriptor);
+            _dbContextProvider ??= new DbContextProvider();
+            if (_dbContextProvider.GetDbContexts().Contains(dbContext)) return;
+            _dbContextProvider.AddDbContext(dbContext);
+            _dbContextFacotry = new DbContextFacotry(new List<IDbContextProvider>() { _dbContextProvider });
         }
 
         /// <summary>
         /// 创建工作者
         /// </summary>
-        /// <param name="dbType"></param>
-        /// <param name="connectionString"></param>
+        /// <param name="dbContext"></param>
         /// <returns></returns>
-        public static IDbWork CreateWork(DatabaseType dbType, string connectionString)
+        public static IDbWork CreateWork(IDescriptorDbContext dbContext)
         {
-            return CreateWork(new DbConnectionDescriptor("default", dbType, connectionString));
+            _dbFactory ??= new DbFactory();
+            UserDbContext(dbContext);
+            if (!_entityModelProviders.Any())
+            {
+                UseEntityProvider(new DbSetModelProvider(_dbFactory, _dbContextFacotry!, new List<IEntityModelConvention>()));
+            }
+            _dbWorkProvider ??= new EfCoreWorkProvider(_dbFactory, _dbContextFacotry!);
+            var dbWorkManagerProvider = new EfCoreManagerProvider(_dbFactory, _dbContextFacotry!, _dbConnectionDescriptorManager!);
+            return dbWorkManagerProvider.CreateManager().CreateWork();
         }
+
+        ///// <summary>
+        ///// 创建工作者
+        ///// </summary>
+        ///// <param name="dbType"></param>
+        ///// <param name="connectionString"></param>
+        ///// <returns></returns>
+        //public static IDbWork CreateWork(DatabaseType dbType, string connectionString)
+        //{
+        //    return CreateWork(new DbConnectionDescriptor("default", dbType, connectionString));
+        //}
 
         /// <summary>
         /// 创建Sql仓库
@@ -134,7 +150,6 @@ namespace sy
         {
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             return work.GetRepository(
-                _entityModelFactory,
                 new EfCoreInsertProvider<TEntity>(work.WorkManager),
                 new EfCoreDeleteProvider<TEntity>(work.WorkManager),
                 new EfCoreUpdateProvider<TEntity>(_entityModelFactory, work.WorkManager),
@@ -153,7 +168,6 @@ namespace sy
         {
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             return work.GetRepository<TEntity, TId>(
-                _entityModelFactory,
                 new EfCoreInsertProvider<TEntity>(work.WorkManager),
                 new EfCoreDeleteProvider<TEntity>(work.WorkManager),
                 new EfCoreUpdateProvider<TEntity>(_entityModelFactory, work.WorkManager),
