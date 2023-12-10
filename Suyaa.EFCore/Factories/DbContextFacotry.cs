@@ -10,7 +10,7 @@ namespace Suyaa.EFCore.Factories
     /// <summary>
     /// 数据库上下文工厂
     /// </summary>
-    public class DbContextFacotry : IDbContextFacotry
+    public class DbContextFacotry : IDbContextFactory
     {
         private readonly IEnumerable<IDbContextProvider> _providers;
         private readonly List<IDescriptorDbContext> _dbContexts;

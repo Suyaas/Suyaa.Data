@@ -90,7 +90,7 @@ namespace sy
             UseConnection(descriptor);
             _dbFactory ??= new DbFactory();
             _dbWorkProvider ??= new DbWorkProvider(_dbFactory);
-            var dbWorkManagerProvider = new DbWorkManagerProvider(_dbFactory, _dbConnectionDescriptorManager!, _dbWorkProvider);
+            var dbWorkManagerProvider = new DbWorkManagerProvider(_dbFactory, _dbConnectionDescriptorManager!);
             return dbWorkManagerProvider.CreateManager().CreateWork();
         }
 

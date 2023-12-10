@@ -88,6 +88,13 @@ namespace Suyaa.EFCore.Providers
         /// <returns></returns>
         public EntityModel? GetEntityModel(IEntityModelSource source)
         {
+            // 只读查询
+            if (source is TypeDbContextModelSource typeDbContextModelSource)
+            {
+                var entiy = _entities.Where(d => d.Type == typeDbContextModelSource.Type).FirstOrDefault();
+                return entiy;
+            }
+            // 建模查询
             if (source is DbSetModelSource dbSetModelSource)
             {
                 var entiy = _entities.Where(d => d.Type == dbSetModelSource.Type).FirstOrDefault();

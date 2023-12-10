@@ -1,6 +1,7 @@
 ﻿using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Helpers;
+using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Helpers;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,22 @@ namespace Suyaa.Data.Providers
     /// <summary>
     /// EFCore作业供应商
     /// </summary>
-    public sealed class EFCoreWorkProvider : IDbWorkProvider
+    public sealed class EfCoreWorkProvider : IDbWorkProvider
     {
         private readonly IDbFactory _dbFactory;
+        private readonly IDbContextFactory _dbContextFacotry;
         private IDbWork? _work;
 
         /// <summary>
         /// EFCore作业供应商
         /// </summary>
-        public EFCoreWorkProvider(
-            IDbFactory dbFactory
+        public EfCoreWorkProvider(
+            IDbFactory dbFactory,
+            IDbContextFactory dbContextFacotry
             )
         {
             _dbFactory = dbFactory;
+            _dbContextFacotry = dbContextFacotry;
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace Suyaa.Data.Providers
         /// <returns></returns>
         public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new EFCoreWork(_dbFactory, dbWorkManager);
+            return new EfCoreWork(_dbFactory, _dbContextFacotry, dbWorkManager);
         }
 
         /// <summary>
@@ -50,9 +54,9 @@ namespace Suyaa.Data.Providers
         /// </summary>
         /// <param name="databaseType"></param>
         /// <returns></returns>
-        public IEFCoreProvider GetDbProvider(DatabaseType databaseType)
+        public IEfCoreProvider GetDbProvider(DatabaseType databaseType)
         {
-            return databaseType.GetEFCoreProvider();
+            return databaseType.GetEfCoreProvider();
         }
 
         /// <summary>

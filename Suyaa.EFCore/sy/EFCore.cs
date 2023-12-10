@@ -5,7 +5,10 @@ using Suyaa.Data.Enums;
 using Suyaa.Data.Factories;
 using Suyaa.Data.Helpers;
 using Suyaa.Data.Providers;
+using Suyaa.EFCore.Dependency;
+using Suyaa.EFCore.Factories;
 using Suyaa.EFCore.Helpers;
+using Suyaa.EFCore.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +30,8 @@ namespace sy
         private static IDbWorkProvider? _dbWorkProvider;
         // 实体建模供应商
         private static IEntityModelFactory? _entityModelFactory;
+        // 数据库上下文工厂
+        private static IDbContextFactory? _dbContextFacotry;
         // 数据库实例供应商集合
         private static List<IEntityModelProvider> _entityModelProviders = new List<IEntityModelProvider>();
 
@@ -90,8 +95,9 @@ namespace sy
             // 使用连接
             UseConnection(descriptor);
             _dbFactory ??= new DbFactory();
-            _dbWorkProvider ??= new EFCoreWorkProvider(_dbFactory);
-            var dbWorkManagerProvider = new DbWorkManagerProvider(_dbFactory, _dbConnectionDescriptorManager!, _dbWorkProvider);
+            _dbContextFacotry ??= new DbContextFacotry(new List<IDbContextProvider>() { new DbContextProvider() });
+            _dbWorkProvider ??= new EfCoreWorkProvider(_dbFactory, _dbContextFacotry);
+            var dbWorkManagerProvider = new EfCoreManagerProvider(_dbFactory, _dbContextFacotry, _dbConnectionDescriptorManager!);
             return dbWorkManagerProvider.CreateManager().CreateWork();
         }
 
@@ -124,18 +130,15 @@ namespace sy
         /// <param name="work"></param>
         /// <returns></returns>
         public static IRepository<TEntity> CreateRepository<TEntity>(IDbWork work)
-            where TEntity : IDbEntity, new()
+            where TEntity : class, IDbEntity, new()
         {
-            var provider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
-            _dbFactory ??= new DbFactory();
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
-            var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository(
                 _entityModelFactory,
-                new DbInsertProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbDeleteProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbUpdateProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbQueryProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository)
+                new EfCoreInsertProvider<TEntity>(work.WorkManager),
+                new EfCoreDeleteProvider<TEntity>(work.WorkManager),
+                new EfCoreUpdateProvider<TEntity>(_entityModelFactory, work.WorkManager),
+                new EfCoreQueryProvider<TEntity>(work.WorkManager)
             );
         }
 
@@ -145,19 +148,16 @@ namespace sy
         /// <param name="work"></param>
         /// <returns></returns>
         public static IRepository<TEntity, TId> CreateRepository<TEntity, TId>(IDbWork work)
-            where TEntity : IDbEntity<TId>, new()
+            where TEntity : class, IDbEntity<TId>, new()
             where TId : notnull
         {
-            var provider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
-            _dbFactory ??= new DbFactory();
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
-            var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository<TEntity, TId>(
                 _entityModelFactory,
-                new DbInsertProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbDeleteProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbUpdateProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbQueryProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository)
+                new EfCoreInsertProvider<TEntity>(work.WorkManager),
+                new EfCoreDeleteProvider<TEntity>(work.WorkManager),
+                new EfCoreUpdateProvider<TEntity>(_entityModelFactory, work.WorkManager),
+                new EfCoreQueryProvider<TEntity>(work.WorkManager)
             );
         }
     }

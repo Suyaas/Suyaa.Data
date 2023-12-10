@@ -1,4 +1,6 @@
 ﻿using Suyaa.Data.Dependency;
+using Suyaa.Data.Providers;
+using Suyaa.EFCore.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,27 +10,29 @@ namespace Suyaa.Data
     /// <summary>
     /// 简单的数据库工作者管理器
     /// </summary>
-    public sealed class EFCoreManager : IDbWorkManager
+    public sealed class EfCoreWorkManager : IDbWorkManager
     {
         private IDbWork? _work;
         private static readonly object _lock = new object();
         private readonly IDbFactory _factory;
+        private readonly IDbContextFactory _dbContextFactory;
         private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
-        private readonly IDbWorkProvider _dbWorkProvider;
+        private readonly EfCoreWorkProvider _efCoreWorkProvider;
 
         /// <summary>
         /// 简单的数据库工作者管理器
         /// </summary>
-        public EFCoreManager(
+        public EfCoreWorkManager(
             IDbFactory factory,
-            IDbConnectionDescriptorManager dbConnectionDescriptorManager,
-            IDbWorkProvider dbWorkProvider
+            IDbContextFactory dbContextFactory,
+            IDbConnectionDescriptorManager dbConnectionDescriptorManager
             )
         {
             _factory = factory;
+            _dbContextFactory = dbContextFactory;
             _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
-            _dbWorkProvider = dbWorkProvider;
-            ConnectionDescriptor = dbConnectionDescriptorManager.GetCurrentConnection();
+            _efCoreWorkProvider = new EfCoreWorkProvider(_factory, _dbContextFactory);
+            ConnectionDescriptor = _dbConnectionDescriptorManager.GetCurrentConnection();
         }
 
         /// <summary>
@@ -42,7 +46,7 @@ namespace Suyaa.Data
         /// <returns></returns>
         public IDbWork CreateWork()
         {
-            var work = _dbWorkProvider.CreateWork(this);
+            var work = _efCoreWorkProvider.CreateWork(this);
             SetCurrentWork(work);
             return work;
         }

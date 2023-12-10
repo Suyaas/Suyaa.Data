@@ -9,7 +9,7 @@ namespace Suyaa.EFCore.Dependency
     /// <summary>
     /// 数据库上下文工厂
     /// </summary>
-    public interface IDbContextFacotry
+    public interface IDbContextFactory
     {
         /// <summary>
         /// 数据库上下文工厂

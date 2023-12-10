@@ -1,4 +1,5 @@
 ﻿using Suyaa.Data.Dependency;
+using Suyaa.Data.Providers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,29 +7,28 @@ using System.Text;
 namespace Suyaa.Data
 {
     /// <summary>
-    /// 简单的数据库工作者管理器
+    /// 数据库作业管理器
     /// </summary>
     public sealed class DbWorkManager : IDbWorkManager
     {
         private IDbWork? _work;
         private static readonly object _lock = new object();
-        private readonly IDbFactory _factory;
+        private readonly IDbFactory _dbFactory;
         private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
-        private readonly IDbWorkProvider _dbWorkProvider;
+        private readonly DbWorkProvider _dbWorkProvider;
 
         /// <summary>
-        /// 简单的数据库工作者管理器
+        /// 数据库作业管理器
         /// </summary>
         public DbWorkManager(
-            IDbFactory factory,
-            IDbConnectionDescriptorManager dbConnectionDescriptorManager,
-            IDbWorkProvider dbWorkProvider
+            IDbFactory dbFactory,
+            IDbConnectionDescriptorManager dbConnectionDescriptorManager
             )
         {
-            _factory = factory;
+            _dbFactory = dbFactory;
             _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
-            _dbWorkProvider = dbWorkProvider;
-            ConnectionDescriptor = dbConnectionDescriptorManager.GetCurrentConnection();
+            _dbWorkProvider = new DbWorkProvider(_dbFactory);
+            ConnectionDescriptor = _dbConnectionDescriptorManager.GetCurrentConnection();
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ namespace Suyaa.EFCore.Helpers
         /// <param name="type"></param>
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
-        public static IEFCoreProvider GetEFCoreProvider(this DatabaseType type)
+        public static IEfCoreProvider GetEfCoreProvider(this DatabaseType type)
         {
             string providerName;
             string providerDllPath;
@@ -40,7 +40,7 @@ namespace Suyaa.EFCore.Helpers
                 sy.IO.CreateFolder(dllPath);
                 throw new DbProviderNotExistException(providerName);
             }
-            return providerType.Create<IEFCoreProvider>();
+            return providerType.Create<IEfCoreProvider>();
         }
     }
 }

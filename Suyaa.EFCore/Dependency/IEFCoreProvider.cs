@@ -10,7 +10,7 @@ namespace Suyaa.Data.Dependency
     /// <summary>
     /// 数据库供应商
     /// </summary>
-    public interface IEFCoreProvider
+    public interface IEfCoreProvider
     {
         /// <summary>
         /// 数据库上下文配置供应商

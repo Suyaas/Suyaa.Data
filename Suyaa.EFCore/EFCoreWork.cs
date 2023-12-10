@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data.Dependency;
+using Suyaa.Data.Helpers;
 using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.Dependency;
+using Suyaa.EFCore.Helpers;
 using Suyaa.EFCore.Models;
 using System.Data.Common;
 using System.Reflection;
@@ -12,10 +14,10 @@ namespace Suyaa.Data
     /// <summary>
     /// 简单的数据库工作着
     /// </summary>
-    public sealed class EFCoreWork : Disposable, IDbWork
+    public sealed class EfCoreWork : Disposable, IDbWork
     {
         private readonly IDbFactory _dbFactory;
-        private readonly IDbContextFacotry _dbContextFacotry;
+        private readonly IDbContextFactory _dbContextFacotry;
         private readonly IDbWorkManager _dbWorkManager;
         private DbConnection? _connection;
         private DbTransaction? _transaction;
@@ -25,11 +27,10 @@ namespace Suyaa.Data
         /// <summary>
         /// 简单的数据库工作着
         /// </summary>
-        public EFCoreWork(
+        public EfCoreWork(
             IDbFactory dbFactory,
-            IDbContextFacotry dbContextFacotry,
-            IDbWorkManager dbWorkManager,
-            IDbContextOptionsProvider dbContextOptionsProvider
+            IDbContextFactory dbContextFacotry,
+            IDbWorkManager dbWorkManager
             )
         {
             ConnectionDescriptor = dbWorkManager.ConnectionDescriptor;
@@ -37,6 +38,8 @@ namespace Suyaa.Data
             _dbContextFacotry = dbContextFacotry;
             _dbWorkManager = dbWorkManager;
             var types = GetDbContextsDbSets(_dbContextFacotry.DbContexts);
+            var efCoreProvider = ConnectionDescriptor.DatabaseType.GetEfCoreProvider();
+            var dbContextOptionsProvider = efCoreProvider.DbContextOptionsProvider;
             _dbContext = new DescriptorTypeDbContext(ConnectionDescriptor, dbContextOptionsProvider.GetDbContextOptions(ConnectionDescriptor.ToConnectionString()), types);
         }
 
@@ -71,6 +74,11 @@ namespace Suyaa.Data
         /// 连接信息
         /// </summary>
         public IDbConnectionDescriptor ConnectionDescriptor { get; }
+
+        /// <summary>
+        /// 获取数据库上下文
+        /// </summary>
+        public DescriptorTypeDbContext DbContext => _dbContext;
 
         /// <summary>
         /// 数据库连接
