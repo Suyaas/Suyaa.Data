@@ -17,7 +17,6 @@ namespace Suyaa.Data.Providers
         where TEntity : IDbEntity
     {
         private readonly IEntityModelFactory _entityModelFactory;
-        private readonly IDbScriptProvider _dbScriptProvider;
         private readonly ISqlRepository _sqlRepository;
         private readonly DbEntityModel _entity;
 
@@ -26,12 +25,10 @@ namespace Suyaa.Data.Providers
         /// </summary>
         public DbInsertProvider(
             IEntityModelFactory entityModelFactory,
-            IDbScriptProvider dbScriptProvider,
             ISqlRepository sqlRepository
             )
         {
             _entityModelFactory = entityModelFactory;
-            _dbScriptProvider = dbScriptProvider;
             _sqlRepository = sqlRepository;
             _entity = _entityModelFactory.GetDbEntity<TEntity>();
         }
@@ -39,11 +36,14 @@ namespace Suyaa.Data.Providers
         /// <summary>
         /// 新增数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
-        public void Insert(TEntity entity)
+        public void Insert(IDbWork work, TEntity entity)
         {
+            // 获取数据库供应商
+            var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = _dbScriptProvider.GetEntityInsert(_entity);
+            var sql = dbProvider.ScriptProvider.GetEntityInsert(_entity);
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本
@@ -53,12 +53,15 @@ namespace Suyaa.Data.Providers
         /// <summary>
         /// 异步方式新增数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task InsertAsync(TEntity entity)
+        public async Task InsertAsync(IDbWork work, TEntity entity)
         {
+            // 获取数据库供应商
+            var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = _dbScriptProvider.GetEntityInsert(_entity);
+            var sql = dbProvider.ScriptProvider.GetEntityInsert(_entity);
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本

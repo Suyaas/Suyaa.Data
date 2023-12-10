@@ -150,10 +150,10 @@ namespace sy
         {
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             return work.GetRepository(
-                new EfCoreInsertProvider<TEntity>(work.WorkManager),
-                new EfCoreDeleteProvider<TEntity>(work.WorkManager),
-                new EfCoreUpdateProvider<TEntity>(_entityModelFactory, work.WorkManager),
-                new EfCoreQueryProvider<TEntity>(work.WorkManager)
+                new EfCoreInsertProvider<TEntity>(),
+                new EfCoreDeleteProvider<TEntity>(),
+                new EfCoreUpdateProvider<TEntity>(_entityModelFactory),
+                new EfCoreQueryProvider<TEntity>()
             );
         }
 
@@ -168,10 +168,10 @@ namespace sy
         {
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             return work.GetRepository<TEntity, TId>(
-                new EfCoreInsertProvider<TEntity>(work.WorkManager),
-                new EfCoreDeleteProvider<TEntity>(work.WorkManager),
-                new EfCoreUpdateProvider<TEntity>(_entityModelFactory, work.WorkManager),
-                new EfCoreQueryProvider<TEntity>(work.WorkManager)
+                new EfCoreInsertProvider<TEntity>(),
+                new EfCoreDeleteProvider<TEntity>(),
+                new EfCoreUpdateProvider<TEntity>(_entityModelFactory),
+                new EfCoreQueryProvider<TEntity>()
             );
         }
     }

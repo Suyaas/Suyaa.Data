@@ -16,6 +16,7 @@ namespace Suyaa.Data
     public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : IDbEntity, new()
     {
+        private readonly IDbWorkManager _dbWorkManager;
         private readonly IDbInsertProvider<TEntity> _dbInsertProvider;
         private readonly IDbDeleteProvider<TEntity> _dbDeleteProvider;
         private readonly IDbUpdateProvider<TEntity> _dbUpdateProvider;
@@ -25,16 +26,26 @@ namespace Suyaa.Data
         /// 数据仓库
         /// </summary>
         public Repository(
+            IDbWorkManager dbWorkManager,
             IDbInsertProvider<TEntity> dbInsertProvider,
             IDbDeleteProvider<TEntity> dbDeleteProvider,
             IDbUpdateProvider<TEntity> dbUpdateProvider,
             IDbQueryProvider<TEntity> dbQueryProvider
             )
         {
+            _dbWorkManager = dbWorkManager;
             _dbInsertProvider = dbInsertProvider;
             _dbDeleteProvider = dbDeleteProvider;
             _dbUpdateProvider = dbUpdateProvider;
             _dbQueryProvider = dbQueryProvider;
+        }
+
+        // 获取当前作业
+        private IDbWork GetDbWork()
+        {
+            var work = _dbWorkManager.GetCurrentWork();
+            if (work is null) throw new NullException<IDbWork>();
+            return work;
         }
 
         #region 新增
@@ -45,7 +56,9 @@ namespace Suyaa.Data
         /// <param name="entity"></param>
         public void Insert(TEntity entity)
         {
-            _dbInsertProvider.Insert(entity);
+            // 获取当前作业
+            var work = GetDbWork();
+            _dbInsertProvider.Insert(work, entity);
         }
 
         /// <summary>
@@ -55,7 +68,9 @@ namespace Suyaa.Data
         /// <returns></returns>
         public async Task InsertAsync(TEntity entity)
         {
-            await _dbInsertProvider.InsertAsync(entity);
+            // 获取当前作业
+            var work = GetDbWork();
+            await _dbInsertProvider.InsertAsync(work, entity);
         }
 
         #endregion
@@ -68,7 +83,9 @@ namespace Suyaa.Data
         /// <param name="predicate"></param>
         public void Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            _dbDeleteProvider.Delete(predicate);
+            // 获取当前作业
+            var work = GetDbWork();
+            _dbDeleteProvider.Delete(work, predicate);
         }
 
         /// <summary>
@@ -78,7 +95,9 @@ namespace Suyaa.Data
         /// <returns></returns>
         public async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            await _dbDeleteProvider.DeleteAsync(predicate);
+            // 获取当前作业
+            var work = GetDbWork();
+            await _dbDeleteProvider.DeleteAsync(work, predicate);
         }
 
         #endregion
@@ -92,7 +111,9 @@ namespace Suyaa.Data
         /// <param name="predicate"></param>
         public void Update(TEntity entity, Expression<Func<TEntity, bool>> predicate)
         {
-            _dbUpdateProvider.Update(entity, predicate);
+            // 获取当前作业
+            var work = GetDbWork();
+            _dbUpdateProvider.Update(work, entity, predicate);
         }
 
         /// <summary>
@@ -103,7 +124,9 @@ namespace Suyaa.Data
         /// <param name="predicate"></param>
         public void Update(TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
         {
-            _dbUpdateProvider.Update(entity, selector, predicate);
+            // 获取当前作业
+            var work = GetDbWork();
+            _dbUpdateProvider.Update(work, entity, selector, predicate);
         }
 
         /// <summary>
@@ -114,7 +137,9 @@ namespace Suyaa.Data
         /// <returns></returns>
         public async Task UpdateAsync(TEntity entity, Expression<Func<TEntity, bool>> predicate)
         {
-            await _dbUpdateProvider.UpdateAsync(entity, predicate);
+            // 获取当前作业
+            var work = GetDbWork();
+            await _dbUpdateProvider.UpdateAsync(work, entity, predicate);
         }
 
         /// <summary>
@@ -126,7 +151,9 @@ namespace Suyaa.Data
         /// <returns></returns>
         public async Task UpdateAsync(TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
         {
-            await _dbUpdateProvider.UpdateAsync(entity, selector, predicate);
+            // 获取当前作业
+            var work = GetDbWork();
+            await _dbUpdateProvider.UpdateAsync(work, entity, selector, predicate);
         }
 
         #endregion
@@ -139,7 +166,9 @@ namespace Suyaa.Data
         /// <returns></returns>
         public IQueryable<TEntity> Query()
         {
-            return _dbQueryProvider.Query();
+            // 获取当前作业
+            var work = GetDbWork();
+            return _dbQueryProvider.Query(work);
         }
 
         #endregion
@@ -155,11 +184,12 @@ namespace Suyaa.Data
         /// 数据仓库
         /// </summary>
         public Repository(
+            IDbWorkManager dbWorkManager,
             IDbInsertProvider<TEntity> dbInsertProvider,
             IDbDeleteProvider<TEntity> dbDeleteProvider,
             IDbUpdateProvider<TEntity> dbUpdateProvider,
             IDbQueryProvider<TEntity> dbQueryProvider
-            ) : base(dbInsertProvider, dbDeleteProvider, dbUpdateProvider, dbQueryProvider)
+            ) : base(dbWorkManager, dbInsertProvider, dbDeleteProvider, dbUpdateProvider, dbQueryProvider)
         {
         }
     }

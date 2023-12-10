@@ -23,35 +23,33 @@ namespace Suyaa.EFCore.Providers
         where TEntity : class, IDbEntity
     {
         private readonly IEntityModelFactory _entityModelFactory;
-        private readonly IDbWorkManager _dbWorkManager;
-        private readonly DescriptorTypeDbContext _dbContext;
-        private readonly DbSet<TEntity> _dbSet;
-        private readonly DbSetModel _entity;
 
         /// <summary>
         /// 数据更新操作供应商
         /// </summary>
         public EfCoreUpdateProvider(
-            IEntityModelFactory entityModelFactory,
-            IDbWorkManager dbWorkManager
+            IEntityModelFactory entityModelFactory
             )
         {
             _entityModelFactory = entityModelFactory;
-            _dbWorkManager = dbWorkManager;
-            _dbContext = _dbWorkManager.GetCurrentWork().GetDbContext();
-            _dbSet = _dbContext.Set<TEntity>();
-            _entity = _entityModelFactory.GetDbSet<TEntity>(_dbContext);
         }
 
         /// <summary>
         /// 更新数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
         /// <param name="predicate"></param>
-        public void Update(TEntity entity, Expression<Func<TEntity, bool>> predicate)
+        public void Update(IDbWork work, TEntity entity, Expression<Func<TEntity, bool>> predicate)
         {
-            var datas = _dbSet.Where(predicate).ToList();
-            foreach (var field in _entity.Fields)
+            // 获取数据库上下文
+            var dbContext = work.GetDbContext();
+            // 获取DbSet
+            var dbSet = dbContext.Set<TEntity>();
+            // 获取DbSet建模
+            var dbSetModel = _entityModelFactory.GetDbSet<TEntity>(dbContext);
+            var datas = dbSet.Where(predicate).ToList();
+            foreach (var field in dbSetModel.Fields)
             {
                 foreach (var data in datas)
                 {
@@ -64,13 +62,20 @@ namespace Suyaa.EFCore.Providers
         /// <summary>
         /// 更新数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
         /// <param name="selector"></param>
         /// <param name="predicate"></param>
-        public void Update(TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
+        public void Update(IDbWork work, TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
         {
-            var datas = _dbSet.Where(predicate).ToList();
-            var fields = _entity.GetEntityUpdateFields(selector);
+            // 获取数据库上下文
+            var dbContext = work.GetDbContext();
+            // 获取DbSet
+            var dbSet = dbContext.Set<TEntity>();
+            // 获取DbSet建模
+            var dbSetModel = _entityModelFactory.GetDbSet<TEntity>(dbContext);
+            var datas = dbSet.Where(predicate).ToList();
+            var fields = dbSetModel.GetEntityUpdateFields(selector);
             foreach (var field in fields)
             {
                 foreach (var data in datas)
@@ -84,13 +89,20 @@ namespace Suyaa.EFCore.Providers
         /// <summary>
         /// 更新数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(TEntity entity, Expression<Func<TEntity, bool>> predicate)
+        public async Task UpdateAsync(IDbWork work, TEntity entity, Expression<Func<TEntity, bool>> predicate)
         {
-            var datas = await _dbSet.Where(predicate).ToListAsync();
-            foreach (var field in _entity.Fields)
+            // 获取数据库上下文
+            var dbContext = work.GetDbContext();
+            // 获取DbSet
+            var dbSet = dbContext.Set<TEntity>();
+            // 获取DbSet建模
+            var dbSetModel = _entityModelFactory.GetDbSet<TEntity>(dbContext);
+            var datas = await dbSet.Where(predicate).ToListAsync();
+            foreach (var field in dbSetModel.Fields)
             {
                 foreach (var data in datas)
                 {
@@ -103,14 +115,21 @@ namespace Suyaa.EFCore.Providers
         /// <summary>
         /// 更新数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
         /// <param name="selector"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
+        public async Task UpdateAsync(IDbWork work, TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
         {
-            var datas = await _dbSet.Where(predicate).ToListAsync();
-            var fields = _entity.GetEntityUpdateFields(selector);
+            // 获取数据库上下文
+            var dbContext = work.GetDbContext();
+            // 获取DbSet
+            var dbSet = dbContext.Set<TEntity>();
+            // 获取DbSet建模
+            var dbSetModel = _entityModelFactory.GetDbSet<TEntity>(dbContext);
+            var datas = await dbSet.Where(predicate).ToListAsync();
+            var fields = dbSetModel.GetEntityUpdateFields(selector);
             foreach (var field in fields)
             {
                 foreach (var data in datas)

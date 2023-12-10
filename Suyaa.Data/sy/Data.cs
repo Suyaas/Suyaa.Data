@@ -125,15 +125,14 @@ namespace sy
         public static IRepository<TEntity> CreateRepository<TEntity>(IDbWork work)
             where TEntity : IDbEntity, new()
         {
-            var provider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             _dbFactory ??= new DbFactory();
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository(
-                new DbInsertProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbDeleteProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbUpdateProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbQueryProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository)
+                new DbInsertProvider<TEntity>(_entityModelFactory, sqlRepository),
+                new DbDeleteProvider<TEntity>(_entityModelFactory, sqlRepository),
+                new DbUpdateProvider<TEntity>(_entityModelFactory, sqlRepository),
+                new DbQueryProvider<TEntity>(_entityModelFactory, sqlRepository)
             );
         }
 
@@ -146,15 +145,14 @@ namespace sy
             where TEntity : IDbEntity<TId>, new()
             where TId : notnull
         {
-            var provider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             _dbFactory ??= new DbFactory();
             _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
             var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository<TEntity, TId>(
-                new DbInsertProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbDeleteProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbUpdateProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository),
-                new DbQueryProvider<TEntity>(_entityModelFactory, provider.ScriptProvider, sqlRepository)
+                new DbInsertProvider<TEntity>(_entityModelFactory, sqlRepository),
+                new DbDeleteProvider<TEntity>(_entityModelFactory, sqlRepository),
+                new DbUpdateProvider<TEntity>(_entityModelFactory, sqlRepository),
+                new DbQueryProvider<TEntity>(_entityModelFactory, sqlRepository)
             );
         }
     }

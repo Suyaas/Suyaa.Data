@@ -21,30 +21,16 @@ namespace Suyaa.EFCore.Providers
     public sealed class EfCoreQueryProvider<TEntity> : IDbQueryProvider<TEntity>
         where TEntity : class, IDbEntity
     {
-        private readonly IDbWorkManager _dbWorkManager;
-        private readonly DescriptorTypeDbContext _dbContext;
-        private readonly DbSet<TEntity> _dbSet;
-
-        /// <summary>
-        /// 数据更新操作供应商
-        /// </summary>
-        public EfCoreQueryProvider(
-            IDbWorkManager dbWorkManager
-            )
-        {
-            _dbWorkManager = dbWorkManager;
-            _dbContext = _dbWorkManager.GetCurrentWork().GetDbContext();
-            _dbSet = _dbContext.Set<TEntity>();
-        }
-
         /// <summary>
         /// 获取查询
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public IQueryable<TEntity> Query()
+        public IQueryable<TEntity> Query(IDbWork work)
         {
-            return _dbSet;
+            // 获取数据库上下文
+            var dbContext = work.GetDbContext();
+            return dbContext.Set<TEntity>();
         }
     }
 }

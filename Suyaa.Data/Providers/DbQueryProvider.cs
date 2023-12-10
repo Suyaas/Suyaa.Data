@@ -19,7 +19,6 @@ namespace Suyaa.Data.Providers
         where TEntity : IDbEntity
     {
         private readonly IEntityModelFactory _entityModelFactory;
-        private readonly IDbScriptProvider _dbScriptProvider;
         private readonly ISqlRepository _sqlRepository;
         private readonly DbEntityModel _entity;
 
@@ -28,12 +27,10 @@ namespace Suyaa.Data.Providers
         /// </summary>
         public DbQueryProvider(
             IEntityModelFactory entityModelFactory,
-            IDbScriptProvider dbScriptProvider,
             ISqlRepository sqlRepository
             )
         {
             _entityModelFactory = entityModelFactory;
-            _dbScriptProvider = dbScriptProvider;
             _sqlRepository = sqlRepository;
             _entity = _entityModelFactory.GetDbEntity<TEntity>();
         }
@@ -43,7 +40,7 @@ namespace Suyaa.Data.Providers
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public IQueryable<TEntity> Query()
+        public IQueryable<TEntity> Query(IDbWork work)
         {
             throw new NotImplementedException();
         }

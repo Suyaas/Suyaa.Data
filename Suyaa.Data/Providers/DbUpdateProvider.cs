@@ -18,7 +18,6 @@ namespace Suyaa.Data.Providers
         where TEntity : IDbEntity
     {
         private readonly IEntityModelFactory _entityModelFactory;
-        private readonly IDbScriptProvider _dbScriptProvider;
         private readonly ISqlRepository _sqlRepository;
         private readonly DbEntityModel _entity;
 
@@ -27,12 +26,10 @@ namespace Suyaa.Data.Providers
         /// </summary>
         public DbUpdateProvider(
             IEntityModelFactory entityModelFactory,
-            IDbScriptProvider dbScriptProvider,
             ISqlRepository sqlRepository
             )
         {
             _entityModelFactory = entityModelFactory;
-            _dbScriptProvider = dbScriptProvider;
             _sqlRepository = sqlRepository;
             _entity = _entityModelFactory.GetDbEntity<TEntity>();
         }
@@ -40,12 +37,15 @@ namespace Suyaa.Data.Providers
         /// <summary>
         /// 更新数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
         /// <param name="predicate"></param>
-        public void Update(TEntity entity, Expression<Func<TEntity, bool>> predicate)
+        public void Update(IDbWork work, TEntity entity, Expression<Func<TEntity, bool>> predicate)
         {
+            // 获取数据库供应商
+            var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = _dbScriptProvider.GetEntityUpdate(_entity, _entity.Fields, predicate);
+            var sql = dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.Fields, predicate);
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本
@@ -55,13 +55,16 @@ namespace Suyaa.Data.Providers
         /// <summary>
         /// 更新数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
         /// <param name="selector"></param>
         /// <param name="predicate"></param>
-        public void Update(TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
+        public void Update(IDbWork work, TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
         {
+            // 获取数据库供应商
+            var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = _dbScriptProvider.GetEntityUpdate(_entity, _entity.GetEntityUpdateFields(selector), predicate);
+            var sql = dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.GetEntityUpdateFields(selector), predicate);
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本
@@ -71,13 +74,16 @@ namespace Suyaa.Data.Providers
         /// <summary>
         /// 更新数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(TEntity entity, Expression<Func<TEntity, bool>> predicate)
+        public async Task UpdateAsync(IDbWork work, TEntity entity, Expression<Func<TEntity, bool>> predicate)
         {
+            // 获取数据库供应商
+            var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = _dbScriptProvider.GetEntityUpdate(_entity, _entity.Fields, predicate);
+            var sql = dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.Fields, predicate);
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本
@@ -87,14 +93,17 @@ namespace Suyaa.Data.Providers
         /// <summary>
         /// 更新数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
         /// <param name="selector"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
+        public async Task UpdateAsync(IDbWork work, TEntity entity, Expression<Func<TEntity, object>> selector, Expression<Func<TEntity, bool>> predicate)
         {
+            // 获取数据库供应商
+            var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = _dbScriptProvider.GetEntityUpdate(_entity, _entity.GetEntityUpdateFields(selector), predicate);
+            var sql = dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.GetEntityUpdateFields(selector), predicate);
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本

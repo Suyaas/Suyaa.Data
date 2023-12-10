@@ -18,7 +18,6 @@ namespace Suyaa.Data.Providers
         where TEntity : IDbEntity
     {
         private readonly IEntityModelFactory _entityModelFactory;
-        private readonly IDbScriptProvider _dbScriptProvider;
         private readonly ISqlRepository _sqlRepository;
         private readonly DbEntityModel _entity;
 
@@ -27,12 +26,10 @@ namespace Suyaa.Data.Providers
         /// </summary>
         public DbDeleteProvider(
             IEntityModelFactory entityModelFactory,
-            IDbScriptProvider dbScriptProvider,
             ISqlRepository sqlRepository
             )
         {
             _entityModelFactory = entityModelFactory;
-            _dbScriptProvider = dbScriptProvider;
             _sqlRepository = sqlRepository;
             _entity = _entityModelFactory.GetDbEntity<TEntity>();
         }
@@ -40,11 +37,14 @@ namespace Suyaa.Data.Providers
         /// <summary>
         /// 删除数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="predicate"></param>
-        public void Delete(Expression<Func<TEntity, bool>> predicate)
+        public void Delete(IDbWork work, Expression<Func<TEntity, bool>> predicate)
         {
+            // 获取数据库供应商
+            var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = _dbScriptProvider.GetEntityDelete(_entity, predicate);
+            var sql = dbProvider.ScriptProvider.GetEntityDelete(_entity, predicate);
             // 生成参数
             //var parameters = _entity.GetParameters(entity);
             // 执行脚本
@@ -54,12 +54,15 @@ namespace Suyaa.Data.Providers
         /// <summary>
         /// 异步删除数据
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task DeleteAsync(IDbWork work, Expression<Func<TEntity, bool>> predicate)
         {
+            // 获取数据库供应商
+            var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = _dbScriptProvider.GetEntityDelete(_entity, predicate);
+            var sql = dbProvider.ScriptProvider.GetEntityDelete(_entity, predicate);
             // 生成参数
             //var parameters = _entity.GetParameters(entity);
             // 执行脚本
