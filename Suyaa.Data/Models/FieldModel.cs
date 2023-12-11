@@ -19,12 +19,13 @@ namespace Suyaa.Data.Models
             Index = index;
             Name = property.GetColumnName();
             IsAutoIncrement = property.IsAutoIncrement();
+            Description = property.GetDescription();
         }
 
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 索引号
@@ -35,6 +36,11 @@ namespace Suyaa.Data.Models
         /// 是否为自增字段
         /// </summary>
         public bool IsAutoIncrement { get; }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Description { get; set; }
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
 using Suyaa.Data.Dependency;
+using Suyaa.Data.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,20 @@ namespace Suyaa.EFCore.Contexts
         /// 动态数据库上下文
         /// </summary>
         /// <param name="descriptor"></param>
+        /// <param name="entityModelConventionFactory"></param>
         /// <param name="types"></param>
-        public DescriptorTypeDbContext(IDbConnectionDescriptor descriptor, IEnumerable<Type> types) : base(descriptor)
+        public DescriptorTypeDbContext(IDbConnectionDescriptor descriptor, IEntityModelConventionFactory entityModelConventionFactory, IEnumerable<Type> types) : base(descriptor, entityModelConventionFactory)
+        {
+            _types = types;
+        }
+
+        /// <summary>
+        /// 动态数据库上下文
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <param name="types"></param>
+        public DescriptorTypeDbContext(IDbConnectionDescriptor descriptor, IEnumerable<Type> types)
+            : base(descriptor, new EntityModelConventionFactory(Enumerable.Empty<IEntityModelConvention>()))
         {
             _types = types;
         }

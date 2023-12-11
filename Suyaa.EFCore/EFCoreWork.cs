@@ -18,6 +18,7 @@ namespace Suyaa.Data
     {
         private readonly IDbFactory _dbFactory;
         private readonly IDbContextFactory _dbContextFacotry;
+        private readonly IEntityModelConventionFactory _entityConventionFactory;
         private readonly IDbWorkManager _dbWorkManager;
         private DbConnection? _connection;
         private DbTransaction? _transaction;
@@ -30,17 +31,19 @@ namespace Suyaa.Data
         public EfCoreWork(
             IDbFactory dbFactory,
             IDbContextFactory dbContextFacotry,
+            IEntityModelConventionFactory entityConventionFactory,
             IDbWorkManager dbWorkManager
             )
         {
             ConnectionDescriptor = dbWorkManager.ConnectionDescriptor;
             _dbFactory = dbFactory;
             _dbContextFacotry = dbContextFacotry;
+            _entityConventionFactory = entityConventionFactory;
             _dbWorkManager = dbWorkManager;
             var types = GetDbContextsDbSets(_dbContextFacotry.DbContexts);
             var efCoreProvider = ConnectionDescriptor.DatabaseType.GetEfCoreProvider();
             var dbContextOptionsProvider = efCoreProvider.DbContextOptionsProvider;
-            _dbContext = new DescriptorTypeDbContext(ConnectionDescriptor, types);
+            _dbContext = new DescriptorTypeDbContext(ConnectionDescriptor, entityConventionFactory, types);
         }
 
         // 添加数据库实例

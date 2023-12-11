@@ -16,6 +16,7 @@ namespace Suyaa.Data
         private static readonly object _lock = new object();
         private readonly IDbFactory _factory;
         private readonly IDbContextFactory _dbContextFactory;
+        private readonly IEntityModelConventionFactory _entityModelConventionFactory;
         private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
         private readonly EfCoreWorkProvider _efCoreWorkProvider;
 
@@ -25,13 +26,15 @@ namespace Suyaa.Data
         public EfCoreWorkManager(
             IDbFactory factory,
             IDbContextFactory dbContextFactory,
+            IEntityModelConventionFactory entityModelConventionFactory,
             IDbConnectionDescriptorManager dbConnectionDescriptorManager
             )
         {
             _factory = factory;
             _dbContextFactory = dbContextFactory;
+            _entityModelConventionFactory = entityModelConventionFactory;
             _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
-            _efCoreWorkProvider = new EfCoreWorkProvider(_factory, _dbContextFactory);
+            _efCoreWorkProvider = new EfCoreWorkProvider(_factory, _dbContextFactory, _entityModelConventionFactory);
             ConnectionDescriptor = _dbConnectionDescriptorManager.GetCurrentConnection();
         }
 

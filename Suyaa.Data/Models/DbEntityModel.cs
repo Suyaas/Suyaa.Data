@@ -25,12 +25,12 @@ namespace Suyaa.Data.Models
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 所属架构
         /// </summary>
-        public string Schema { get; }
+        public string Schema { get; set; }
 
         /// <summary>
         /// 字段集合

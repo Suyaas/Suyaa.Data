@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data.Dependency;
+using Suyaa.Data.Factories;
 using Suyaa.EFCore.Contexts;
 using SuyaaTest.PostgreSQL.Entities;
+using SuyaaTest.PostgreSQL.ModelConventions;
 
 namespace SuyaaTest.PostgreSQL
 {
@@ -9,7 +11,7 @@ namespace SuyaaTest.PostgreSQL
     {
         public DbSet<Test> Tests { get; set; }
 
-        public TestDbContext(IDbConnectionDescriptor descriptor) : base(descriptor)
+        public TestDbContext(IDbConnectionDescriptor descriptor) : base(descriptor, new EntityModelConventionFactory(new List<IEntityModelConvention> { new LowercaseUnderlinedModelConvention() }))
         {
         }
 

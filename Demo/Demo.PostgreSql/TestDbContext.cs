@@ -1,15 +1,17 @@
 ﻿using Demo.PostgreSql.Entities;
 using Microsoft.EntityFrameworkCore;
 using Suyaa.Data.Dependency;
+using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.PostgreSQL;
 
 namespace Demo.PostgreSql
 {
-    public class TestDbContext : PostgreSqlContext
+    public class TestDbContext : DescriptorDbContext
     {
         public DbSet<People> Peoples { get; set; }
 
-        public TestDbContext(IDbConnectionDescriptor descriptor) : base(descriptor)
+        public TestDbContext(IDbConnectionDescriptor descriptor, IEntityModelConventionFactory entityModelConventionFactory)
+            : base(descriptor, entityModelConventionFactory)
         {
         }
 

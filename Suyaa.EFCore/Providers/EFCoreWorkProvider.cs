@@ -17,6 +17,7 @@ namespace Suyaa.Data.Providers
     {
         private readonly IDbFactory _dbFactory;
         private readonly IDbContextFactory _dbContextFacotry;
+        private readonly IEntityModelConventionFactory _entityModelConventionFactory;
         private IDbWork? _work;
 
         /// <summary>
@@ -24,11 +25,13 @@ namespace Suyaa.Data.Providers
         /// </summary>
         public EfCoreWorkProvider(
             IDbFactory dbFactory,
-            IDbContextFactory dbContextFacotry
+            IDbContextFactory dbContextFacotry,
+            IEntityModelConventionFactory entityModelConventionFactory
             )
         {
             _dbFactory = dbFactory;
             _dbContextFacotry = dbContextFacotry;
+            _entityModelConventionFactory = entityModelConventionFactory;
         }
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace Suyaa.Data.Providers
         /// <returns></returns>
         public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new EfCoreWork(_dbFactory, _dbContextFacotry, dbWorkManager);
+            return new EfCoreWork(_dbFactory, _dbContextFacotry, _entityModelConventionFactory, dbWorkManager);
         }
 
         /// <summary>

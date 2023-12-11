@@ -22,7 +22,7 @@ namespace Demo.PostgreSql
         public override TestDbContext CreateDbContext(IDbConnectionDescriptorFactory dbConnectionDescriptorFactory, string[] args)
         {
             Console.WriteLine(dbConnectionDescriptorFactory.DefaultConnection.ToConnectionString());
-            return new TestDbContext(dbConnectionDescriptorFactory.DefaultConnection);
+            return new TestDbContext(dbConnectionDescriptorFactory.DefaultConnection, new EntityModelConventionFactory(Enumerable.Empty<IEntityModelConvention>()));
         }
     }
 }

@@ -27,12 +27,23 @@ namespace Suyaa.EFCore.Sources
         }
 
         /// <summary>
+        /// 类型建模源
+        /// </summary>
+        public TypeDbContextModelSource(
+            Type type
+            )
+        {
+            if (!type.HasInterface<IDbEntity>()) throw new TypeNotSupportedException(type);
+            Type = type;
+        }
+
+        /// <summary>
         /// 类型
         /// </summary>
         public Type Type { get; }
         /// <summary>
         /// 数据库上下文
         /// </summary>
-        public DescriptorTypeDbContext DbContext { get; }
+        public DescriptorTypeDbContext? DbContext { get; }
     }
 }

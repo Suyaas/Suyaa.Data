@@ -3,6 +3,7 @@ using Suyaa.Data;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Helpers;
 using SuyaaTest.PostgreSQL.Entities;
+using SuyaaTest.PostgreSQL.ModelConventions;
 using System.Configuration;
 using Xunit.Abstractions;
 
@@ -37,8 +38,8 @@ namespace SuyaaTest.PostgreSQL
         public void ReadData()
         {
             using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
-            using var work = sy.EFCore.CreateWork(dbContext);
-            var repository = sy.EFCore.CreateRepository<Test, string>(work);
+            using var work = sy.EfCore.CreateWork(dbContext);
+            var repository = sy.EfCore.CreateRepository<Test, string>(work);
             var query = from p in repository.Query()
                         where p.Content != null
                         select p;
@@ -52,9 +53,10 @@ namespace SuyaaTest.PostgreSQL
         [Fact]
         public void InsertEFCore()
         {
+            sy.EfCore.UseModelConvention(new LowercaseUnderlinedModelConvention());
             using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
-            using var work = sy.EFCore.CreateWork(dbContext);
-            var repository = sy.EFCore.CreateRepository<Test, string>(work);
+            using var work = sy.EfCore.CreateWork(dbContext);
+            var repository = sy.EfCore.CreateRepository<Test, string>(work);
             repository.Insert(new Test() { Content = "Test001" });
             work.Commit();
             _output.WriteLine("OK");

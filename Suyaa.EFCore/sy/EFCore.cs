@@ -18,7 +18,7 @@ namespace sy
     /// <summary>
     /// 数据助手
     /// </summary>
-    public static class EFCore
+    public static class EfCore
     {
         // 数据库工厂
         private static IDbFactory? _dbFactory;
@@ -30,6 +30,8 @@ namespace sy
         private static IDbWorkProvider? _dbWorkProvider;
         // 实体建模供应商
         private static IEntityModelFactory? _entityModelFactory;
+        private static IEntityModelConventionFactory? _entityModelConventionFactory;
+        private static List<IEntityModelConvention> _entityModelConventions = new List<IEntityModelConvention>();
         // 数据库上下文工厂
         private static IDbContextFactory? _dbContextFacotry;
         // 数据库上下文供应商
@@ -78,6 +80,16 @@ namespace sy
         }
 
         /// <summary>
+        /// 注册数据库实例建模约定器
+        /// </summary>
+        /// <param name="entityModelConvention"></param>
+        public static void UseModelConvention(IEntityModelConvention entityModelConvention)
+        {
+            _entityModelConventions.Add(entityModelConvention);
+            _entityModelConventionFactory = new EntityModelConventionFactory(_entityModelConventions);
+        }
+
+        /// <summary>
         /// 注册数据库实例供应商
         /// </summary>
         /// <typeparam name="TProvider"></typeparam>
@@ -107,13 +119,14 @@ namespace sy
         public static IDbWork CreateWork(IDescriptorDbContext dbContext)
         {
             _dbFactory ??= new DbFactory();
+            _entityModelConventionFactory ??= new EntityModelConventionFactory(_entityModelConventions);
             UserDbContext(dbContext);
             if (!_entityModelProviders.Any())
             {
                 UseEntityProvider(new DbSetModelProvider(_dbFactory, _dbContextFacotry!, new List<IEntityModelConvention>()));
             }
-            _dbWorkProvider ??= new EfCoreWorkProvider(_dbFactory, _dbContextFacotry!);
-            var dbWorkManagerProvider = new EfCoreManagerProvider(_dbFactory, _dbContextFacotry!, _dbConnectionDescriptorManager!);
+            _dbWorkProvider ??= new EfCoreWorkProvider(_dbFactory, _dbContextFacotry!, _entityModelConventionFactory);
+            var dbWorkManagerProvider = new EfCoreManagerProvider(_dbFactory, _dbContextFacotry!, _entityModelConventionFactory, _dbConnectionDescriptorManager!);
             return dbWorkManagerProvider.CreateManager().CreateWork();
         }
 
