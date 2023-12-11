@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
+using Suyaa.Data.Providers;
 using Suyaa.Sqlite.Tests.Entities;
 using SuyaaTest.PostgreSQL;
 using Xunit.Abstractions;

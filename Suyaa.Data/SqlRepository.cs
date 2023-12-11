@@ -1,4 +1,5 @@
 ﻿using Suyaa.Data.Dependency;
+using Suyaa.Data.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,18 +14,15 @@ namespace Suyaa.Data
     public sealed class SqlRepository : ISqlRepository
     {
         private readonly IDbWorkManager _dbWorkManager;
-        private readonly ISqlRepositoryProvider _sqlRepositoryProvider;
 
         /// <summary>
         /// Sql脚本仓库
         /// </summary>
         public SqlRepository(
-            IDbWorkManager dbWorkManager,
-            ISqlRepositoryProvider sqlRepositoryProvider
+            IDbWorkManager dbWorkManager
             )
         {
             _dbWorkManager = dbWorkManager;
-            _sqlRepositoryProvider = sqlRepositoryProvider;
         }
 
         /// <summary>
@@ -34,7 +32,7 @@ namespace Suyaa.Data
         /// <returns></returns>
         public DataSet GetDataSet(string sql)
         {
-            return _sqlRepositoryProvider.GetDataSet(GetDbWork(), sql);
+            return GetSqlRepositoryProvider().GetDataSet(GetDbWork(), sql);
         }
 
         /// <summary>
@@ -45,7 +43,7 @@ namespace Suyaa.Data
         /// <returns></returns>
         public DataSet GetDataSet(string sql, DbParameters parameters)
         {
-            return _sqlRepositoryProvider.GetDataSet(GetDbWork(), sql, parameters);
+            return GetSqlRepositoryProvider().GetDataSet(GetDbWork(), sql, parameters);
         }
 
         /// <summary>
@@ -55,7 +53,7 @@ namespace Suyaa.Data
         /// <returns></returns>
         public DbCommand GetDbCommand(string sql)
         {
-            return _sqlRepositoryProvider.GetDbCommand(GetDbWork(), sql);
+            return GetSqlRepositoryProvider().GetDbCommand(GetDbWork(), sql);
         }
 
         /// <summary>
@@ -66,7 +64,16 @@ namespace Suyaa.Data
         /// <returns></returns>
         public DbCommand GetDbCommand(string sql, DbParameters parameters)
         {
-            return _sqlRepositoryProvider.GetDbCommand(GetDbWork(), sql, parameters);
+            return GetSqlRepositoryProvider().GetDbCommand(GetDbWork(), sql, parameters);
+        }
+
+        /// <summary>
+        /// 获取Sql仓库供应商
+        /// </summary>
+        /// <returns></returns>
+        public ISqlRepositoryProvider GetSqlRepositoryProvider()
+        {
+            return GetDbWork().ConnectionDescriptor.DatabaseType.GetDbProvider().SqlRepositoryProvider;
         }
 
         /// <summary>

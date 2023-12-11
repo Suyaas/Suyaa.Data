@@ -135,8 +135,7 @@ namespace sy
         /// <returns></returns>
         public static ISqlRepository CreateSqlRepository(IDbWork work)
         {
-            var provider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
-            return work.GetSqlRepository(provider.SqlRepositoryProvider);
+            return work.GetSqlRepository();
         }
 
         /// <summary>

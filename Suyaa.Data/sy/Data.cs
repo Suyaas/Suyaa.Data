@@ -26,8 +26,6 @@ namespace sy
         private static IDbWorkProvider? _dbWorkProvider;
         // 实体建模供应商
         private static IEntityModelFactory? _entityModelFactory;
-        // 数据库实例供应商集合
-        private static List<IEntityModelProvider> _entityModelProviders = new List<IEntityModelProvider>();
 
         /// <summary>
         /// 注册数据库工厂
@@ -58,25 +56,19 @@ namespace sy
             _dbConnectionDescriptorManager.SetCurrentConnection(descriptor);
         }
 
-        /// <summary>
-        /// 注册数据库实例供应商
-        /// </summary>
-        /// <param name="dbEntityProvider"></param>
-        public static void UseEntityProvider(IEntityModelProvider dbEntityProvider)
+        // 获取实体建模工厂
+        private static IEntityModelFactory GetEntityModelFactory()
         {
-            _entityModelProviders.Add(dbEntityProvider);
             _dbFactory ??= new DbFactory();
-            _entityModelFactory = new EntityModelFactory(_entityModelProviders);
-        }
-
-        /// <summary>
-        /// 注册数据库实例供应商
-        /// </summary>
-        /// <typeparam name="TProvider"></typeparam>
-        public static void UseEntityProvider<TProvider>()
-            where TProvider : class, IEntityModelProvider, new()
-        {
-            UseEntityProvider(sy.Assembly.Create<TProvider>());
+            if (_entityModelFactory is null)
+            {
+                List<IEntityModelProvider> entityModelProviders = new List<IEntityModelProvider>() {
+                    new EntityModelProvider(_dbFactory,new List<IEntityModelConvention>()),
+                    new DbEntityModelProvider(_dbFactory,new List<IEntityModelConvention>()),
+                };
+                _entityModelFactory = new EntityModelFactory(entityModelProviders);
+            }
+            return _entityModelFactory;
         }
 
         /// <summary>
@@ -112,8 +104,7 @@ namespace sy
         /// <returns></returns>
         public static ISqlRepository CreateSqlRepository(IDbWork work)
         {
-            var provider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
-            return work.GetSqlRepository(provider.SqlRepositoryProvider);
+            return work.GetSqlRepository();
         }
 
         /// <summary>
@@ -126,13 +117,13 @@ namespace sy
             where TEntity : IDbEntity, new()
         {
             _dbFactory ??= new DbFactory();
-            _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
+            var entityModelFactory = GetEntityModelFactory();
             var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository(
-                new DbInsertProvider<TEntity>(_entityModelFactory, sqlRepository),
-                new DbDeleteProvider<TEntity>(_entityModelFactory, sqlRepository),
-                new DbUpdateProvider<TEntity>(_entityModelFactory, sqlRepository),
-                new DbQueryProvider<TEntity>(_entityModelFactory, sqlRepository)
+                new DbInsertProvider<TEntity>(entityModelFactory, sqlRepository),
+                new DbDeleteProvider<TEntity>(entityModelFactory, sqlRepository),
+                new DbUpdateProvider<TEntity>(entityModelFactory, sqlRepository),
+                new DbQueryProvider<TEntity>(entityModelFactory, sqlRepository)
             );
         }
 
@@ -146,13 +137,13 @@ namespace sy
             where TId : notnull
         {
             _dbFactory ??= new DbFactory();
-            _entityModelFactory ??= new EntityModelFactory(_entityModelProviders);
+            var entityModelFactory = GetEntityModelFactory();
             var sqlRepository = CreateSqlRepository(work);
             return work.GetRepository<TEntity, TId>(
-                new DbInsertProvider<TEntity>(_entityModelFactory, sqlRepository),
-                new DbDeleteProvider<TEntity>(_entityModelFactory, sqlRepository),
-                new DbUpdateProvider<TEntity>(_entityModelFactory, sqlRepository),
-                new DbQueryProvider<TEntity>(_entityModelFactory, sqlRepository)
+                new DbInsertProvider<TEntity>(entityModelFactory, sqlRepository),
+                new DbDeleteProvider<TEntity>(entityModelFactory, sqlRepository),
+                new DbUpdateProvider<TEntity>(entityModelFactory, sqlRepository),
+                new DbQueryProvider<TEntity>(entityModelFactory, sqlRepository)
             );
         }
     }

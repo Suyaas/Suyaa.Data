@@ -14,9 +14,9 @@ namespace Suyaa.Data.Helpers
         /// 获取Sql仓库
         /// </summary>
         /// <returns></returns>
-        public static ISqlRepository GetSqlRepository(this IDbWork work, ISqlRepositoryProvider sqlRepositoryProvider)
+        public static ISqlRepository GetSqlRepository(this IDbWork work)
         {
-            return new SqlRepository(work.WorkManager, sqlRepositoryProvider);
+            return new SqlRepository(work.WorkManager);
         }
         /// <summary>
         /// 获取Sql仓库
