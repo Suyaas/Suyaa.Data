@@ -40,7 +40,7 @@ namespace Suyaa.Data
             var types = GetDbContextsDbSets(_dbContextFacotry.DbContexts);
             var efCoreProvider = ConnectionDescriptor.DatabaseType.GetEfCoreProvider();
             var dbContextOptionsProvider = efCoreProvider.DbContextOptionsProvider;
-            _dbContext = new DescriptorTypeDbContext(ConnectionDescriptor, dbContextOptionsProvider.GetDbContextOptions(ConnectionDescriptor.ToConnectionString()), types);
+            _dbContext = new DescriptorTypeDbContext(ConnectionDescriptor, types);
         }
 
         // 添加数据库实例
@@ -54,7 +54,7 @@ namespace Suyaa.Data
                 // 跳过非泛型
                 if (!prop.PropertyType.IsGenericType) continue;
                 if (!prop.PropertyType.IsBased(_dbSetType)) continue;
-                var entityType = prop.PropertyType.GenericTypeArguments[0];  
+                var entityType = prop.PropertyType.GenericTypeArguments[0];
                 types.Add(entityType);
             }
             return types;

@@ -20,11 +20,10 @@ namespace Suyaa.EFCore.Contexts
         /// EFCore重写上下文
         /// </summary>
         /// <param name="descriptor"></param>
-        /// <param name="options"></param>
-        public DescriptorDbContext(IDbConnectionDescriptor descriptor, DbContextOptions options) : base(descriptor.DatabaseType.GetEfCoreProvider().DbContextOptionsProvider.GetDbContextOptions(descriptor.ToConnectionString()))
+        public DescriptorDbContext(IDbConnectionDescriptor descriptor) : base(descriptor.DatabaseType.GetEfCoreProvider().DbContextOptionsProvider.GetDbContextOptions(descriptor.ToConnectionString()))
         {
             ConnectionDescriptor = descriptor;
-            Options = options;
+            Options = descriptor.DatabaseType.GetEfCoreProvider().DbContextOptionsProvider.GetDbContextOptions(descriptor.ToConnectionString());
         }
 
         /// <summary>

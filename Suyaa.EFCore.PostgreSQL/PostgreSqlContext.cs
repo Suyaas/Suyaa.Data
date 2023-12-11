@@ -20,7 +20,7 @@ namespace Suyaa.EFCore.PostgreSQL
         /// SqlServer数据库上下文
         /// </summary>
         /// <param name="descriptor"></param>
-        protected PostgreSqlContext(IDbConnectionDescriptor descriptor) : base(descriptor, descriptor.GetPostgreSqlContextOptions())
+        protected PostgreSqlContext(IDbConnectionDescriptor descriptor) : base(descriptor)
         {
         }
     }

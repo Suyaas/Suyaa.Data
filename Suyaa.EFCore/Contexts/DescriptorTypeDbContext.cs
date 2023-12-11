@@ -21,9 +21,8 @@ namespace Suyaa.EFCore.Contexts
         /// 动态数据库上下文
         /// </summary>
         /// <param name="descriptor"></param>
-        /// <param name="options"></param>
         /// <param name="types"></param>
-        public DescriptorTypeDbContext(IDbConnectionDescriptor descriptor, DbContextOptions options, IEnumerable<Type> types) : base(descriptor, options)
+        public DescriptorTypeDbContext(IDbConnectionDescriptor descriptor, IEnumerable<Type> types) : base(descriptor)
         {
             _types = types;
         }

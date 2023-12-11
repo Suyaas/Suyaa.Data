@@ -1,18 +1,23 @@
-﻿namespace SuyaaTest.PostgreSQL
+﻿using Microsoft.EntityFrameworkCore;
+using Suyaa.Data.Dependency;
+using Suyaa.EFCore.Contexts;
+using SuyaaTest.PostgreSQL.Entities;
+
+namespace SuyaaTest.PostgreSQL
 {
-    //public class TestDbContext : PostgreSqlContext
-    //{
-    //    public DbSet<People> Peoples { get; set; }
+    public class TestDbContext : DescriptorDbContext
+    {
+        public DbSet<Test> Tests { get; set; }
 
-    //    public TestDbContext(IDbConnectionDescriptor descriptor) : base(descriptor)
-    //    {
-    //    }
+        public TestDbContext(IDbConnectionDescriptor descriptor) : base(descriptor)
+        {
+        }
 
-    //    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    //    {
-    //        base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-    //        modelBuilder.Entity<People>().HasIndex(p => p.Name);
-    //    }
-    //}
+            modelBuilder.Entity<Test>().HasIndex(p => p.Content);
+        }
+    }
 }
