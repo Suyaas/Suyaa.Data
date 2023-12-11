@@ -20,7 +20,7 @@ namespace Suyaa.Data.Entities
         /// <summary>
         /// 对象实例化
         /// </summary>
-        public UUIDKeyEntity() : base(sy.Generator.GetNewUUID().ToString()) { }
+        public UUIDKeyEntity() : base(sy.Generator.GetNewUUID().ToString(false)) { }
 
     }
 }
