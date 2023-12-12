@@ -14,6 +14,6 @@ namespace Suyaa.EFCore.Dependency
         /// <summary>
         /// 数据库上下文工厂
         /// </summary>
-        IEnumerable<IDescriptorDbContext> DbContexts { get; }
+        IEnumerable<IDefineDbContext> DbContexts { get; }
     }
 }

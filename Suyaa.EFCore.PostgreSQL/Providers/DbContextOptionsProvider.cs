@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data.Dependency;
+using Suyaa.EFCore.DbInterceptors;
 using Suyaa.EFCore.Dependency;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,13 @@ namespace Suyaa.EFCore.PostgreSQL.Providers
         /// 获取数据库上下文配置
         /// </summary>
         /// <param name="connectionString"></param>
+        /// <param name="provider"></param>
         /// <returns></returns>
-        public DbContextOptions GetDbContextOptions(string connectionString)
+        public DbContextOptions GetDbContextOptions(IDbContextOptionsBuilderProvider provider, string connectionString)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<DbContext>();
+            var optionsBuilder = provider.CreateBuilder();
             optionsBuilder.UseNpgsql(connectionString);
+            //optionsBuilder.AddInterceptors(new EfCoreCommandInterceptor());
             return optionsBuilder.Options;
         }
     }

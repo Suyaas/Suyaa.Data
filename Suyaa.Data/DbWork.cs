@@ -7,7 +7,7 @@ namespace Suyaa.Data
     /// <summary>
     /// 简单的数据库工作着
     /// </summary>
-    public sealed class DbWork : Disposable, IDbWork
+    public class DbWork : Disposable, IDbWork
     {
         private readonly IDbFactory _dbFactory;
         private readonly IDbWorkManager _dbWorkManager;
@@ -18,8 +18,8 @@ namespace Suyaa.Data
         /// 简单的数据库工作着
         /// </summary>
         public DbWork(
-            IDbFactory dbFactory,
-            IDbWorkManager dbWorkManager
+            IDbWorkManager dbWorkManager,
+            IDbFactory dbFactory
             )
         {
             ConnectionDescriptor = dbWorkManager.ConnectionDescriptor;
@@ -50,7 +50,7 @@ namespace Suyaa.Data
         /// <summary>
         /// 生效事务
         /// </summary>
-        public void Commit()
+        public virtual void Commit()
         {
             if (_transaction is null) return;
             _transaction.Commit();
@@ -63,7 +63,7 @@ namespace Suyaa.Data
         /// </summary>
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
-        public async Task CommitAsync()
+        public virtual async Task CommitAsync()
         {
             if (_transaction is null) return;
             await _transaction.CommitAsync();

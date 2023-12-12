@@ -13,7 +13,7 @@ namespace Suyaa.EFCore.Factories
     public class DbContextFacotry : IDbContextFactory
     {
         private readonly IEnumerable<IDbContextProvider> _providers;
-        private readonly List<IDescriptorDbContext> _dbContexts;
+        private readonly List<IDefineDbContext> _dbContexts;
 
         /// <summary>
         /// 数据库上下文工厂
@@ -24,7 +24,7 @@ namespace Suyaa.EFCore.Factories
             )
         {
             _providers = providers;
-            _dbContexts = new List<IDescriptorDbContext>();
+            _dbContexts = new List<IDefineDbContext>();
             foreach (var provider in _providers)
             {
                 _dbContexts.AddRange(provider.GetDbContexts());
@@ -34,6 +34,6 @@ namespace Suyaa.EFCore.Factories
         /// <summary>
         /// 获取数据库上下文集合
         /// </summary>
-        public IEnumerable<IDescriptorDbContext> DbContexts => _dbContexts;
+        public IEnumerable<IDefineDbContext> DbContexts => _dbContexts;
     }
 }

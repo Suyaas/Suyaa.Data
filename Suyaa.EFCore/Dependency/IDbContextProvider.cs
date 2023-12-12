@@ -15,6 +15,6 @@ namespace Suyaa.EFCore.Dependency
         /// 获取数据库上下文集合
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IDescriptorDbContext> GetDbContexts();
+        IEnumerable<IDefineDbContext> GetDbContexts();
     }
 }

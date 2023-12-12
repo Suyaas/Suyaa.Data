@@ -32,7 +32,7 @@ namespace Suyaa.Data.Providers
         /// <returns></returns>
         public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new DbWork(_dbFactory, dbWorkManager);
+            return new DbWork(dbWorkManager, _dbFactory);
         }
 
         /// <summary>

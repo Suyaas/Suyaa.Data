@@ -23,7 +23,7 @@ namespace Suyaa.EFCore.Models
         /// <param name="type"></param>
         /// <param name="property"></param>
         /// <param name="dbContext"></param>
-        public DbSetModel(Type type, PropertyInfo property, IDescriptorDbContext dbContext) : base(type)
+        public DbSetModel(Type type, PropertyInfo property, IDefineDbContext dbContext) : base(type)
         {
             Property = property;
             DbContext = dbContext.GetType();

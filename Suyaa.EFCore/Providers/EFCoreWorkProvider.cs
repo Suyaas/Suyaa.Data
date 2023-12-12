@@ -40,7 +40,7 @@ namespace Suyaa.Data.Providers
         /// <returns></returns>
         public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new EfCoreWork(_dbFactory, _dbContextFacotry, _entityModelConventionFactory, dbWorkManager);
+            return new EfCoreWork(dbWorkManager, _dbFactory, _dbContextFacotry, _entityModelConventionFactory);
         }
 
         /// <summary>

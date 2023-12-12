@@ -19,7 +19,12 @@ namespace Suyaa.EFCore.Contexts
         /// <param name="options"></param>
         public BaseDbContext(DbContextOptions options) : base(options)
         {
+            Options = options;
         }
 
+        /// <summary>
+        /// 数据库上下文配置
+        /// </summary>
+        public DbContextOptions Options { get; }
     }
 }

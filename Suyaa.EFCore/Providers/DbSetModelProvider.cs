@@ -42,7 +42,7 @@ namespace Suyaa.EFCore.Providers
         }
 
         // 添加数据库实例
-        private void AddDbContextDbSets(IDescriptorDbContext dbContext)
+        private void AddDbContextDbSets(IDefineDbContext dbContext)
         {
             var type = dbContext.GetType();
             var pros = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -57,7 +57,7 @@ namespace Suyaa.EFCore.Providers
         }
 
         // 添加数据库上下文
-        private void AddDbContextsDbSets(IEnumerable<IDescriptorDbContext> dbContexts)
+        private void AddDbContextsDbSets(IEnumerable<IDefineDbContext> dbContexts)
         {
             foreach (var dbContext in dbContexts)
             {

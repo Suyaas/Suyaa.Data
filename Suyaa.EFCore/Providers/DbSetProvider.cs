@@ -15,14 +15,14 @@ namespace Suyaa.EFCore.Providers
     /// </summary>
     public class DbSetProvider : IDbSetProvider
     {
-        private readonly IEnumerable<IDescriptorDbContext> _dbContexts;
+        private readonly IEnumerable<IDefineDbContext> _dbContexts;
         private static Type _dbSetType = typeof(DbSet<>);
 
         /// <summary>
         /// DbSet 供应商
         /// </summary>
         /// <param name="dbContexts"></param>
-        public DbSetProvider(IEnumerable<IDescriptorDbContext> dbContexts)
+        public DbSetProvider(IEnumerable<IDefineDbContext> dbContexts)
         {
             _dbContexts = dbContexts;
 
@@ -44,7 +44,7 @@ namespace Suyaa.EFCore.Providers
         }
 
         // 添加数据库实例
-        private List<DbSetModel> GetDbContextDbSets(IDescriptorDbContext dbContext)
+        private List<DbSetModel> GetDbContextDbSets(IDefineDbContext dbContext)
         {
             List<DbSetModel> descriptors = new List<DbSetModel>();
             var type = dbContext.GetType();

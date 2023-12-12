@@ -2,6 +2,8 @@
 using Suyaa.Data;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Factories;
+using Suyaa.EFCore.Dependency;
+using Suyaa.EFCore.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +25,14 @@ namespace Suyaa.EFCore.Contexts
         /// </summary>
         /// <param name="descriptor"></param>
         /// <param name="entityModelConventionFactory"></param>
+        /// <param name="dbWork"></param>
         /// <param name="types"></param>
-        public DescriptorTypeDbContext(IDbConnectionDescriptor descriptor, IEntityModelConventionFactory entityModelConventionFactory, IEnumerable<Type> types) : base(descriptor, entityModelConventionFactory)
+        public DescriptorTypeDbContext(
+            IEntityModelConventionFactory entityModelConventionFactory,
+            IDbWork dbWork,
+            IDbConnectionDescriptor descriptor,
+            IEnumerable<Type> types)
+            : base(entityModelConventionFactory, new DbWorkContextOptionsBuilderProvider(dbWork), descriptor)
         {
             _types = types;
         }
@@ -32,10 +40,19 @@ namespace Suyaa.EFCore.Contexts
         /// <summary>
         /// 动态数据库上下文
         /// </summary>
+        /// <param name="dbWork"></param>
         /// <param name="descriptor"></param>
+        /// <param name="entityModelConventions"></param>
         /// <param name="types"></param>
-        public DescriptorTypeDbContext(IDbConnectionDescriptor descriptor, IEnumerable<Type> types)
-            : base(descriptor, new EntityModelConventionFactory(Enumerable.Empty<IEntityModelConvention>()))
+        public DescriptorTypeDbContext(
+            IDbWork dbWork,
+            IDbConnectionDescriptor descriptor,
+            IEnumerable<IEntityModelConvention> entityModelConventions,
+            IEnumerable<Type> types)
+            : base(
+                  new EntityModelConventionFactory(entityModelConventions),
+                  new DbWorkContextOptionsBuilderProvider(dbWork),
+                  descriptor)
         {
             _types = types;
         }

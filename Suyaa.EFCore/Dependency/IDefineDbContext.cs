@@ -12,7 +12,7 @@ namespace Suyaa.EFCore.Dependency
     /// <summary>
     /// 带描述的数据库上下文
     /// </summary>
-    public interface IDescriptorDbContext
+    public interface IDefineDbContext
     {
         /// <summary>
         /// 数据库连接描述

@@ -18,7 +18,7 @@ namespace Suyaa.EFCore.Sources
         public DbSetModelSource(
             Type type,
             PropertyInfo propertyInfo,
-            IDescriptorDbContext dbContext
+            IDefineDbContext dbContext
             )
         {
             if (!type.HasInterface<IDbEntity>()) throw new TypeNotSupportedException(type);
@@ -38,6 +38,6 @@ namespace Suyaa.EFCore.Sources
         /// <summary>
         /// 数据库上下文
         /// </summary>
-        public IDescriptorDbContext DbContext { get; }
+        public IDefineDbContext DbContext { get; }
     }
 }

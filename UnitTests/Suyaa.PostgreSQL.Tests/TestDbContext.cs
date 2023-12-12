@@ -7,11 +7,11 @@ using SuyaaTest.PostgreSQL.ModelConventions;
 
 namespace SuyaaTest.PostgreSQL
 {
-    public class TestDbContext : DescriptorDbContext
+    public class TestDbContext : DefineDbContext
     {
         public DbSet<Test> Tests { get; set; }
 
-        public TestDbContext(IDbConnectionDescriptor descriptor) : base(descriptor, new EntityModelConventionFactory(new List<IEntityModelConvention> { new LowercaseUnderlinedModelConvention() }))
+        public TestDbContext(IDbConnectionDescriptor descriptor) : base(new EntityModelConventionFactory(new List<IEntityModelConvention> { new LowercaseUnderlinedModelConvention() }), descriptor)
         {
         }
 

@@ -102,7 +102,7 @@ namespace sy
         /// <summary>
         /// 注册数据库实例供应商
         /// </summary>
-        public static void UserDbContext(IDescriptorDbContext dbContext)
+        public static void UserDbContext(IDefineDbContext dbContext)
         {
             UseConnection(dbContext.ConnectionDescriptor);
             _dbContextProvider ??= new DbContextProvider();
@@ -116,7 +116,7 @@ namespace sy
         /// </summary>
         /// <param name="dbContext"></param>
         /// <returns></returns>
-        public static IDbWork CreateWork(IDescriptorDbContext dbContext)
+        public static IDbWork CreateWork(IDefineDbContext dbContext)
         {
             _dbFactory ??= new DbFactory();
             _entityModelConventionFactory ??= new EntityModelConventionFactory(_entityModelConventions);

@@ -12,42 +12,33 @@ using System.Threading.Tasks;
 namespace Suyaa.Data
 {
     /// <summary>
-    /// 简单的数据库工作着
+    /// EfCore 作业
     /// </summary>
-    public sealed class EfCoreWork : Disposable, IDbWork
+    public class EfCoreWork : DbWork
     {
-        private readonly IDbFactory _dbFactory;
         private readonly IDbContextFactory _dbContextFacotry;
         private readonly IEntityModelConventionFactory _entityConventionFactory;
-        private readonly IDbWorkManager _dbWorkManager;
-        private DbConnection? _connection;
-        private DbTransaction? _transaction;
         private readonly DescriptorTypeDbContext _dbContext;
         private static Type _dbSetType = typeof(DbSet<>);
 
         /// <summary>
-        /// 简单的数据库工作着
+        /// EfCore 作业
         /// </summary>
         public EfCoreWork(
+            IDbWorkManager dbWorkManager,
             IDbFactory dbFactory,
             IDbContextFactory dbContextFacotry,
-            IEntityModelConventionFactory entityConventionFactory,
-            IDbWorkManager dbWorkManager
-            )
+            IEntityModelConventionFactory entityConventionFactory
+            ) : base(dbWorkManager, dbFactory)
         {
-            ConnectionDescriptor = dbWorkManager.ConnectionDescriptor;
-            _dbFactory = dbFactory;
             _dbContextFacotry = dbContextFacotry;
             _entityConventionFactory = entityConventionFactory;
-            _dbWorkManager = dbWorkManager;
             var types = GetDbContextsDbSets(_dbContextFacotry.DbContexts);
-            var efCoreProvider = ConnectionDescriptor.DatabaseType.GetEfCoreProvider();
-            var dbContextOptionsProvider = efCoreProvider.DbContextOptionsProvider;
-            _dbContext = new DescriptorTypeDbContext(ConnectionDescriptor, entityConventionFactory, types);
+            _dbContext = new DescriptorTypeDbContext(_entityConventionFactory, this, ConnectionDescriptor, types);
         }
 
         // 添加数据库实例
-        private List<Type> GetDbContextDbSets(IDescriptorDbContext dbContext)
+        private List<Type> GetDbContextDbSets(IDefineDbContext dbContext)
         {
             List<Type> types = new List<Type>();
             var type = dbContext.GetType();
@@ -64,7 +55,7 @@ namespace Suyaa.Data
         }
 
         // 添加数据库上下文
-        private List<Type> GetDbContextsDbSets(IEnumerable<IDescriptorDbContext> dbContexts)
+        private List<Type> GetDbContextsDbSets(IEnumerable<IDefineDbContext> dbContexts)
         {
             List<Type> types = new List<Type>();
             foreach (var dbContext in dbContexts)
@@ -75,36 +66,17 @@ namespace Suyaa.Data
         }
 
         /// <summary>
-        /// 连接信息
-        /// </summary>
-        public IDbConnectionDescriptor ConnectionDescriptor { get; }
-
-        /// <summary>
         /// 获取数据库上下文
         /// </summary>
         public DescriptorTypeDbContext DbContext => _dbContext;
 
         /// <summary>
-        /// 数据库连接
-        /// </summary>
-        public DbConnection Connection => _connection ??= _dbFactory.GetDbConnection(ConnectionDescriptor);
-
-        /// <summary>
-        /// 事务
-        /// </summary>
-        public DbTransaction Transaction => _transaction ??= Connection.BeginTransaction();
-
-        /// <summary>
-        /// 工作者管理器
-        /// </summary>
-        public IDbWorkManager WorkManager => _dbWorkManager;
-
-        /// <summary>
         /// 生效事务
         /// </summary>
-        public void Commit()
+        public override void Commit()
         {
             _dbContext.SaveChanges();
+            base.Commit();
         }
 
         /// <summary>
@@ -112,26 +84,10 @@ namespace Suyaa.Data
         /// </summary>
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
-        public async Task CommitAsync()
+        public override async Task CommitAsync()
         {
             await _dbContext.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// 释放资源
-        /// </summary>
-        protected override void OnManagedDispose()
-        {
-            base.OnManagedDispose();
-            // 释放工作者
-            _dbWorkManager.ReleaseWork();
-            // 断开连接
-            if (!(_connection is null))
-            {
-                _connection.Close();
-                _connection.Dispose();
-                _connection = null;
-            }
+            await base.CommitAsync();
         }
     }
 }

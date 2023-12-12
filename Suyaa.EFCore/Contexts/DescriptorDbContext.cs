@@ -16,34 +16,35 @@ namespace Suyaa.EFCore.Contexts
     /// <summary>
     /// 带描述的数据库上下文
     /// </summary>
-    public abstract class DescriptorDbContext : BaseDbContext, IDescriptorDbContext
+    public abstract class DescriptorDbContext : BuilderDbContext
     {
         private readonly IEnumerable<IEntityModelConvention> _conventions;
         private readonly IEntityModelConventionFactory _entityModelConventionFactory;
 
         /// <summary>
-        /// EFCore重写上下文
+        /// 带描述的数据库上下文
         /// </summary>
         /// <param name="descriptor"></param>
         /// <param name="entityModelConventionFactory"></param>
-        public DescriptorDbContext(IDbConnectionDescriptor descriptor, IEntityModelConventionFactory entityModelConventionFactory)
-            : base(descriptor.DatabaseType.GetEfCoreProvider().DbContextOptionsProvider.GetDbContextOptions(descriptor.ToConnectionString()))
+        /// <param name="dbContextOptionsBuilderProvider"></param>
+        public DescriptorDbContext(
+            IEntityModelConventionFactory entityModelConventionFactory,
+            IDbContextOptionsBuilderProvider dbContextOptionsBuilderProvider,
+            IDbConnectionDescriptor descriptor)
+            : base(
+                  descriptor.DatabaseType.GetEfCoreProvider().DbContextOptionsProvider,
+                  dbContextOptionsBuilderProvider,
+                  descriptor.ToConnectionString())
         {
             ConnectionDescriptor = descriptor;
             _entityModelConventionFactory = entityModelConventionFactory;
             _conventions = _entityModelConventionFactory.Conventions;
-            Options = descriptor.DatabaseType.GetEfCoreProvider().DbContextOptionsProvider.GetDbContextOptions(descriptor.ToConnectionString());
         }
 
         /// <summary>
         /// 数据库连接描述
         /// </summary>
         public IDbConnectionDescriptor ConnectionDescriptor { get; }
-
-        /// <summary>
-        /// 数据库上下文配置
-        /// </summary>
-        public DbContextOptions Options { get; }
 
         /// <summary>
         /// 创建模型构建器

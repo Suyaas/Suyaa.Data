@@ -9,16 +9,14 @@ using System.Threading.Tasks;
 namespace Suyaa.EFCore.Dependency
 {
     /// <summary>
-    /// 数据库上下文配置供应商
+    /// 数据库上下文配置构建器供应商
     /// </summary>
-    public interface IDbContextOptionsProvider
+    public interface IDbContextOptionsBuilderProvider
     {
         /// <summary>
-        /// 获取数据库上下文配置
+        /// 创建数据库上下文配置构建器
         /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="provider"></param>
         /// <returns></returns>
-        DbContextOptions GetDbContextOptions(IDbContextOptionsBuilderProvider provider, string connectionString);
+        DbContextOptionsBuilder<DbContext> CreateBuilder();
     }
 }
