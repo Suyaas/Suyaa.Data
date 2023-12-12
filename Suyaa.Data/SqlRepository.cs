@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Suyaa.Data
@@ -47,27 +48,6 @@ namespace Suyaa.Data
         }
 
         /// <summary>
-        /// 获取数据库命令管理器
-        /// </summary>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        public DbCommand GetDbCommand(string sql)
-        {
-            return GetSqlRepositoryProvider().GetDbCommand(GetDbWork(), sql);
-        }
-
-        /// <summary>
-        /// 获取数据库命令管理器
-        /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public DbCommand GetDbCommand(string sql, DbParameters parameters)
-        {
-            return GetSqlRepositoryProvider().GetDbCommand(GetDbWork(), sql, parameters);
-        }
-
-        /// <summary>
         /// 获取Sql仓库供应商
         /// </summary>
         /// <returns></returns>
@@ -86,6 +66,15 @@ namespace Suyaa.Data
             var work = _dbWorkManager.GetCurrentWork();
             if (work is null) throw new NotExistException<IDbWork>();
             return work;
+        }
+
+        /// <summary>
+        /// 获取数据库命令管理器
+        /// </summary>
+        /// <returns></returns>
+        public DbCommand GetDbCommand()
+        {
+            return GetSqlRepositoryProvider().GetDbCommand(GetDbWork());
         }
     }
 }

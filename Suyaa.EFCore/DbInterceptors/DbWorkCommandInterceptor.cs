@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using Suyaa.Data.Dependency;
+using Suyaa.Data.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Suyaa.EFCore.DbInterceptors
 {
@@ -15,6 +17,7 @@ namespace Suyaa.EFCore.DbInterceptors
     public sealed class DbWorkCommandInterceptor : DbCommandInterceptor
     {
         private readonly IDbWork _work;
+        private readonly ISqlRepository _sqlRepository;
 
         /// <summary>
         /// 命令拦截器
@@ -23,6 +26,7 @@ namespace Suyaa.EFCore.DbInterceptors
         public DbWorkCommandInterceptor(IDbWork work)
         {
             _work = work;
+            _sqlRepository = _work.GetSqlRepository();
         }
 
         //public override int NonQueryExecuted(DbCommand command, CommandExecutedEventData eventData, int result)
@@ -50,10 +54,17 @@ namespace Suyaa.EFCore.DbInterceptors
         //    return base.CommandCreated(eventData, result);
         //}
 
-        //public override InterceptionResult<DbCommand> CommandCreating(CommandCorrelatedEventData eventData, InterceptionResult<DbCommand> result)
-        //{
-        //    return base.CommandCreating(eventData, result);
-        //}
+        /// <summary>
+        /// 命令管理器创建
+        /// </summary>
+        /// <param name="eventData"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public override InterceptionResult<DbCommand> CommandCreating(CommandCorrelatedEventData eventData, InterceptionResult<DbCommand> result)
+        {
+            return InterceptionResult<DbCommand>.SuppressWithResult(_sqlRepository.GetDbCommand());
+            //return base.CommandCreating(eventData, result);
+        }
 
         //public override void CommandFailed(DbCommand command, CommandErrorEventData eventData)
         //{
@@ -74,8 +85,7 @@ namespace Suyaa.EFCore.DbInterceptors
         public override DbCommand CommandInitialized(CommandEndEventData eventData, DbCommand result)
         {
             // 过滤
-            result.Connection = _work.Connection;
-            result.Transaction = _work.Transaction;
+            if (eventData.CommandSource != CommandSource.LinqQuery) result.Transaction = _work.Transaction;
             return result;
             //return base.CommandInitialized(eventData, result);
         }

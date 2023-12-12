@@ -20,16 +20,8 @@ namespace Suyaa.Data.Dependency
         /// <summary>
         /// 获取一个数据库命令管理器
         /// </summary>
-        /// <param name="sql"></param>
         /// <returns></returns>
-        DbCommand GetDbCommand(string sql);
-        /// <summary>
-        /// 获取一个数据库命令管理器
-        /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        DbCommand GetDbCommand(string sql, DbParameters parameters);
+        DbCommand GetDbCommand();
         /// <summary>
         /// 执行原始数据读取
         /// </summary>
