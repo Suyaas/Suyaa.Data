@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.Data.Dependency
+namespace Suyaa.Data.Repositories.Dependency
 {
     /// <summary>
     /// 可更新数据库操作对象

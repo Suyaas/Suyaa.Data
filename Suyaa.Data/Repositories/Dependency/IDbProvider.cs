@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
-using Suyaa.Data.Repositories.Dependency;
+using Suyaa.Data.Dependency;
 
-namespace Suyaa.Data.Dependency
+namespace Suyaa.Data.Repositories.Dependency
 {
     /// <summary>
     /// 数据库供应商
@@ -12,9 +12,9 @@ namespace Suyaa.Data.Dependency
     public interface IDbProvider
     {
         /// <summary>
-        /// 查询供应商
+        /// 表达式供应商
         /// </summary>
-        IDbQueryProvider QueryProvider { get; }
+        IDbExpressionProvider ExpressionProvider { get; }
         /// <summary>
         /// 脚本供应商
         /// </summary>
@@ -22,7 +22,7 @@ namespace Suyaa.Data.Dependency
         /// <summary>
         /// Sql脚本仓库供应商
         /// </summary>
-        ISqlRepositoryProvider SqlRepositoryProvider { get; }
+        IDbExecuteProvider ExecuteProvider { get; }
         /// <summary>
         /// 获取一个数据库连接
         /// </summary>

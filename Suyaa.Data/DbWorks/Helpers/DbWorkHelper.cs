@@ -1,12 +1,11 @@
 ﻿using Suyaa.Data.DbWorks.Dependency;
-using Suyaa.Data.Dependency;
 using Suyaa.Data.Repositories;
 using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Suyaa.Data.Helpers
+namespace Suyaa.Data.DbWorks.Helpers
 {
     /// <summary>
     /// 数据库作业助手

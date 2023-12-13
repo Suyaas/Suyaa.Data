@@ -1,5 +1,4 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using Suyaa.Data.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using System.Data.Common;
 
@@ -10,14 +9,14 @@ namespace Suyaa.Data.Oracle.Providers
     /// </summary>
     public class OracleProvider : IDbProvider
     {
-        private OracleQueryProvider? _queryProvider;
+        private OracleExpressionProvider? _expressionProvider;
         private OracleScriptProvider? _scriptProvider;
-        private OracleSqlRepositoryProvider? _sqlRepositoryProvider;
+        private OracleExecuteProvider? _executeProvider;
 
         /// <summary>
         /// 查询供应商
         /// </summary>
-        public IDbQueryProvider QueryProvider => _queryProvider ??= new OracleQueryProvider();
+        public IDbExpressionProvider ExpressionProvider => _expressionProvider ??= new OracleExpressionProvider();
 
         /// <summary>
         /// 脚本供应商
@@ -27,7 +26,7 @@ namespace Suyaa.Data.Oracle.Providers
         /// <summary>
         /// Sql仓库供应商
         /// </summary>
-        public ISqlRepositoryProvider SqlRepositoryProvider => _sqlRepositoryProvider ??= new OracleSqlRepositoryProvider();
+        public IDbExecuteProvider ExecuteProvider => _executeProvider ??= new OracleExecuteProvider();
 
         /// <summary>
         /// 获取数据库连接

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Suyaa.Data.DbWorks.Dependency;
 
-namespace Suyaa.Data.Dependency
+namespace Suyaa.Data.Repositories.Dependency
 {
     /// <summary>
     /// 数据库删除操作供应商

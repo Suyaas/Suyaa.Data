@@ -1,5 +1,4 @@
 ﻿using Npgsql;
-using Suyaa.Data.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using System.Data.Common;
 
@@ -11,14 +10,14 @@ namespace Suyaa.Data.PostgreSQL.Providers
     public class PostgreSqlProvider : IDbProvider
     {
 
-        private PostgreSqlQueryProvider? _queryProvider;
+        private PostgreSqlExpressionProvider? _expressionProvider;
         private PostgreSqlScriptProvider? _scriptProvider;
-        private PostgreSqlRepositoryProvider? _sqlRepositoryProvider;
+        private PostgreSqlExecuteProvider? _executeProvider;
 
         /// <summary>
         /// 查询供应商
         /// </summary>
-        public IDbQueryProvider QueryProvider => _queryProvider ??= new PostgreSqlQueryProvider();
+        public IDbExpressionProvider ExpressionProvider => _expressionProvider ??= new PostgreSqlExpressionProvider();
 
         /// <summary>
         /// 脚本供应商
@@ -28,7 +27,7 @@ namespace Suyaa.Data.PostgreSQL.Providers
         /// <summary>
         /// Sql数据仓库
         /// </summary>
-        public ISqlRepositoryProvider SqlRepositoryProvider => _sqlRepositoryProvider ??= new PostgreSqlRepositoryProvider();
+        public IDbExecuteProvider ExecuteProvider => _executeProvider ??= new PostgreSqlExecuteProvider();
 
         /// <summary>
         /// 获取一个数据库连接

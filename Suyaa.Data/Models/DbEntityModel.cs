@@ -1,5 +1,5 @@
-﻿using Suyaa.Data.Dependency;
-using Suyaa.Data.Helpers;
+﻿using Suyaa.Data.Helpers;
+using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq;

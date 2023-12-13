@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Suyaa.Data.Dependency
+namespace Suyaa.Data.Repositories.Dependency
 {
     /// <summary>
     /// 实例对象

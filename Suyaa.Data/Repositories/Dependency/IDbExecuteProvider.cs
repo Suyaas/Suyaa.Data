@@ -11,7 +11,7 @@ namespace Suyaa.Data.Repositories.Dependency
     /// <summary>
     /// SQL仓库
     /// </summary>
-    public interface ISqlRepositoryProvider
+    public interface IDbExecuteProvider
     {
         /// <summary>
         /// 获取一个数据库命令管理器

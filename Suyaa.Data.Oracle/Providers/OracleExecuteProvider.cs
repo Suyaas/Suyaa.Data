@@ -1,28 +1,28 @@
-﻿using Npgsql;
+﻿using Oracle.ManagedDataAccess.Client;
 using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Repositories;
 using Suyaa.Data.Repositories.Dependency;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 
-namespace Suyaa.Data.PostgreSQL.Providers
+namespace Suyaa.Data.Oracle.Providers
 {
     /// <summary>
-    /// Postgre Sql 仓库
+    /// Oracle Sql 仓库
     /// </summary>
-    public sealed class PostgreSqlRepositoryProvider : ISqlRepositoryProvider
+    public sealed class OracleExecuteProvider : IDbExecuteProvider
     {
+
         /// <summary>
         /// 获取数据库命令管理器
         /// </summary>
         /// <param name="work"></param>
         /// <returns></returns>
-        /// <exception cref="TypeNotSupportedException"></exception>
         public DbCommand GetDbCommand(IDbWork work)
         {
-            if (work.Connection is NpgsqlConnection dbc)
+            if (work.Connection is OracleConnection dbc)
             {
-                var sqlCommand = new NpgsqlCommand();
+                var sqlCommand = new OracleCommand();
                 sqlCommand.CommandTimeout = 600;
                 sqlCommand.Connection = dbc;
                 return sqlCommand;
@@ -41,7 +41,7 @@ namespace Suyaa.Data.PostgreSQL.Providers
             DataSet dataSet = new DataSet();
             using var sqlCommand = GetDbCommand(work);
             sqlCommand.CommandText = sql;
-            var sqlDataAdapter = new NpgsqlDataAdapter { SelectCommand = (NpgsqlCommand)sqlCommand };
+            var sqlDataAdapter = new OracleDataAdapter { SelectCommand = (OracleCommand)sqlCommand };
             sqlDataAdapter.Fill(dataSet);
             return dataSet;
         }
@@ -58,7 +58,7 @@ namespace Suyaa.Data.PostgreSQL.Providers
             using var sqlCommand = GetDbCommand(work);
             sqlCommand.CommandText = sql;
             SetDbParameters(sqlCommand, parameters);
-            var sqlDataAdapter = new NpgsqlDataAdapter { SelectCommand = (NpgsqlCommand)sqlCommand };
+            var sqlDataAdapter = new OracleDataAdapter { SelectCommand = (OracleCommand)sqlCommand };
             sqlDataAdapter.Fill(dataSet);
             return dataSet;
         }
@@ -73,7 +73,7 @@ namespace Suyaa.Data.PostgreSQL.Providers
             command.Parameters.Clear();
             foreach (var param in parameters)
             {
-                command.Parameters.Add(new NpgsqlParameter(":" + param.Key, param.Value));
+                command.Parameters.Add(new OracleParameter(":" + param.Key, param.Value));
             }
         }
     }

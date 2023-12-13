@@ -1,10 +1,11 @@
-﻿using Suyaa.Data.Models;
+﻿using Suyaa.Data.Dependency;
+using Suyaa.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 
-namespace Suyaa.Data.Dependency
+namespace Suyaa.Data.Repositories.Dependency
 {
     /// <summary>
     /// 数据库实例工厂

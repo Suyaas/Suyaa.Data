@@ -34,7 +34,7 @@ namespace Suyaa.Data.Repositories
         /// <returns></returns>
         public DataSet GetDataSet(string sql)
         {
-            return GetSqlRepositoryProvider().GetDataSet(GetDbWork(), sql);
+            return GetExecuteProvider().GetDataSet(GetDbWork(), sql);
         }
 
         /// <summary>
@@ -45,25 +45,16 @@ namespace Suyaa.Data.Repositories
         /// <returns></returns>
         public DataSet GetDataSet(string sql, DbParameters parameters)
         {
-            return GetSqlRepositoryProvider().GetDataSet(GetDbWork(), sql, parameters);
+            return GetExecuteProvider().GetDataSet(GetDbWork(), sql, parameters);
         }
 
         /// <summary>
         /// 获取Sql仓库供应商
         /// </summary>
         /// <returns></returns>
-        private ISqlRepositoryProvider GetSqlRepositoryProvider()
+        private IDbExecuteProvider GetExecuteProvider()
         {
-            return GetDbWork().ConnectionDescriptor.DatabaseType.GetDbProvider().SqlRepositoryProvider;
-        }
-
-        /// <summary>
-        /// 获取Sql仓库供应商
-        /// </summary>
-        /// <returns></returns>
-        private ISqlRepositoryProvider GetSqlRepositoryProvider(IDbWork work)
-        {
-            return work.ConnectionDescriptor.DatabaseType.GetDbProvider().SqlRepositoryProvider;
+            return GetDbWork().ConnectionDescriptor.DatabaseType.GetDbProvider().ExecuteProvider;
         }
 
         /// <summary>
@@ -76,28 +67,6 @@ namespace Suyaa.Data.Repositories
             var work = _dbWorkManager.GetCurrentWork();
             if (work is null) throw new NotExistException<IDbWork>();
             return work;
-        }
-
-        /// <summary>
-        /// 获取数据库命令管理器
-        /// </summary>
-        /// <returns></returns>
-        public DbCommand GetDbCommand()
-        {
-            var work = GetDbWork();
-            var command = work.DbCommandCreating(null);
-            if (command is null) command = GetSqlRepositoryProvider(work).GetDbCommand(work);
-            return command;
-        }
-
-        /// <summary>
-        /// 设置参数集
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="parameters"></param>
-        public void SetDbParameters(DbCommand command, DbParameters parameters)
-        {
-            GetSqlRepositoryProvider().SetDbParameters(command, parameters);
         }
     }
 }

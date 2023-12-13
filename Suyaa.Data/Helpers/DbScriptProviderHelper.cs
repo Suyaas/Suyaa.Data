@@ -1,6 +1,6 @@
-﻿using Suyaa.Data.Dependency;
-using Suyaa.Data.Entities;
+﻿using Suyaa.Data.Entities;
 using Suyaa.Data.Models;
+using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections;
 using System.Collections.Generic;

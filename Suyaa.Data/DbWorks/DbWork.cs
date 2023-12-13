@@ -1,6 +1,7 @@
 ﻿using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Helpers;
+using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -18,6 +19,8 @@ namespace Suyaa.Data.DbWorks
         private readonly IDbWorkManager _dbWorkManager;
         private DbConnection? _connection;
         private DbTransaction? _transaction;
+        private readonly List<DbWorkCommand> _dbWorkCommands;
+        private readonly IDbExecuteProvider _dbExecuteProvider;
 
         /// <summary>
         /// 简单的数据库工作着
@@ -32,6 +35,8 @@ namespace Suyaa.Data.DbWorks
             _dbFactory = dbFactory;
             _dbWorkInterceptorFactory = dbWorkInterceptorFactory;
             _dbWorkManager = dbWorkManager;
+            _dbWorkCommands = new List<DbWorkCommand>();
+            _dbExecuteProvider = ConnectionDescriptor.DatabaseType.GetDbProvider().ExecuteProvider;
         }
 
         /// <summary>
@@ -55,10 +60,40 @@ namespace Suyaa.Data.DbWorks
         public IDbWorkManager WorkManager => _dbWorkManager;
 
         /// <summary>
+        /// 命令集合
+        /// </summary>
+        public IList<DbWorkCommand> Commands => _dbWorkCommands;
+
+        // 命令执行
+        private DbCommand GetDbCommand(DbWorkCommand command)
+        {
+
+            var sqlCommand = DbCommandCreating(null);
+            if (sqlCommand is null) sqlCommand = _dbExecuteProvider.GetDbCommand(this);
+            sqlCommand.Connection = Connection;
+            sqlCommand.Transaction = Transaction;
+            sqlCommand.CommandText = command.CommandText;
+            _dbExecuteProvider.SetDbParameters(sqlCommand, command.Parameters);
+            return sqlCommand;
+        }
+
+        /// <summary>
         /// 生效事务
         /// </summary>
         public void Commit()
         {
+            foreach (var command in Commands)
+            {
+                using var sqlCommand = GetDbCommand(command);
+                sy.Safety.Invoke(() =>
+                {
+                    sqlCommand.ExecuteNonQuery();
+                }, ex =>
+                {
+                    Transaction.Rollback();
+                    throw ex;
+                });
+            }
             if (_transaction is null) return;
             sy.Safety.Invoke(() =>
             {
@@ -82,6 +117,19 @@ namespace Suyaa.Data.DbWorks
         /// <exception cref="DbException"></exception>
         public async Task CommitAsync()
         {
+            foreach (var command in Commands)
+            {
+                using var sqlCommand = GetDbCommand(command);
+                try
+                {
+                    await sqlCommand.ExecuteNonQueryAsync();
+                }
+                catch (Exception ex)
+                {
+                    Transaction.Rollback();
+                    throw ex;
+                }
+            }
             if (_transaction is null) return;
             try
             {

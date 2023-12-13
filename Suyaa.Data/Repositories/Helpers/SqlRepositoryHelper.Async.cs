@@ -1,10 +1,13 @@
-﻿using Suyaa.Data.Repositories.Dependency;
+﻿using Suyaa.Data.DbWorks;
+using Suyaa.Data.Repositories;
+using Suyaa.Data.Repositories.Dependency;
 using Suyaa.Data.Repositories.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Suyaa.Data.Helpers
@@ -20,22 +23,11 @@ namespace Suyaa.Data.Helpers
         /// <param name="repository"></param>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static async Task<int> ExecuteNonQueryAsync(this ISqlRepository repository, string sql)
+        public static async Task ExecuteNonQueryAsync(this ISqlRepository repository, string sql)
         {
             var work = repository.GetDbWork();
-            var command = repository.GetDbCommand(sql);
-            command.Transaction = work.Transaction;
-            using var sqlCommand = work.DbCommandExecuting(command);
-            try
-            {
-                var res = await sqlCommand.ExecuteNonQueryAsync();
-                return res;
-            }
-            catch (Exception ex)
-            {
-                work.Transaction.Rollback();
-                throw ex;
-            }
+            work.Commands.Add(new DbWorkCommand(sql));
+            await Task.CompletedTask;
         }
         /// <summary>
         /// 执行Sql语句
@@ -44,22 +36,11 @@ namespace Suyaa.Data.Helpers
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static async Task<int> ExecuteNonQueryAsync(this ISqlRepository repository, string sql, DbParameters parameters)
+        public static async Task ExecuteNonQueryAsync(this ISqlRepository repository, string sql, DbParameters parameters)
         {
             var work = repository.GetDbWork();
-            var command = repository.GetDbCommand(sql, parameters);
-            command.Transaction = work.Transaction;
-            using var sqlCommand = work.DbCommandExecuting(command);
-            try
-            {
-                var res = await sqlCommand.ExecuteNonQueryAsync();
-                return res;
-            }
-            catch (Exception ex)
-            {
-                work.Transaction.Rollback();
-                throw ex;
-            }
+            work.Commands.Add(new DbWorkCommand(sql, parameters));
+            await Task.CompletedTask;
         }
         /// <summary>
         /// 执行原始数据读取
@@ -71,7 +52,10 @@ namespace Suyaa.Data.Helpers
         public static async Task ExecuteReaderAsync(this ISqlRepository repository, string sql, Action<DbDataReader> actionDbDataReader)
         {
             var work = repository.GetDbWork();
-            using var sqlCommand = work.DbCommandExecuting(repository.GetDbCommand(sql));
+            using var command = repository.GetDbCommand();
+            command.CommandText = sql;
+            using var sqlCommand = work.DbCommandExecuting(command);
+            sqlCommand.CommandText = sql;
             using var reader = await sqlCommand.ExecuteReaderAsync(CommandBehavior.Default);
             actionDbDataReader(reader);
             reader.Close();
@@ -87,7 +71,10 @@ namespace Suyaa.Data.Helpers
         public static async Task ExecuteReaderAsync(this ISqlRepository repository, string sql, DbParameters parameters, Action<DbDataReader> actionDbDataReader)
         {
             var work = repository.GetDbWork();
-            using var sqlCommand = work.DbCommandExecuting(repository.GetDbCommand(sql, parameters));
+            using var command = repository.GetDbCommand();
+            command.CommandText = sql;
+            repository.SetDbParameters(command, parameters);
+            using var sqlCommand = work.DbCommandExecuting(command);
             using var reader = await sqlCommand.GetDataReaderAsync();
             actionDbDataReader(reader);
             reader.Close();

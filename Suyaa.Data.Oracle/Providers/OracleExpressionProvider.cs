@@ -1,4 +1,4 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace Suyaa.Data.Oracle.Providers
     /// <summary>
     /// Sqlite查询供应商
     /// </summary>
-    public class OracleQueryProvider : IDbQueryProvider
+    public class OracleExpressionProvider : IDbExpressionProvider
     {
         /// <summary>
         /// 获取

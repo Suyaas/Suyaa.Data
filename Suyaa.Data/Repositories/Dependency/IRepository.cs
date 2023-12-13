@@ -1,5 +1,4 @@
-﻿using Suyaa.Data.Dependency;
-using Suyaa.Data.Models;
+﻿using Suyaa.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

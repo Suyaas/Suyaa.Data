@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using Suyaa.Data.DbWorks.Dependency;
-using Suyaa.Data.Helpers;
+using Suyaa.Data.DbWorks.Helpers;
 using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Suyaa.Data.Helpers;
 
 namespace Suyaa.EFCore.DbInterceptors
 {

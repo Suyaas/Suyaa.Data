@@ -5,6 +5,7 @@ using Suyaa.Data.Entities;
 using Suyaa.Data.Factories;
 using Suyaa.Data.Helpers;
 using Suyaa.Data.Models;
+using Suyaa.Data.Repositories.Dependency;
 using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.Helpers;
 using Suyaa.EFCore.Models;

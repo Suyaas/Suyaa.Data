@@ -1,4 +1,4 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace Suyaa.Data.Queries
     public class EntityQueryProvider : IQueryProvider
     {
         // 数据库查询供应商
-        private readonly IDbQueryProvider _provider;
+        private readonly IDbExpressionProvider _provider;
 
         /// <summary>
         /// 创建查询
@@ -63,7 +63,7 @@ namespace Suyaa.Data.Queries
         /// 实例查询供应商
         /// </summary>
         /// <param name="provider"></param>
-        public EntityQueryProvider(IDbQueryProvider provider)
+        public EntityQueryProvider(IDbExpressionProvider provider)
         {
             _provider = provider;
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace Suyaa.Data
+namespace Suyaa.Data.Repositories
 {
     /// <summary>
     /// 配置集合

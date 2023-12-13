@@ -1,4 +1,5 @@
 ﻿using Suyaa.Data.Dependency;
+using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Suyaa.Data.PostgreSQL.Providers
     /// <summary>
     /// Sqlite查询供应商
     /// </summary>
-    public class PostgreSqlQueryProvider : IDbQueryProvider
+    public class PostgreSqlExpressionProvider : IDbExpressionProvider
     {
         /// <summary>
         /// 获取

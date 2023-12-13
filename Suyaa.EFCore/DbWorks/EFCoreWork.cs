@@ -96,6 +96,11 @@ namespace Suyaa.EFCore.DbWorks
         public IDbConnectionDescriptor ConnectionDescriptor => _dbWork.ConnectionDescriptor;
 
         /// <summary>
+        /// 命令集合
+        /// </summary>
+        public IList<DbWorkCommand> Commands => _dbWork.Commands;
+
+        /// <summary>
         /// 生效事务
         /// </summary>
         public void Commit()

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading.Tasks;
 using Suyaa.Data.Dependency;
@@ -27,6 +29,10 @@ namespace Suyaa.Data.DbWorks.Dependency
         /// 数据库连接描述
         /// </summary>
         IDbConnectionDescriptor ConnectionDescriptor { get; }
+        /// <summary>
+        /// 数据库连接描述
+        /// </summary>
+        IList<DbWorkCommand> Commands { get; }
         /// <summary>
         /// 生效事务
         /// </summary>

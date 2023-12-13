@@ -19,11 +19,6 @@ namespace Suyaa.Data.Repositories.Dependency
         /// <returns></returns>
         IDbWork GetDbWork();
         /// <summary>
-        /// 获取一个数据库命令管理器
-        /// </summary>
-        /// <returns></returns>
-        DbCommand GetDbCommand();
-        /// <summary>
         /// 执行原始数据读取
         /// </summary>
         /// <param name="sql"></param>
@@ -36,12 +31,5 @@ namespace Suyaa.Data.Repositories.Dependency
         /// <param name="parameters"></param>
         /// <returns></returns>
         DataSet GetDataSet(string sql, DbParameters parameters);
-        /// <summary>
-        /// 设置参数集
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        void SetDbParameters(DbCommand command, DbParameters parameters);
     }
 }
