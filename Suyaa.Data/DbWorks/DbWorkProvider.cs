@@ -2,39 +2,31 @@
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Helpers;
-using Suyaa.EFCore.Dependency;
-using Suyaa.EFCore.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace Suyaa.Data.Providers
+namespace Suyaa.Data.DbWorks
 {
     /// <summary>
-    /// EFCore作业供应商
+    /// 简单的数据库供应商
     /// </summary>
-    public sealed class EfCoreWorkProvider : IDbWorkProvider
+    public sealed class DbWorkProvider : IDbWorkProvider
     {
         private readonly IDbFactory _dbFactory;
-        private readonly IDbContextFactory _dbContextFacotry;
-        private readonly IEntityModelConventionFactory _entityModelConventionFactory;
         private readonly IDbWorkInterceptorFactory _dbWorkInterceptorFactory;
         private IDbWork? _work;
 
         /// <summary>
-        /// EFCore作业供应商
+        /// 简单的数据库工作者供应商
         /// </summary>
-        public EfCoreWorkProvider(
+        public DbWorkProvider(
             IDbFactory dbFactory,
-            IDbContextFactory dbContextFacotry,
-            IEntityModelConventionFactory entityModelConventionFactory,
             IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
             _dbFactory = dbFactory;
-            _dbContextFacotry = dbContextFacotry;
-            _entityModelConventionFactory = entityModelConventionFactory;
             _dbWorkInterceptorFactory = dbWorkInterceptorFactory;
         }
 
@@ -44,7 +36,7 @@ namespace Suyaa.Data.Providers
         /// <returns></returns>
         public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new EfCoreWork(dbWorkManager, _dbFactory, _dbContextFacotry, _entityModelConventionFactory, _dbWorkInterceptorFactory);
+            return new DbWork(dbWorkManager, _dbFactory, _dbWorkInterceptorFactory);
         }
 
         /// <summary>
@@ -61,9 +53,9 @@ namespace Suyaa.Data.Providers
         /// </summary>
         /// <param name="databaseType"></param>
         /// <returns></returns>
-        public IEfCoreProvider GetDbProvider(DatabaseType databaseType)
+        public IDbProvider GetDbProvider(DatabaseType databaseType)
         {
-            return databaseType.GetEfCoreProvider();
+            return databaseType.GetDbProvider();
         }
 
         /// <summary>

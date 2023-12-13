@@ -1,6 +1,6 @@
-﻿using Suyaa.Data;
-using Suyaa.Data.DbWorks.Dependency;
+﻿using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.EFCore.Contexts;
+using Suyaa.EFCore.DbWorks;
 using System;
 using System.Collections.Generic;
 using System.Text;

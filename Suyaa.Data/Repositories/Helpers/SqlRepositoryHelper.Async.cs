@@ -23,8 +23,9 @@ namespace Suyaa.Data.Helpers
         public static async Task<int> ExecuteNonQueryAsync(this ISqlRepository repository, string sql)
         {
             var work = repository.GetDbWork();
-            using var sqlCommand = work.DbCommandExecuting(repository.GetDbCommand(sql));
-            sqlCommand.Transaction = work.Transaction;
+            var command = repository.GetDbCommand(sql);
+            command.Transaction = work.Transaction;
+            using var sqlCommand = work.DbCommandExecuting(command);
             try
             {
                 var res = await sqlCommand.ExecuteNonQueryAsync();
@@ -46,8 +47,9 @@ namespace Suyaa.Data.Helpers
         public static async Task<int> ExecuteNonQueryAsync(this ISqlRepository repository, string sql, DbParameters parameters)
         {
             var work = repository.GetDbWork();
-            using var sqlCommand = work.DbCommandExecuting(repository.GetDbCommand(sql, parameters));
-            sqlCommand.Transaction = work.Transaction;
+            var command = repository.GetDbCommand(sql, parameters);
+            command.Transaction = work.Transaction;
+            using var sqlCommand = work.DbCommandExecuting(command);
             try
             {
                 var res = await sqlCommand.ExecuteNonQueryAsync();

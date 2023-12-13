@@ -7,6 +7,7 @@ using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Providers;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace Suyaa.EFCore.Contexts
         /// 动态数据库上下文
         /// </summary>
         /// <param name="descriptor"></param>
+        /// <param name="connection"></param>
         /// <param name="entityModelConventionFactory"></param>
         /// <param name="dbWork"></param>
         /// <param name="types"></param>
@@ -32,8 +34,9 @@ namespace Suyaa.EFCore.Contexts
             IEntityModelConventionFactory entityModelConventionFactory,
             IDbWork dbWork,
             IDbConnectionDescriptor descriptor,
+            DbConnection connection,
             IEnumerable<Type> types)
-            : base(entityModelConventionFactory, new DbWorkContextOptionsBuilderProvider(dbWork), descriptor)
+            : base(entityModelConventionFactory, new DbWorkContextOptionsBuilderProvider(dbWork), descriptor, connection)
         {
             _types = types;
         }

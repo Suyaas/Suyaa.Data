@@ -3,6 +3,7 @@ using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -27,6 +28,21 @@ namespace Suyaa.EFCore.Contexts
             : base(dbContextOptionsProvider.GetDbContextOptions(dbContextOptionsBuilderProvider, connectionString))
         {
             ConnectionString = connectionString;
+        }
+
+        /// <summary>
+        /// EFCore重写上下文
+        /// </summary>
+        /// <param name="dbContextOptionsProvider"></param>
+        /// <param name="dbContextOptionsBuilderProvider"></param>
+        /// <param name="connection"></param>
+        public BuilderDbContext(
+            IDbContextOptionsProvider dbContextOptionsProvider,
+            IDbContextOptionsBuilderProvider dbContextOptionsBuilderProvider,
+            DbConnection connection)
+            : base(dbContextOptionsProvider.GetDbContextOptions(dbContextOptionsBuilderProvider, connection))
+        {
+            ConnectionString = connection.ConnectionString;
         }
 
         /// <summary>

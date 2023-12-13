@@ -11,7 +11,7 @@ namespace Suyaa.Data.DbWorks
     /// <summary>
     /// 简单的数据库工作着
     /// </summary>
-    public class DbWork : Disposable, IDbWork
+    public sealed class DbWork : Disposable, IDbWork
     {
         private readonly IDbFactory _dbFactory;
         private readonly IDbWorkInterceptorFactory _dbWorkInterceptorFactory;
@@ -57,7 +57,7 @@ namespace Suyaa.Data.DbWorks
         /// <summary>
         /// 生效事务
         /// </summary>
-        public virtual void Commit()
+        public void Commit()
         {
             if (_transaction is null) return;
             sy.Safety.Invoke(() =>
@@ -80,13 +80,14 @@ namespace Suyaa.Data.DbWorks
         /// </summary>
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
-        public virtual async Task CommitAsync()
+        public async Task CommitAsync()
         {
             if (_transaction is null) return;
             try
             {
                 await _transaction.CommitAsync();
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 try
                 {

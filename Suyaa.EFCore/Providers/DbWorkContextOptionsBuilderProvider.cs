@@ -33,7 +33,8 @@ namespace Suyaa.EFCore.Providers
         public DbContextOptionsBuilder<DbContext> CreateBuilder()
         {
             var builder = new DbContextOptionsBuilder<DbContext>();
-            builder.AddInterceptors(new DbWorkCommandInterceptor(_dbWork), new DbWorkTransactionInterceptor());
+            builder.AddInterceptors(new DbWorkCommandInterceptor(_dbWork));
+            //builder.AddInterceptors(new DbWorkCommandInterceptor(_dbWork), new DbWorkTransactionInterceptor(_dbWork));
             return builder;
         }
     }

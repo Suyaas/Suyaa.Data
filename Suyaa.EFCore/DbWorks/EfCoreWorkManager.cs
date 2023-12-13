@@ -1,12 +1,11 @@
 ﻿using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Dependency;
-using Suyaa.Data.Providers;
 using Suyaa.EFCore.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Suyaa.Data
+namespace Suyaa.EFCore.DbWorks
 {
     /// <summary>
     /// 简单的数据库工作者管理器

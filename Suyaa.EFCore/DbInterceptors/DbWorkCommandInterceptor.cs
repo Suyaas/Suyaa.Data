@@ -77,22 +77,22 @@ namespace Suyaa.EFCore.DbInterceptors
         //    return base.CommandFailedAsync(command, eventData, cancellationToken);
         //}
 
-        /// <summary>
-        /// 数据库命令初始化
-        /// </summary>
-        /// <param name="eventData"></param>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        public override DbCommand CommandInitialized(CommandEndEventData eventData, DbCommand result)
-        {
-            // 过滤
-            if (eventData.CommandSource == CommandSource.SaveChanges)
-            {
-                result.Transaction = _work.Transaction;
-            }
-            return result;
-            //return base.CommandInitialized(eventData, result);
-        }
+        ///// <summary>
+        ///// 数据库命令初始化
+        ///// </summary>
+        ///// <param name="eventData"></param>
+        ///// <param name="result"></param>
+        ///// <returns></returns>
+        //public override DbCommand CommandInitialized(CommandEndEventData eventData, DbCommand result)
+        //{
+        //    // 过滤
+        //    if (eventData.CommandSource == CommandSource.SaveChanges)
+        //    {
+        //        result.Transaction = _work.Transaction;
+        //    }
+        //    return result;
+        //    //return base.CommandInitialized(eventData, result);
+        //}
 
         //public override InterceptionResult DataReaderClosing(DbCommand command, DataReaderClosingEventData eventData, InterceptionResult result)
         //{
@@ -106,6 +106,7 @@ namespace Suyaa.EFCore.DbInterceptors
 
         //public override InterceptionResult DataReaderDisposing(DbCommand command, DataReaderDisposingEventData eventData, InterceptionResult result)
         //{
+        //    command.Transaction = null;
         //    return base.DataReaderDisposing(command, eventData, result);
         //}
 

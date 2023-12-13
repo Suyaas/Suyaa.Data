@@ -8,6 +8,7 @@ using Suyaa.EFCore.Helpers;
 using sy;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -35,6 +36,28 @@ namespace Suyaa.EFCore.Contexts
                   descriptor.DatabaseType.GetEfCoreProvider().DbContextOptionsProvider,
                   dbContextOptionsBuilderProvider,
                   descriptor.ToConnectionString())
+        {
+            ConnectionDescriptor = descriptor;
+            _entityModelConventionFactory = entityModelConventionFactory;
+            _conventions = _entityModelConventionFactory.Conventions;
+        }
+
+        /// <summary>
+        /// 带描述的数据库上下文
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <param name="connection"></param>
+        /// <param name="entityModelConventionFactory"></param>
+        /// <param name="dbContextOptionsBuilderProvider"></param>
+        public DescriptorDbContext(
+            IEntityModelConventionFactory entityModelConventionFactory,
+            IDbContextOptionsBuilderProvider dbContextOptionsBuilderProvider,
+            IDbConnectionDescriptor descriptor,
+            DbConnection connection)
+            : base(
+                  descriptor.DatabaseType.GetEfCoreProvider().DbContextOptionsProvider,
+                  dbContextOptionsBuilderProvider,
+                  connection)
         {
             ConnectionDescriptor = descriptor;
             _entityModelConventionFactory = entityModelConventionFactory;

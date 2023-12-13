@@ -9,20 +9,13 @@ namespace Suyaa.Data.DbWorks
     /// <summary>
     /// 数据库作业拦截器
     /// </summary>
-    public sealed class DbWorkInterceptor : IDbWorkInterceptor
+    public class DbWorkInterceptor : IDbWorkInterceptor
     {
-        private readonly Func<DbCommand?, DbCommand?>? _creating;
-        private readonly Func<DbCommand, DbCommand>? _executing;
-
         /// <summary>
         /// 数据库作业拦截器
         /// </summary>
-        /// <param name="creating"></param>
-        /// <param name="executing"></param>
-        public DbWorkInterceptor(Func<DbCommand?, DbCommand?>? creating, Func<DbCommand, DbCommand>? executing)
+        public DbWorkInterceptor()
         {
-            _creating = creating;
-            _executing = executing;
         }
 
         /// <summary>
@@ -30,10 +23,9 @@ namespace Suyaa.Data.DbWorks
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public DbCommand? DbCommandCreating(DbCommand? command)
+        public virtual DbCommand? DbCommandCreating(DbCommand? command)
         {
-            if (_creating is null) return command;
-            return _creating(command);
+            return command;
         }
 
         /// <summary>
@@ -41,10 +33,9 @@ namespace Suyaa.Data.DbWorks
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public DbCommand DbCommandExecuting(DbCommand command)
+        public virtual DbCommand DbCommandExecuting(DbCommand command)
         {
-            if (_executing is null) return command;
-            return _executing(command);
+            return command;
         }
     }
 }

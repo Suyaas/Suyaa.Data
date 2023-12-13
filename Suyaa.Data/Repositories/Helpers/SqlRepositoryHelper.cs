@@ -21,8 +21,9 @@ namespace Suyaa.Data.Helpers
         public static int ExecuteNonQuery(this ISqlRepository repository, string sql)
         {
             var work = repository.GetDbWork();
-            using var sqlCommand = work.DbCommandExecuting(repository.GetDbCommand(sql));
-            sqlCommand.Transaction = work.Transaction;
+            var command = repository.GetDbCommand(sql);
+            command.Transaction = work.Transaction;
+            using var sqlCommand = work.DbCommandExecuting(command);
             try
             {
                 var res = sqlCommand.ExecuteNonQuery();
@@ -44,8 +45,9 @@ namespace Suyaa.Data.Helpers
         public static int ExecuteNonQuery(this ISqlRepository repository, string sql, DbParameters parameters)
         {
             var work = repository.GetDbWork();
-            using var sqlCommand = work.DbCommandExecuting(repository.GetDbCommand(sql, parameters));
-            sqlCommand.Transaction = work.Transaction;
+            var command = repository.GetDbCommand(sql, parameters);
+            command.Transaction = work.Transaction;
+            using var sqlCommand = work.DbCommandExecuting(command);
             try
             {
                 var res = sqlCommand.ExecuteNonQuery();
@@ -67,7 +69,9 @@ namespace Suyaa.Data.Helpers
         public static void ExecuteReader(this ISqlRepository repository, string sql, Action<DbDataReader> actionDbDataReader)
         {
             var work = repository.GetDbWork();
-            using var sqlCommand = work.DbCommandExecuting(repository.GetDbCommand(sql));
+            var command = repository.GetDbCommand(sql);
+            command.Transaction = work.Transaction;
+            using var sqlCommand = work.DbCommandExecuting(command);
             using var reader = sqlCommand.ExecuteReader(CommandBehavior.Default);
             actionDbDataReader(reader);
             reader.Close();
@@ -86,7 +90,8 @@ namespace Suyaa.Data.Helpers
         public static void ExecuteReader(this ISqlRepository repository, string sql, DbParameters parameters, Action<DbDataReader> actionDbDataReader)
         {
             var work = repository.GetDbWork();
-            using var sqlCommand = work.DbCommandExecuting(repository.GetDbCommand(sql, parameters));
+            var command = repository.GetDbCommand(sql, parameters);
+            using var sqlCommand = work.DbCommandExecuting(command);
             using var reader = sqlCommand.ExecuteReader(CommandBehavior.Default);
             actionDbDataReader(reader);
             reader.Close();

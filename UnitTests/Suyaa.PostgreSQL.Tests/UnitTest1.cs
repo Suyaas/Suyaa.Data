@@ -110,11 +110,7 @@ namespace SuyaaTest.PostgreSQL
         public void InsertMix()
         {
             // Ê¹ÓÃÀ¹½ØÆ÷
-            sy.EfCore.UseWorkInterceptor(new DbWorkInterceptor(null, command =>
-            {
-                _output.WriteLine(command.CommandText);
-                return command;
-            }));
+            sy.EfCore.UseWorkInterceptor(new DbWorkInterceptor());
             sy.EfCore.UseModelConvention(new LowercaseUnderlinedModelConvention());
             using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
             using var work = sy.EfCore.CreateWork(dbContext);

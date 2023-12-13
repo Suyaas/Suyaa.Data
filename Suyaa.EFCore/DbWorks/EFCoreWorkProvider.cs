@@ -3,41 +3,52 @@ using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Helpers;
+using Suyaa.EFCore.Dependency;
+using Suyaa.EFCore.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace Suyaa.Data.Providers
+namespace Suyaa.EFCore.DbWorks
 {
     /// <summary>
-    /// 简单的数据库供应商
+    /// EFCore作业供应商
     /// </summary>
-    public sealed class DbWorkProvider : IDbWorkProvider
+    public sealed class EfCoreWorkProvider : IDbWorkProvider
     {
         private readonly IDbFactory _dbFactory;
+        private readonly IDbContextFactory _dbContextFacotry;
+        private readonly IEntityModelConventionFactory _entityModelConventionFactory;
         private readonly IDbWorkInterceptorFactory _dbWorkInterceptorFactory;
         private IDbWork? _work;
 
         /// <summary>
-        /// 简单的数据库工作者供应商
+        /// EFCore作业供应商
         /// </summary>
-        public DbWorkProvider(
+        public EfCoreWorkProvider(
             IDbFactory dbFactory,
+            IDbContextFactory dbContextFacotry,
+            IEntityModelConventionFactory entityModelConventionFactory,
             IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
             _dbFactory = dbFactory;
+            _dbContextFacotry = dbContextFacotry;
+            _entityModelConventionFactory = entityModelConventionFactory;
             _dbWorkInterceptorFactory = dbWorkInterceptorFactory;
         }
 
         /// <summary>
-        /// 创建一个工作者
+        /// 创建EfCore作业
         /// </summary>
         /// <returns></returns>
         public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new DbWork(dbWorkManager, _dbFactory, _dbWorkInterceptorFactory);
+            // 创建 标准作业
+            DbWork work = new DbWork(dbWorkManager, _dbFactory, _dbWorkInterceptorFactory);
+            // 创建并返回 EfCore 作业
+            return new EfCoreWork(_dbContextFacotry, _entityModelConventionFactory, work);
         }
 
         /// <summary>
@@ -54,9 +65,9 @@ namespace Suyaa.Data.Providers
         /// </summary>
         /// <param name="databaseType"></param>
         /// <returns></returns>
-        public IDbProvider GetDbProvider(DatabaseType databaseType)
+        public IEfCoreProvider GetDbProvider(DatabaseType databaseType)
         {
-            return databaseType.GetDbProvider();
+            return databaseType.GetEfCoreProvider();
         }
 
         /// <summary>
