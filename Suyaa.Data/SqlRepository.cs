@@ -76,5 +76,15 @@ namespace Suyaa.Data
         {
             return GetSqlRepositoryProvider().GetDbCommand(GetDbWork());
         }
+
+        /// <summary>
+        /// 设置参数集
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="parameters"></param>
+        public void SetDbParameters(DbCommand command, DbParameters parameters)
+        {
+            GetSqlRepositoryProvider().SetDbParameters(command, parameters);
+        }
     }
 }

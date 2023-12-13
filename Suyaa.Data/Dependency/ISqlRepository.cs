@@ -35,5 +35,12 @@ namespace Suyaa.Data.Dependency
         /// <param name="parameters"></param>
         /// <returns></returns>
         DataSet GetDataSet(string sql, DbParameters parameters);
+        /// <summary>
+        /// 设置参数集
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        void SetDbParameters(DbCommand command, DbParameters parameters);
     }
 }

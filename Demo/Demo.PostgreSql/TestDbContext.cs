@@ -6,12 +6,12 @@ using Suyaa.EFCore.PostgreSQL;
 
 namespace Demo.PostgreSql
 {
-    public class TestDbContext : DescriptorDbContext
+    public class TestDbContext : DefineDbContext
     {
         public DbSet<People> Peoples { get; set; }
 
         public TestDbContext(IDbConnectionDescriptor descriptor, IEntityModelConventionFactory entityModelConventionFactory)
-            : base(descriptor, entityModelConventionFactory)
+            : base(entityModelConventionFactory, descriptor)
         {
         }
 

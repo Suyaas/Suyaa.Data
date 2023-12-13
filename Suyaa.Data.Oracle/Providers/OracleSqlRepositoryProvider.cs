@@ -55,14 +55,24 @@ namespace Suyaa.Data.Oracle.Providers
             DataSet dataSet = new DataSet();
             using var sqlCommand = GetDbCommand(work);
             sqlCommand.CommandText = sql;
-            sqlCommand.Parameters.Clear();
-            foreach (var param in parameters)
-            {
-                sqlCommand.Parameters.Add(new OracleParameter(":" + param.Key, param.Value));
-            }
+            SetDbParameters(sqlCommand, parameters);
             var sqlDataAdapter = new OracleDataAdapter { SelectCommand = (OracleCommand)sqlCommand };
             sqlDataAdapter.Fill(dataSet);
             return dataSet;
+        }
+
+        /// <summary>
+        /// 设置参数集
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="parameters"></param>
+        public void SetDbParameters(DbCommand command, DbParameters parameters)
+        {
+            command.Parameters.Clear();
+            foreach (var param in parameters)
+            {
+                command.Parameters.Add(new OracleParameter(":" + param.Key, param.Value));
+            }
         }
     }
 }

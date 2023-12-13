@@ -36,11 +36,7 @@ namespace Suyaa.Data.Helpers
         public static DbCommand GetDbCommand(this ISqlRepository repository, string sql, DbParameters parameters)
         {
             var sqlCommand = repository.GetDbCommand(sql);
-            sqlCommand.Parameters.Clear();
-            foreach (var param in parameters)
-            {
-                sqlCommand.Parameters.Add(param);
-            }
+            repository.SetDbParameters(sqlCommand, parameters);
             return sqlCommand;
         }
     }
