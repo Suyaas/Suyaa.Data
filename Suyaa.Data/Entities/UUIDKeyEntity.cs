@@ -13,7 +13,6 @@ namespace Suyaa.Data.Entities
         /// <summary>
         /// 自动增长标识
         /// </summary>
-        [Key]
         [StringLength(36)]
         public override string Id { get => base.Id; set => base.Id = value; }
 

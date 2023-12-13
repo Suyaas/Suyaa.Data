@@ -1,6 +1,7 @@
 ﻿using Suyaa.Data.Attributes;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Suyaa.Data.Entities
@@ -16,6 +17,7 @@ namespace Suyaa.Data.Entities
         /// 唯一标识
         /// </summary>
         [Key]
+        [Description("主键Id")]
         public virtual TId Id { get; set; }
 
         /// <summary>

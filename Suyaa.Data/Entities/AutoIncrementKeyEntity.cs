@@ -3,6 +3,7 @@ using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlTypes;
@@ -21,7 +22,6 @@ namespace Suyaa.Data.Entities
         /// <summary>
         /// 自动增长标识
         /// </summary>
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get => base.Id; set => base.Id = value; }
 

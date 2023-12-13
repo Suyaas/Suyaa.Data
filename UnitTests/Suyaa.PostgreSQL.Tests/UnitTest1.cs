@@ -68,6 +68,7 @@ namespace SuyaaTest.PostgreSQL
         [Fact]
         public void InsertDb()
         {
+            sy.Data.UseModelConvention(new LowercaseUnderlinedModelConvention());
             //using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
             using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connectionString);
             var repository = sy.Data.CreateRepository<Test, string>(work);

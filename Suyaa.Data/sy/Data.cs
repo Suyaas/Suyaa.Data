@@ -26,6 +26,8 @@ namespace sy
         private static IDbWorkProvider? _dbWorkProvider;
         // 实体建模供应商
         private static IEntityModelFactory? _entityModelFactory;
+        private static IEntityModelConventionFactory? _entityModelConventionFactory;
+        private static List<IEntityModelConvention> _entityModelConventions = new List<IEntityModelConvention>();
 
         /// <summary>
         /// 注册数据库工厂
@@ -63,12 +65,22 @@ namespace sy
             if (_entityModelFactory is null)
             {
                 List<IEntityModelProvider> entityModelProviders = new List<IEntityModelProvider>() {
-                    new EntityModelProvider(_dbFactory,new List<IEntityModelConvention>()),
-                    new DbEntityModelProvider(_dbFactory,new List<IEntityModelConvention>()),
+                    new EntityModelProvider(_dbFactory,_entityModelConventions),
+                    new DbEntityModelProvider(_dbFactory,_entityModelConventions),
                 };
                 _entityModelFactory = new EntityModelFactory(entityModelProviders);
             }
             return _entityModelFactory;
+        }
+
+        /// <summary>
+        /// 注册数据库实例建模约定器
+        /// </summary>
+        /// <param name="entityModelConvention"></param>
+        public static void UseModelConvention(IEntityModelConvention entityModelConvention)
+        {
+            _entityModelConventions.Add(entityModelConvention);
+            _entityModelConventionFactory = new EntityModelConventionFactory(_entityModelConventions);
         }
 
         /// <summary>
