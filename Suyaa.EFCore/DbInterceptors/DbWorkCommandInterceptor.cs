@@ -85,7 +85,7 @@ namespace Suyaa.EFCore.DbInterceptors
         public override DbCommand CommandInitialized(CommandEndEventData eventData, DbCommand result)
         {
             // 过滤
-            if (eventData.CommandSource != CommandSource.LinqQuery) result.Transaction = _work.Transaction;
+            if (eventData.CommandSource == CommandSource.SaveChanges) result.Transaction = _work.Transaction;
             return result;
             //return base.CommandInitialized(eventData, result);
         }

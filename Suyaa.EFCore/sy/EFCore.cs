@@ -112,6 +112,36 @@ namespace sy
         }
 
         /// <summary>
+        /// 获取实体建模约定器工厂
+        /// </summary>
+        /// <returns></returns>
+        public static IEntityModelConventionFactory GetEntityModelConventionFactory()
+        {
+            return _entityModelConventionFactory ??= new EntityModelConventionFactory(_entityModelConventions);
+        }
+
+        /// <summary>
+        /// 获取实体建模工厂
+        /// </summary>
+        /// <returns></returns>
+        public static IEntityModelFactory GetEntityModelFactory()
+        {
+            _dbFactory ??= new DbFactory();
+            _dbContextProvider ??= new DbContextProvider();
+            _dbContextFacotry ??= new DbContextFacotry(new List<IDbContextProvider>() { _dbContextProvider });
+            if (_entityModelFactory is null)
+            {
+                List<IEntityModelProvider> entityModelProviders = new List<IEntityModelProvider>() {
+                    new EntityModelProvider(_dbFactory,_entityModelConventions),
+                    new DbEntityModelProvider(_dbFactory,_entityModelConventions),
+                    new DbSetModelProvider(_dbFactory,_dbContextFacotry,_entityModelConventions),
+                };
+                _entityModelFactory = new EntityModelFactory(entityModelProviders);
+            }
+            return _entityModelFactory;
+        }
+
+        /// <summary>
         /// 创建工作者
         /// </summary>
         /// <param name="dbContext"></param>
@@ -121,10 +151,10 @@ namespace sy
             _dbFactory ??= new DbFactory();
             _entityModelConventionFactory ??= new EntityModelConventionFactory(_entityModelConventions);
             UserDbContext(dbContext);
-            if (!_entityModelProviders.Any())
-            {
-                UseEntityProvider(new DbSetModelProvider(_dbFactory, _dbContextFacotry!, new List<IEntityModelConvention>()));
-            }
+            //if (!_entityModelProviders.Any())
+            //{
+            //    UseEntityProvider(new DbSetModelProvider(_dbFactory, _dbContextFacotry!, new List<IEntityModelConvention>()));
+            //}
             _dbWorkProvider ??= new EfCoreWorkProvider(_dbFactory, _dbContextFacotry!, _entityModelConventionFactory);
             var dbWorkManagerProvider = new EfCoreManagerProvider(_dbFactory, _dbContextFacotry!, _entityModelConventionFactory, _dbConnectionDescriptorManager!);
             return dbWorkManagerProvider.CreateManager().CreateWork();

@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
+using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
+using Suyaa.Data.Factories;
 using Suyaa.Data.Helpers;
+using Suyaa.Data.Providers;
 using SuyaaTest.PostgreSQL.Entities;
 using SuyaaTest.PostgreSQL.ModelConventions;
 using System.Configuration;
@@ -72,6 +75,23 @@ namespace SuyaaTest.PostgreSQL
             //using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
             using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connectionString);
             var repository = sy.Data.CreateRepository<Test, string>(work);
+            repository.Insert(new Test() { Content = "Test002" });
+            work.Commit();
+            _output.WriteLine("OK");
+        }
+
+        /// <summary>
+        /// Á¬½Ó
+        /// </summary>
+        [Fact]
+        public void InsertMix()
+        {
+            sy.EfCore.UseModelConvention(new LowercaseUnderlinedModelConvention());
+            using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
+            using var work = sy.EfCore.CreateWork(dbContext);
+            var sqlRepository = new SqlRepository(work.WorkManager);
+            var repository = new MixRepository<Test, string>(work.WorkManager, sy.EfCore.GetEntityModelFactory(), sqlRepository);
+            //var repository = sy.Data.CreateRepository<Test, string>(work);
             repository.Insert(new Test() { Content = "Test002" });
             work.Commit();
             _output.WriteLine("OK");
