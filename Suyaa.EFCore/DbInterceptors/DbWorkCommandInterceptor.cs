@@ -129,22 +129,35 @@ namespace Suyaa.EFCore.DbInterceptors
         //    return base.ReaderExecutedAsync(command, eventData, result, cancellationToken);
         //}
 
-        /// <summary>
-        /// 命令执行时
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="eventData"></param>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result)
-        {
-            command = _work.DbCommandExecuting(command);
-            return base.ReaderExecuting(command, eventData, result);
-        }
-
-        //public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result, CancellationToken cancellationToken = default)
+        ///// <summary>
+        ///// 命令执行时
+        ///// </summary>
+        ///// <param name="command"></param>
+        ///// <param name="eventData"></param>
+        ///// <param name="result"></param>
+        ///// <returns></returns>
+        //public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result)
         //{
-        //    return base.ReaderExecutingAsync(command, eventData, result, cancellationToken);
+        //    command = _work.DbCommandExecuting(command);
+        //    var reader = command.ExecuteReader();
+        //    return InterceptionResult<DbDataReader>.SuppressWithResult(reader);
+        //    //return base.ReaderExecuting(command, eventData, result);
+        //}
+
+        ///// <summary>
+        ///// 命令执行时
+        ///// </summary>
+        ///// <param name="command"></param>
+        ///// <param name="eventData"></param>
+        ///// <param name="result"></param>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns></returns>
+        //public override async ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result, CancellationToken cancellationToken = default)
+        //{
+        //    command = _work.DbCommandExecuting(command);
+        //    var reader = await command.ExecuteReaderAsync();
+        //    return InterceptionResult<DbDataReader>.SuppressWithResult(reader);
+        //    //return base.ReaderExecutingAsync(command, eventData, result, cancellationToken);
         //}
 
         //public override object? ScalarExecuted(DbCommand command, CommandExecutedEventData eventData, object? result)

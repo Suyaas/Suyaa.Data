@@ -58,12 +58,33 @@ namespace SuyaaTest.PostgreSQL
         [Fact]
         public void InsertEFCore()
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
             sy.EfCore.UseModelConvention(new LowercaseUnderlinedModelConvention());
             using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
             using var work = sy.EfCore.CreateWork(dbContext);
             var repository = sy.EfCore.CreateRepository<Test, string>(work);
             repository.Insert(new Test() { Content = "Test001" });
+            repository.Insert(new Test() { Content = "Test002" });
             work.Commit();
+            _output.WriteLine("OK");
+        }
+
+        /// <summary>
+        /// 连接
+        /// </summary>
+        [Fact]
+        public async void InsertEFCoreAsync()
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+            sy.EfCore.UseModelConvention(new LowercaseUnderlinedModelConvention());
+            using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
+            using var work = sy.EfCore.CreateWork(dbContext);
+            var repository = sy.EfCore.CreateRepository<Test, string>(work);
+            await repository.InsertAsync(new Test() { Content = "Test011" });
+            await repository.InsertAsync(new Test() { Content = "Test012" });
+            await work.CommitAsync();
             _output.WriteLine("OK");
         }
 
@@ -89,7 +110,8 @@ namespace SuyaaTest.PostgreSQL
         public void InsertMix()
         {
             // 使用拦截器
-            sy.EfCore.UseWorkInterceptor(new DbWorkInterceptor(null, command => {
+            sy.EfCore.UseWorkInterceptor(new DbWorkInterceptor(null, command =>
+            {
                 _output.WriteLine(command.CommandText);
                 return command;
             }));

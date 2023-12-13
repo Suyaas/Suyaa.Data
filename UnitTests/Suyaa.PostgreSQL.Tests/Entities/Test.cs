@@ -22,5 +22,10 @@ namespace SuyaaTest.PostgreSQL.Entities
         [Column]
         [Description("内容")]
         public string Content { get; set; } = string.Empty;
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        [Column]
+        public DateTime CreationTime { get; set; } = DateTime.Now;
     }
 }

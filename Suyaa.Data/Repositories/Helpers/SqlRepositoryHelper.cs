@@ -72,6 +72,9 @@ namespace Suyaa.Data.Helpers
             actionDbDataReader(reader);
             reader.Close();
         }
+
+
+
         /// <summary>
         /// 执行原始数据读取
         /// </summary>

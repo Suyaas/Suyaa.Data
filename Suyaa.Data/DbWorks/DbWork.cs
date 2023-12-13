@@ -65,7 +65,11 @@ namespace Suyaa.Data.DbWorks
                 _transaction.Commit();
             }, ex =>
             {
-                sy.Safety.Invoke(() => { _transaction.Rollback(); });
+                sy.Safety.Invoke(() => { _transaction.Rollback(); }, ex1 =>
+                {
+                    throw new Exception(ex1.Message, ex);
+                });
+                throw ex;
             });
             _transaction.Dispose();
             _transaction = null;
@@ -79,7 +83,21 @@ namespace Suyaa.Data.DbWorks
         public virtual async Task CommitAsync()
         {
             if (_transaction is null) return;
-            await _transaction.CommitAsync();
+            try
+            {
+                await _transaction.CommitAsync();
+            }catch (Exception ex)
+            {
+                try
+                {
+                    await _transaction.RollbackAsync();
+                }
+                catch (Exception ex1)
+                {
+                    throw new Exception(ex1.Message, ex);
+                }
+                throw ex;
+            }
             _transaction.Dispose();
             _transaction = null;
         }

@@ -1,4 +1,5 @@
 ﻿using Suyaa.Data.Repositories.Dependency;
+using Suyaa.Data.Repositories.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -85,7 +86,7 @@ namespace Suyaa.Data.Helpers
         {
             var work = repository.GetDbWork();
             using var sqlCommand = work.DbCommandExecuting(repository.GetDbCommand(sql, parameters));
-            using var reader = await sqlCommand.ExecuteReaderAsync(CommandBehavior.Default);
+            using var reader = await sqlCommand.GetDataReaderAsync();
             actionDbDataReader(reader);
             reader.Close();
         }
