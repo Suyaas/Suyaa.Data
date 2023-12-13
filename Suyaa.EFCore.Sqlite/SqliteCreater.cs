@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Suyaa.Data.Sqlite;
 using Suyaa.EFCore.Helpers;
 using Suyaa;
 using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Contexts;
+using Suyaa.Data.Sqlite.Providers;
 
 namespace Suyaa.EFCore
 {

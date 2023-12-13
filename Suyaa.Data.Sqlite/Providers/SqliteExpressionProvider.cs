@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Suyaa.Data.Repositories.Dependency;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.Data.Sqlite
+namespace Suyaa.Data.Sqlite.Providers
 {
     /// <summary>
     /// Sqlite查询供应商
     /// </summary>
-    public class SqliteQueryProvider : IDbQueryProvider
+    public class SqliteExpressionProvider : IDbExpressionProvider
     {
         /// <summary>
         /// 获取

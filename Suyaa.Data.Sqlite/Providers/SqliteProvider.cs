@@ -4,8 +4,10 @@ using System;
 using System.Reflection;
 using System.Text;
 using Suyaa.Data.Dependency;
+using Suyaa.Data.Repositories.Dependency;
+using Suyaa;
 
-namespace Suyaa.Data.Sqlite
+namespace Suyaa.Data.Sqlite.Providers
 {
     /// <summary>
     /// PostgreSQL数据库语法供应器
@@ -15,14 +17,14 @@ namespace Suyaa.Data.Sqlite
         /// <summary>
         /// 查询供应商
         /// </summary>
-        public IDbQueryProvider QueryProvider { get; }
+        public IDbExpressionProvider ExpressionProvider { get; }
 
         /// <summary>
         /// PostgreSQL数据库语法供应器
         /// </summary>
         public SqliteProvider()
         {
-            this.QueryProvider = new SqliteQueryProvider();
+            ExpressionProvider = new SqliteExpressionProvider();
         }
 
         /// <summary>
@@ -31,7 +33,7 @@ namespace Suyaa.Data.Sqlite
         /// <param name="connectionString">连接字符串</param>
         /// <returns></returns>
         public IDatabaseConnectionBase GetDatabaseConnection(string connectionString)
-            => new SqliteConnectionBase(connectionString);
+            => throw new NotImplementedException();
 
         /// <summary>
         /// 获取事务开始语句
