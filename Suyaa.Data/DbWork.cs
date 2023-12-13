@@ -53,7 +53,13 @@ namespace Suyaa.Data
         public virtual void Commit()
         {
             if (_transaction is null) return;
-            _transaction.Commit();
+            sy.Safety.Invoke(() =>
+            {
+                _transaction.Commit();
+            }, ex =>
+            {
+                sy.Safety.Invoke(() => { _transaction.Rollback(); });
+            });
             _transaction.Dispose();
             _transaction = null;
         }
