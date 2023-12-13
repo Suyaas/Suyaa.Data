@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.EFCore.DbInterceptors;
 using Suyaa.EFCore.Dependency;
 using System;

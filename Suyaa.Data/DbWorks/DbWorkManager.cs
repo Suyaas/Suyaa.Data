@@ -1,10 +1,11 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Dependency;
 using Suyaa.Data.Providers;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Suyaa.Data
+namespace Suyaa.Data.DbWorks
 {
     /// <summary>
     /// 数据库作业管理器
@@ -21,13 +22,14 @@ namespace Suyaa.Data
         /// 数据库作业管理器
         /// </summary>
         public DbWorkManager(
+            IDbConnectionDescriptorManager dbConnectionDescriptorManager,
             IDbFactory dbFactory,
-            IDbConnectionDescriptorManager dbConnectionDescriptorManager
+            IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
             _dbFactory = dbFactory;
             _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
-            _dbWorkProvider = new DbWorkProvider(_dbFactory);
+            _dbWorkProvider = new DbWorkProvider(_dbFactory, dbWorkInterceptorFactory);
             ConnectionDescriptor = _dbConnectionDescriptorManager.GetCurrentConnection();
         }
 

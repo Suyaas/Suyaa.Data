@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Suyaa.Data.DbWorks;
+using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Helpers;
 using Suyaa.EFCore.Contexts;
@@ -28,8 +30,9 @@ namespace Suyaa.Data
             IDbWorkManager dbWorkManager,
             IDbFactory dbFactory,
             IDbContextFactory dbContextFacotry,
-            IEntityModelConventionFactory entityConventionFactory
-            ) : base(dbWorkManager, dbFactory)
+            IEntityModelConventionFactory entityConventionFactory,
+            IDbWorkInterceptorFactory dbWorkInterceptorFactory
+            ) : base(dbWorkManager, dbFactory, dbWorkInterceptorFactory)
         {
             _dbContextFacotry = dbContextFacotry;
             _entityConventionFactory = entityConventionFactory;

@@ -1,4 +1,5 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Helpers;
 using Suyaa.EFCore.Dependency;
@@ -18,6 +19,7 @@ namespace Suyaa.Data.Providers
         private readonly IDbFactory _dbFactory;
         private readonly IDbContextFactory _dbContextFacotry;
         private readonly IEntityModelConventionFactory _entityModelConventionFactory;
+        private readonly IDbWorkInterceptorFactory _dbWorkInterceptorFactory;
         private IDbWork? _work;
 
         /// <summary>
@@ -26,12 +28,14 @@ namespace Suyaa.Data.Providers
         public EfCoreWorkProvider(
             IDbFactory dbFactory,
             IDbContextFactory dbContextFacotry,
-            IEntityModelConventionFactory entityModelConventionFactory
+            IEntityModelConventionFactory entityModelConventionFactory,
+            IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
             _dbFactory = dbFactory;
             _dbContextFacotry = dbContextFacotry;
             _entityModelConventionFactory = entityModelConventionFactory;
+            _dbWorkInterceptorFactory = dbWorkInterceptorFactory;
         }
 
         /// <summary>
@@ -40,7 +44,7 @@ namespace Suyaa.Data.Providers
         /// <returns></returns>
         public IDbWork CreateWork(IDbWorkManager dbWorkManager)
         {
-            return new EfCoreWork(dbWorkManager, _dbFactory, _dbContextFacotry, _entityModelConventionFactory);
+            return new EfCoreWork(dbWorkManager, _dbFactory, _dbContextFacotry, _entityModelConventionFactory, _dbWorkInterceptorFactory);
         }
 
         /// <summary>

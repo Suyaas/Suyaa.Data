@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
+using Suyaa.Data.Repositories.Dependency;
 
 namespace Suyaa.Data.Dependency
 {

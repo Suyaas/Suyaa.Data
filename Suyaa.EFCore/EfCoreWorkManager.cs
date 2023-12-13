@@ -1,4 +1,5 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Dependency;
 using Suyaa.Data.Providers;
 using Suyaa.EFCore.Dependency;
 using System;
@@ -17,6 +18,7 @@ namespace Suyaa.Data
         private readonly IDbFactory _factory;
         private readonly IDbContextFactory _dbContextFactory;
         private readonly IEntityModelConventionFactory _entityModelConventionFactory;
+        private readonly IDbWorkInterceptorFactory _dbWorkInterceptorFactory;
         private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
         private readonly EfCoreWorkProvider _efCoreWorkProvider;
 
@@ -24,17 +26,19 @@ namespace Suyaa.Data
         /// 简单的数据库工作者管理器
         /// </summary>
         public EfCoreWorkManager(
+            IDbConnectionDescriptorManager dbConnectionDescriptorManager,
             IDbFactory factory,
             IDbContextFactory dbContextFactory,
             IEntityModelConventionFactory entityModelConventionFactory,
-            IDbConnectionDescriptorManager dbConnectionDescriptorManager
+            IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
             _factory = factory;
             _dbContextFactory = dbContextFactory;
             _entityModelConventionFactory = entityModelConventionFactory;
+            _dbWorkInterceptorFactory = dbWorkInterceptorFactory;
             _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
-            _efCoreWorkProvider = new EfCoreWorkProvider(_factory, _dbContextFactory, _entityModelConventionFactory);
+            _efCoreWorkProvider = new EfCoreWorkProvider(_factory, _dbContextFactory, _entityModelConventionFactory, _dbWorkInterceptorFactory);
             ConnectionDescriptor = _dbConnectionDescriptorManager.GetCurrentConnection();
         }
 

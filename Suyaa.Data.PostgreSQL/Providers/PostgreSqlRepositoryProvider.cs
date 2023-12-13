@@ -1,5 +1,6 @@
 ﻿using Npgsql;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Repositories.Dependency;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;

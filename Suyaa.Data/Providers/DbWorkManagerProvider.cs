@@ -1,4 +1,6 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.DbWorks;
+using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Helpers;
 using System;
@@ -14,17 +16,20 @@ namespace Suyaa.Data.Providers
     public sealed class DbWorkManagerProvider : IDbWorkManagerProvider
     {
         private readonly IDbFactory _dbFactory;
+        private readonly IDbWorkInterceptorFactory _dbWorkInterceptorFactory;
         private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
 
         /// <summary>
         /// 简单的数据库工作者供应商
         /// </summary>
         public DbWorkManagerProvider(
+            IDbConnectionDescriptorManager dbConnectionDescriptorManager,
             IDbFactory dbFactory,
-            IDbConnectionDescriptorManager dbConnectionDescriptorManager
+            IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
             _dbFactory = dbFactory;
+            _dbWorkInterceptorFactory = dbWorkInterceptorFactory;
             _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
         }
 
@@ -34,7 +39,7 @@ namespace Suyaa.Data.Providers
         /// <returns></returns>
         public IDbWorkManager CreateManager()
         {
-            return new DbWorkManager(_dbFactory, _dbConnectionDescriptorManager);
+            return new DbWorkManager(_dbConnectionDescriptorManager, _dbFactory, _dbWorkInterceptorFactory);
         }
     }
 }

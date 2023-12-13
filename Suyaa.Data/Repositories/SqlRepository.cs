@@ -1,5 +1,6 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Helpers;
+using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +8,7 @@ using System.Data.Common;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Suyaa.Data
+namespace Suyaa.Data.Repositories
 {
     /// <summary>
     /// Sql脚本仓库
@@ -51,9 +52,18 @@ namespace Suyaa.Data
         /// 获取Sql仓库供应商
         /// </summary>
         /// <returns></returns>
-        public ISqlRepositoryProvider GetSqlRepositoryProvider()
+        private ISqlRepositoryProvider GetSqlRepositoryProvider()
         {
             return GetDbWork().ConnectionDescriptor.DatabaseType.GetDbProvider().SqlRepositoryProvider;
+        }
+
+        /// <summary>
+        /// 获取Sql仓库供应商
+        /// </summary>
+        /// <returns></returns>
+        private ISqlRepositoryProvider GetSqlRepositoryProvider(IDbWork work)
+        {
+            return work.ConnectionDescriptor.DatabaseType.GetDbProvider().SqlRepositoryProvider;
         }
 
         /// <summary>
@@ -74,7 +84,10 @@ namespace Suyaa.Data
         /// <returns></returns>
         public DbCommand GetDbCommand()
         {
-            return GetSqlRepositoryProvider().GetDbCommand(GetDbWork());
+            var work = GetDbWork();
+            var command = work.DbCommandCreating(null);
+            if (command is null) command = GetSqlRepositoryProvider(work).GetDbCommand(work);
+            return command;
         }
 
         /// <summary>

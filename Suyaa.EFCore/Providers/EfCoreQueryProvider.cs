@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Entities;
 using Suyaa.Data.Helpers;

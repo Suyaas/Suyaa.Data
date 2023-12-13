@@ -4,6 +4,8 @@ using System.Linq.Expressions;
 using Suyaa;
 using Suyaa.Data.Providers;
 using Suyaa.EFCore.Providers;
+using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Repositories.Dependency;
 
 namespace SuyaaTest.PostgreSQL
 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Helpers;
+using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -85,7 +86,10 @@ namespace Suyaa.EFCore.DbInterceptors
         public override DbCommand CommandInitialized(CommandEndEventData eventData, DbCommand result)
         {
             // 过滤
-            if (eventData.CommandSource == CommandSource.SaveChanges) result.Transaction = _work.Transaction;
+            if (eventData.CommandSource == CommandSource.SaveChanges)
+            {
+                result.Transaction = _work.Transaction;
+            }
             return result;
             //return base.CommandInitialized(eventData, result);
         }
@@ -125,10 +129,18 @@ namespace Suyaa.EFCore.DbInterceptors
         //    return base.ReaderExecutedAsync(command, eventData, result, cancellationToken);
         //}
 
-        //public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result)
-        //{
-        //    return base.ReaderExecuting(command, eventData, result);
-        //}
+        /// <summary>
+        /// 命令执行时
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="eventData"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result)
+        {
+            command = _work.DbCommandExecuting(command);
+            return base.ReaderExecuting(command, eventData, result);
+        }
 
         //public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result, CancellationToken cancellationToken = default)
         //{

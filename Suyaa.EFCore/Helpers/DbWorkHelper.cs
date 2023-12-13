@@ -1,5 +1,5 @@
 ﻿using Suyaa.Data;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.EFCore.Contexts;
 using System;
 using System.Collections.Generic;

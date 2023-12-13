@@ -1,4 +1,5 @@
 ﻿using Suyaa.Data;
+using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Helpers;
@@ -19,21 +20,24 @@ namespace Suyaa.EFCore.Providers
         private readonly IDbFactory _dbFactory;
         private readonly IDbContextFactory _dbContextFactory;
         private readonly IEntityModelConventionFactory _entityModelConventionFactory;
+        private readonly IDbWorkInterceptorFactory _dbWorkInterceptorFactory;
         private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
 
         /// <summary>
         /// 简单的数据库工作者供应商
         /// </summary>
         public EfCoreManagerProvider(
+            IDbConnectionDescriptorManager dbConnectionDescriptorManager,
             IDbFactory dbFactory,
             IDbContextFactory dbContextFactory,
             IEntityModelConventionFactory entityModelConventionFactory,
-            IDbConnectionDescriptorManager dbConnectionDescriptorManager
+            IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
             _dbFactory = dbFactory;
             _dbContextFactory = dbContextFactory;
             _entityModelConventionFactory = entityModelConventionFactory;
+            _dbWorkInterceptorFactory = dbWorkInterceptorFactory;
             _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
         }
 
@@ -43,7 +47,7 @@ namespace Suyaa.EFCore.Providers
         /// <returns></returns>
         public IDbWorkManager CreateManager()
         {
-            return new EfCoreWorkManager(_dbFactory, _dbContextFactory, _entityModelConventionFactory, _dbConnectionDescriptorManager);
+            return new EfCoreWorkManager(_dbConnectionDescriptorManager, _dbFactory, _dbContextFactory, _entityModelConventionFactory, _dbWorkInterceptorFactory);
         }
     }
 }

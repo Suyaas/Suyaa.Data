@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
+using Suyaa.Data.DbWorks;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Factories;
 using Suyaa.Data.Helpers;
 using Suyaa.Data.Providers;
+using Suyaa.Data.Repositories;
 using SuyaaTest.PostgreSQL.Entities;
 using SuyaaTest.PostgreSQL.ModelConventions;
 using System.Configuration;
@@ -86,6 +88,11 @@ namespace SuyaaTest.PostgreSQL
         [Fact]
         public void InsertMix()
         {
+            // Ê¹ÓÃÀ¹½ØÆ÷
+            sy.EfCore.UseWorkInterceptor(new DbWorkInterceptor(null, command => {
+                _output.WriteLine(command.CommandText);
+                return command;
+            }));
             sy.EfCore.UseModelConvention(new LowercaseUnderlinedModelConvention());
             using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
             using var work = sy.EfCore.CreateWork(dbContext);

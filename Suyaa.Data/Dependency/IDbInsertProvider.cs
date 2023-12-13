@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Suyaa.Data.DbWorks.Dependency;
 
 namespace Suyaa.Data.Dependency
 {

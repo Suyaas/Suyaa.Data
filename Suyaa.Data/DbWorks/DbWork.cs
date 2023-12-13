@@ -1,8 +1,12 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Dependency;
+using Suyaa.Data.Helpers;
+using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading.Tasks;
 
-namespace Suyaa.Data
+namespace Suyaa.Data.DbWorks
 {
     /// <summary>
     /// 简单的数据库工作着
@@ -10,6 +14,7 @@ namespace Suyaa.Data
     public class DbWork : Disposable, IDbWork
     {
         private readonly IDbFactory _dbFactory;
+        private readonly IDbWorkInterceptorFactory _dbWorkInterceptorFactory;
         private readonly IDbWorkManager _dbWorkManager;
         private DbConnection? _connection;
         private DbTransaction? _transaction;
@@ -19,11 +24,13 @@ namespace Suyaa.Data
         /// </summary>
         public DbWork(
             IDbWorkManager dbWorkManager,
-            IDbFactory dbFactory
+            IDbFactory dbFactory,
+            IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
             ConnectionDescriptor = dbWorkManager.ConnectionDescriptor;
             _dbFactory = dbFactory;
+            _dbWorkInterceptorFactory = dbWorkInterceptorFactory;
             _dbWorkManager = dbWorkManager;
         }
 
@@ -92,6 +99,36 @@ namespace Suyaa.Data
                 _connection.Dispose();
                 _connection = null;
             }
+        }
+
+        /// <summary>
+        /// 命令管理器创建
+        /// </summary>
+        /// <param name="dbCommand"></param>
+        /// <returns></returns>
+        public DbCommand? DbCommandCreating(DbCommand? dbCommand)
+        {
+            var providers = _dbWorkInterceptorFactory.GetInterceptors();
+            foreach (var provider in providers)
+            {
+                dbCommand = provider.DbCommandCreating(dbCommand);
+            }
+            return dbCommand;
+        }
+
+        /// <summary>
+        /// 命令管理器执行
+        /// </summary>
+        /// <param name="dbCommand"></param>
+        /// <returns></returns>
+        public DbCommand DbCommandExecuting(DbCommand dbCommand)
+        {
+            var providers = _dbWorkInterceptorFactory.GetInterceptors();
+            foreach (var provider in providers)
+            {
+                dbCommand = provider.DbCommandExecuting(dbCommand);
+            }
+            return dbCommand;
         }
     }
 }

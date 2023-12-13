@@ -1,5 +1,6 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Repositories.Dependency;
 using System.Data;
 using System.Data.Common;
 

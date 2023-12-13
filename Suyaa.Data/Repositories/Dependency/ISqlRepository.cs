@@ -4,35 +4,38 @@ using System.Data;
 using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
+using Suyaa.Data.DbWorks.Dependency;
 
-namespace Suyaa.Data.Dependency
+namespace Suyaa.Data.Repositories.Dependency
 {
     /// <summary>
     /// SQL仓库
     /// </summary>
-    public interface ISqlRepositoryProvider
+    public interface ISqlRepository
     {
+        /// <summary>
+        /// 获取数据库工作者
+        /// </summary>
+        /// <returns></returns>
+        IDbWork GetDbWork();
         /// <summary>
         /// 获取一个数据库命令管理器
         /// </summary>
-        /// <param name="dbWork"></param>
         /// <returns></returns>
-        DbCommand GetDbCommand(IDbWork dbWork);
+        DbCommand GetDbCommand();
         /// <summary>
         /// 执行原始数据读取
         /// </summary>
-        /// <param name="dbWork"></param>
         /// <param name="sql"></param>
         /// <returns></returns>
-        DataSet GetDataSet(IDbWork dbWork, string sql);
+        DataSet GetDataSet(string sql);
         /// <summary>
         /// 执行原始数据读取
         /// </summary>
-        /// <param name="dbWork"></param>
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        DataSet GetDataSet(IDbWork dbWork, string sql, DbParameters parameters);
+        DataSet GetDataSet(string sql, DbParameters parameters);
         /// <summary>
         /// 设置参数集
         /// </summary>

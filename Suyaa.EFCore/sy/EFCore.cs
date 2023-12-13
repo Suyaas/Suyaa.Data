@@ -1,10 +1,13 @@
 ﻿using Suyaa;
 using Suyaa.Data;
+using Suyaa.Data.DbWorks;
+using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Factories;
 using Suyaa.Data.Helpers;
 using Suyaa.Data.Providers;
+using Suyaa.Data.Repositories.Dependency;
 using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Factories;
 using Suyaa.EFCore.Helpers;
@@ -38,6 +41,34 @@ namespace sy
         private static DbContextProvider? _dbContextProvider;
         // 数据库实例供应商集合
         private static List<IEntityModelProvider> _entityModelProviders = new List<IEntityModelProvider>();
+
+
+        #region 拦截器相关
+
+        // 数据库作业拦截器工厂
+        private static IDbWorkInterceptorFactory? _dbWorkInterceptorFactory;
+        private static List<IDbWorkInterceptor> _dbWorkInterceptors = new List<IDbWorkInterceptor>();
+
+        /// <summary>
+        /// 使用拦截器
+        /// </summary>
+        /// <param name="dbWorkInterceptor"></param>
+        public static void UseWorkInterceptor(IDbWorkInterceptor dbWorkInterceptor)
+        {
+            _dbWorkInterceptors.Add(dbWorkInterceptor);
+            _dbWorkInterceptorFactory = new DbWorkInterceptorFactory(_dbWorkInterceptors);
+        }
+
+        /// <summary>
+        /// 获取拦截器工厂
+        /// </summary>
+        /// <returns></returns>
+        public static IDbWorkInterceptorFactory GetDbWorkInterceptorFactory()
+        {
+            return _dbWorkInterceptorFactory ??= new DbWorkInterceptorFactory();
+        }
+
+        #endregion
 
         /// <summary>
         /// 注册数据库工厂
@@ -151,12 +182,13 @@ namespace sy
             _dbFactory ??= new DbFactory();
             _entityModelConventionFactory ??= new EntityModelConventionFactory(_entityModelConventions);
             UserDbContext(dbContext);
+            var dbWorkInterceptorFactory = GetDbWorkInterceptorFactory();
             //if (!_entityModelProviders.Any())
             //{
             //    UseEntityProvider(new DbSetModelProvider(_dbFactory, _dbContextFacotry!, new List<IEntityModelConvention>()));
             //}
-            _dbWorkProvider ??= new EfCoreWorkProvider(_dbFactory, _dbContextFacotry!, _entityModelConventionFactory);
-            var dbWorkManagerProvider = new EfCoreManagerProvider(_dbFactory, _dbContextFacotry!, _entityModelConventionFactory, _dbConnectionDescriptorManager!);
+            _dbWorkProvider ??= new EfCoreWorkProvider(_dbFactory, _dbContextFacotry!, _entityModelConventionFactory, dbWorkInterceptorFactory);
+            var dbWorkManagerProvider = new EfCoreManagerProvider(_dbConnectionDescriptorManager!, _dbFactory, _dbContextFacotry!, _entityModelConventionFactory, dbWorkInterceptorFactory);
             return dbWorkManagerProvider.CreateManager().CreateWork();
         }
 

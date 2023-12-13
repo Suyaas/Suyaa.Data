@@ -1,10 +1,13 @@
 ﻿using Suyaa;
 using Suyaa.Data;
+using Suyaa.Data.DbWorks;
+using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
 using Suyaa.Data.Factories;
 using Suyaa.Data.Helpers;
 using Suyaa.Data.Providers;
+using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +31,33 @@ namespace sy
         private static IEntityModelFactory? _entityModelFactory;
         private static IEntityModelConventionFactory? _entityModelConventionFactory;
         private static List<IEntityModelConvention> _entityModelConventions = new List<IEntityModelConvention>();
+
+        #region 拦截器相关
+
+        // 数据库作业拦截器工厂
+        private static IDbWorkInterceptorFactory? _dbWorkInterceptorFactory;
+        private static List<IDbWorkInterceptor> _dbWorkInterceptors = new List<IDbWorkInterceptor>();
+
+        /// <summary>
+        /// 使用拦截器
+        /// </summary>
+        /// <param name="dbWorkInterceptor"></param>
+        public static void UseWorkInterceptor(IDbWorkInterceptor dbWorkInterceptor)
+        {
+            _dbWorkInterceptors.Add(dbWorkInterceptor);
+            _dbWorkInterceptorFactory = new DbWorkInterceptorFactory(_dbWorkInterceptors);
+        }
+
+        /// <summary>
+        /// 获取拦截器工厂
+        /// </summary>
+        /// <returns></returns>
+        public static IDbWorkInterceptorFactory GetDbWorkInterceptorFactory()
+        {
+            return _dbWorkInterceptorFactory ??= new DbWorkInterceptorFactory();
+        }
+
+        #endregion
 
         /// <summary>
         /// 注册数据库工厂
@@ -93,8 +123,9 @@ namespace sy
             // 使用连接
             UseConnection(descriptor);
             _dbFactory ??= new DbFactory();
-            _dbWorkProvider ??= new DbWorkProvider(_dbFactory);
-            var dbWorkManagerProvider = new DbWorkManagerProvider(_dbFactory, _dbConnectionDescriptorManager!);
+            var dbWorkInterceptorFactory = GetDbWorkInterceptorFactory();
+            _dbWorkProvider ??= new DbWorkProvider(_dbFactory, dbWorkInterceptorFactory);
+            var dbWorkManagerProvider = new DbWorkManagerProvider(_dbConnectionDescriptorManager!, _dbFactory, dbWorkInterceptorFactory);
             return dbWorkManagerProvider.CreateManager().CreateWork();
         }
 

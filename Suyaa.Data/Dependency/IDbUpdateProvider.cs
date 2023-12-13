@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Suyaa.Data.DbWorks.Dependency;
 
 namespace Suyaa.Data.Dependency
 {

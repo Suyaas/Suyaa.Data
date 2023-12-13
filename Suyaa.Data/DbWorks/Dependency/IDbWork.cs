@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Data.Common;
 using System.Threading.Tasks;
+using Suyaa.Data.Dependency;
 
-namespace Suyaa.Data.Dependency
+namespace Suyaa.Data.DbWorks.Dependency
 {
     /// <summary>
     /// 数据库作业
@@ -34,5 +35,15 @@ namespace Suyaa.Data.Dependency
         /// 生效事务
         /// </summary>
         Task CommitAsync();
+        /// <summary>
+        /// 数据库命令管理器创建事件
+        /// </summary>
+        /// <param name="dbCommand"></param>
+        DbCommand? DbCommandCreating(DbCommand? dbCommand);
+        /// <summary>
+        /// 数据库命令命令管理器执行事件
+        /// </summary>
+        /// <param name="dbCommand"></param>
+        DbCommand DbCommandExecuting(DbCommand dbCommand);
     }
 }
