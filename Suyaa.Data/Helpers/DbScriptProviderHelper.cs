@@ -1,4 +1,5 @@
 ﻿using Suyaa.Data.Entities;
+using Suyaa.Data.Expressions;
 using Suyaa.Data.Models;
 using Suyaa.Data.Repositories.Dependency;
 using System;
@@ -16,6 +17,11 @@ namespace Suyaa.Data.Helpers
     /// </summary>
     public static class DbScriptProviderHelper
     {
+        /// <summary>
+        /// DbValue
+        /// </summary>
+        public static string Name_DBValue = typeof(DbValue).FullName;
+
         /// <summary>
         /// 获取实例Insert脚本
         /// </summary>
@@ -176,6 +182,65 @@ namespace Suyaa.Data.Helpers
             return $"{name} = {value}";
         }
 
+        /// <summary>
+        /// 获取单参数DbValue函数脚本
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="entity"></param>
+        /// <param name="exp"></param>
+        /// <param name="scriptCreate"></param>
+        public static string GetSingleArgumentDbValueMethodScrip(this IDbScriptProvider provider, DbEntityModel entity, MethodCallExpression exp, Func<string, string> scriptCreate)
+        {
+            if (exp.Arguments.Count != 1) throw new ExpressionNodeNonStandardException($"Call.IsNUll({exp.Arguments.Count})");
+            // 获取需要判断的主体
+            var arg = exp.Arguments[0];
+            if (!(arg is UnaryExpression argUnary)) throw new ExpressionNodeNonStandardException($"Call.IsNUll({arg.NodeType})");
+            if (argUnary.NodeType != ExpressionType.Convert) throw new ExpressionNodeNonStandardException($"Call.IsNUll({arg.NodeType})");
+            // 定义名称
+            string name;
+            // 判断主体类型
+            switch (argUnary.Operand)
+            {
+                case MemberExpression member:
+                    // 获取对象表达式
+                    if (!(member.Expression is ParameterExpression parameter)) throw new ExpressionNodeNonStandardException($"Call.IsNUll({member.NodeType})");
+                    // 判断是否为传入对象
+                    if (parameter.Type != entity.Type) throw new ExpressionNodeNonStandardException($"Call.IsNUll({parameter.Type.FullName})");
+                    // 获取字段名称
+                    var fieldName = entity.GetFieldName(member.Member.Name);
+                    if (fieldName.IsNullOrWhiteSpace()) throw new NotExistException($"{entity.Type.Name}.{member.Member.Name}");
+                    name = provider.GetName(fieldName);
+                    break;
+                default:
+                    throw new ExpressionNodeNotSupportedException($"Call.IsNUll({argUnary.Operand.NodeType})");
+            }
+            return scriptCreate(name);
+        }
+
+        /// <summary>
+        /// 获取Equals函数兼容的sql语句
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="entity"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        public static string GetIsNullMethodScrip(this IDbScriptProvider provider, DbEntityModel entity, MethodCallExpression exp)
+        {
+            return provider.GetSingleArgumentDbValueMethodScrip(entity, exp, name => $"{name} IS NULL");
+        }
+
+        /// <summary>
+        /// 获取Equals函数兼容的sql语句
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="entity"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        public static string GetIsNotNullMethodScrip(this IDbScriptProvider provider, DbEntityModel entity, MethodCallExpression exp)
+        {
+            return provider.GetSingleArgumentDbValueMethodScrip(entity, exp, name => $"{name} IS NOT NULL");
+        }
+
         #endregion
 
         #region 处理查询表达式
@@ -215,6 +280,18 @@ namespace Suyaa.Data.Helpers
         public static string GetMethodCallExpressionScript(this IDbScriptProvider provider, DbEntityModel entity, MethodCallExpression exp)
         {
             var callMethod = exp.Method;
+            // 扩展值函数支持
+            if (callMethod.DeclaringType.FullName == Name_DBValue)
+            {
+                switch (callMethod.Name)
+                {
+                    case nameof(DbValue.IsNull):
+                        return provider.GetIsNullMethodScrip(entity, exp);
+                    case nameof(DbValue.IsNotNull):
+                        return provider.GetIsNotNullMethodScrip(entity, exp);
+
+                }
+            }
             return callMethod.Name switch
             {
                 "Contains" => provider.GetContainsMethodScript(entity, exp),

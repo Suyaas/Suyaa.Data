@@ -38,6 +38,16 @@ namespace Suyaa.Data.Models
         public IEnumerable<FieldModel> Fields => base.Properties.Where(d => d is FieldModel).Select(d => (FieldModel)d);
 
         /// <summary>
+        /// 获取字段名称
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public string GetFieldName(string propertyName)
+        {
+            return base.Properties.Where(d => d is FieldModel && d.PropertyInfo.Name == propertyName).Select(d => ((FieldModel)d).Name).FirstOrDefault();
+        }
+
+        /// <summary>
         /// 添加字段描述
         /// </summary>
         /// <param name="field"></param>
