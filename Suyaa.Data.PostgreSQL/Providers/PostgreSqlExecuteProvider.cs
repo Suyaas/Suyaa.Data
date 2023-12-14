@@ -2,6 +2,7 @@
 using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Repositories;
 using Suyaa.Data.Repositories.Dependency;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -74,7 +75,7 @@ namespace Suyaa.Data.PostgreSQL.Providers
             command.Parameters.Clear();
             foreach (var param in parameters)
             {
-                command.Parameters.Add(new NpgsqlParameter(":" + param.Key, param.Value));
+                command.Parameters.Add(new NpgsqlParameter(":" + param.Key, param.Value ?? DBNull.Value));
             }
         }
     }

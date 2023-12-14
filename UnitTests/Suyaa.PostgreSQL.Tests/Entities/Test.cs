@@ -27,5 +27,15 @@ namespace SuyaaTest.PostgreSQL.Entities
         /// </summary>
         [Column]
         public DateTime CreationTime { get; set; } = DateTime.Now;
+        /// <summary>
+        /// 删除时间
+        /// </summary>
+        [Column]
+        public DateTime? DeletionTime { get; set; }
+        /// <summary>
+        /// 是否删除
+        /// </summary>
+        [Column]
+        public bool IsDeleted { get; set; } = false;
     }
 }
