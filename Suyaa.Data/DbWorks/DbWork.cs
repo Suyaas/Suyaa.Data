@@ -65,7 +65,7 @@ namespace Suyaa.Data.DbWorks
         public IList<DbWorkCommand> Commands => _dbWorkCommands;
 
         // 命令执行
-        private DbCommand GetDbCommand(DbWorkCommand command)
+        private DbCommand GetExecutingDbCommand(DbWorkCommand command)
         {
 
             var sqlCommand = DbCommandCreating(null);
@@ -74,7 +74,7 @@ namespace Suyaa.Data.DbWorks
             sqlCommand.Transaction = Transaction;
             sqlCommand.CommandText = command.CommandText;
             _dbExecuteProvider.SetDbParameters(sqlCommand, command.Parameters);
-            return sqlCommand;
+            return DbCommandExecuting(sqlCommand);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Suyaa.Data.DbWorks
         {
             foreach (var command in Commands)
             {
-                using var sqlCommand = GetDbCommand(command);
+                using var sqlCommand = GetExecutingDbCommand(command);
                 sy.Safety.Invoke(() =>
                 {
                     sqlCommand.ExecuteNonQuery();
@@ -119,7 +119,7 @@ namespace Suyaa.Data.DbWorks
         {
             foreach (var command in Commands)
             {
-                using var sqlCommand = GetDbCommand(command);
+                using var sqlCommand = GetExecutingDbCommand(command);
                 try
                 {
                     await sqlCommand.ExecuteNonQueryAsync();
