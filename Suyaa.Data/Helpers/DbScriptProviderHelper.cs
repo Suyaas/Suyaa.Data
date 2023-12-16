@@ -256,6 +256,19 @@ namespace Suyaa.Data.Helpers
             return "'" + value.Replace("'", "''") + "'";
         }
 
+        /// <summary>
+        /// 获取脚本字符串值
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetScriptValue(this IDbScriptProvider provider, object? value)
+        {
+            if (value is null) return "NULL";
+            if (value is string str) return provider.GetStringValue(str);
+            return Convert.ToString(value);
+        }
+
         // 从对象字段或属性中获取内容
         private static object? GetFieldOrPropertyValue(object obj, string name)
         {
@@ -349,19 +362,38 @@ namespace Suyaa.Data.Helpers
                 case MethodCallExpression methodCallExpression:
                     return provider.GetMethodCallExpressionScript(entity, methodCallExpression);
                 // 变量
-                case MemberExpression member:
-                    switch (member.Expression)
+                case MemberExpression memberExpression:
+                    if (memberExpression.Expression is ParameterExpression parameterExpression)
                     {
-                        // 如果包含表达式，则先解析表达式
-                        case ConstantExpression constant:
-                            var parent = provider.GetExpressionValue(entity, constant) ?? throw new NullException(typeof(ConstantExpression));
-                            return GetFieldOrPropertyValue(parent, member.Member.Name);
-                        default:
-                            // 查询实例属性
-                            var field = entity.Fields.Where(d => d.PropertyInfo.Name == member.Member.Name).FirstOrDefault();
-                            if (field is null) throw new NotExistException(member.Member.Name);
-                            return provider.GetName(field.Name);
+                        // 查询实例属性
+                        var field = entity.Fields.Where(d => d.PropertyInfo.Name == memberExpression.Member.Name).FirstOrDefault();
+                        if (field is null) throw new NotExistException(memberExpression.Member.Name);
+                        return provider.GetName(field.Name);
                     }
+                    // 变量名称
+                    var memberName = memberExpression.Member.Name;
+                    // 变量所属对象
+                    var memberObject = provider.GetExpressionValue(entity, memberExpression.Expression) ?? throw new NullException(typeof(ConstantExpression));
+                    // 变量值
+                    var memberValue = GetFieldOrPropertyValue(memberObject, memberName);
+                    // 变量值类型
+                    var memberValueType = memberValue?.GetType();
+                    if (memberValueType.IsNumeric()) return memberValue;
+                    if (memberValue is string memberStringValue) return provider.GetStringValue(memberStringValue);
+                    return memberValue;
+                //switch (member.Expression)
+                //{
+                //    // 如果包含表达式，则先解析表达式
+                //    case ConstantExpression constant:
+                //        var parent = provider.GetExpressionValue(entity, constant) ?? throw new NullException(typeof(ConstantExpression));
+                //        if(parent is string strParent) return strParent;
+                //        return provider.GetScriptValue(GetFieldOrPropertyValue(parent, member.Member.Name));
+                //    default:
+                //        // 查询实例属性
+                //        var field = entity.Fields.Where(d => d.PropertyInfo.Name == member.Member.Name).FirstOrDefault();
+                //        if (field is null) throw new NotExistException(member.Member.Name);
+                //        return provider.GetName(field.Name);
+                //}
                 // 常量
                 case ConstantExpression constantExpression:
                     if (constantExpression.Value is null) return "NULL";

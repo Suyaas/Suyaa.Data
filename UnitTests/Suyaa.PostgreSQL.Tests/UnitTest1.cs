@@ -114,7 +114,9 @@ namespace SuyaaTest.PostgreSQL
             //using var dbContext = new TestDbContext(new DbConnectionDescriptor("default", DatabaseType.PostgreSQL, _connectionString));
             using var work = sy.Data.CreateWork(DatabaseType.PostgreSQL, _connectionString);
             var repository = sy.Data.CreateRepository<Test, string>(work);
-            repository.Update(new Test() { IsDeleted = false }, d => d.IsDeleted, d => DbValue.IsNull(d.IsDeleted));
+            var id = "111";
+            Test test = new Test() { Id = "223232" };
+            repository.Update(new Test() { IsDeleted = false }, d => d.IsDeleted, d => d.Id == test.Id);
             work.Commit();
             _output.WriteLine("OK");
         }
