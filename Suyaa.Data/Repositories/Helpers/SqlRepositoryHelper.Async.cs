@@ -151,5 +151,38 @@ namespace Suyaa.Data.Helpers
             });
             return data!;
         }
+        /// <summary>
+        /// 执行数据读取
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static async Task<bool> AnyAsync(this ISqlRepository repository, string sql, DbParameters parameters)
+        {
+            bool result = false;
+            // 执行读取
+            await repository.ExecuteReaderAsync(sql, parameters, reader =>
+            {
+                result = reader.Read();
+            });
+            return result;
+        }
+        /// <summary>
+        /// 执行数据读取
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public static async Task<bool> AnyAsync(this ISqlRepository repository, string sql)
+        {
+            bool result = false;
+            // 执行读取
+            await repository.ExecuteReaderAsync(sql, reader =>
+            {
+                result = reader.Read();
+            });
+            return result;
+        }
     }
 }

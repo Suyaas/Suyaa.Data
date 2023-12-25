@@ -35,7 +35,7 @@ namespace Suyaa.Data.Helpers
         public static void ExecuteNonQuery(this ISqlRepository repository, string sql, DbParameters parameters)
         {
             var work = repository.GetDbWork();
-            work.Commands.Add(new DbWorkCommand(sql,parameters));
+            work.Commands.Add(new DbWorkCommand(sql, parameters));
         }
 
         /// <summary>
@@ -201,6 +201,39 @@ namespace Suyaa.Data.Helpers
                 data = reader.GetData<T>();
             });
             return data;
+        }
+        /// <summary>
+        /// 执行数据读取
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static bool Any(this ISqlRepository repository, string sql, DbParameters parameters)
+        {
+            bool result = false;
+            // 执行读取
+            repository.ExecuteReader(sql, parameters, reader =>
+            {
+                result = reader.Read();
+            });
+            return result;
+        }
+        /// <summary>
+        /// 执行数据读取
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public static bool Any(this ISqlRepository repository, string sql)
+        {
+            bool result = false;
+            // 执行读取
+            repository.ExecuteReader(sql, reader =>
+            {
+                result = reader.Read();
+            });
+            return result;
         }
     }
 }

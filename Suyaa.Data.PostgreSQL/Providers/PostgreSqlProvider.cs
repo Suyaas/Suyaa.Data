@@ -1,4 +1,6 @@
 ﻿using Npgsql;
+using Suyaa.Data.Ensures.Dependency;
+using Suyaa.Data.Kernel.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using System.Data.Common;
 
@@ -28,6 +30,11 @@ namespace Suyaa.Data.PostgreSQL.Providers
         /// Sql数据仓库
         /// </summary>
         public IDbExecuteProvider ExecuteProvider => _executeProvider ??= new PostgreSqlExecuteProvider();
+
+        /// <summary>
+        /// 维护供应商
+        /// </summary>
+        public IDbMaintenanceProvider MaintenanceProvider => throw new System.NotImplementedException();
 
         /// <summary>
         /// 获取一个数据库连接

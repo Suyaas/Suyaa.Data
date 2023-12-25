@@ -15,14 +15,14 @@ namespace Suyaa.EFCore
     public class SqliteCreater : IDbCreater
     {
         // 数据库供应商
-        private readonly SqliteProvider _provider;
+        private readonly SqliteDatabaseProvider _provider;
 
         /// <summary>
         /// Sqlite创建器
         /// </summary>
         public SqliteCreater()
         {
-            _provider = new SqliteProvider();
+            _provider = new SqliteDatabaseProvider();
         }
 
         /// <summary>

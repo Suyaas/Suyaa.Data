@@ -7,12 +7,12 @@ using System.Text;
 namespace Suyaa.Data.Models
 {
     /// <summary>
-    /// 表描述
+    /// 字段描述
     /// </summary>
     public sealed class FieldModel : PropertyInfoModel
     {
         /// <summary>
-        /// 表描述
+        /// 字段描述
         /// </summary>
         public FieldModel(long index, PropertyInfo property) : base(property)
         {

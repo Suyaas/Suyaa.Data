@@ -1,6 +1,6 @@
 ﻿using Suyaa.Data.Dependency;
 using Suyaa.Data.Enums;
-using Suyaa.Data.Repositories.Dependency;
+using Suyaa.Data.Kernel.Dependency;
 using System;
 
 namespace Suyaa.Data.Helpers

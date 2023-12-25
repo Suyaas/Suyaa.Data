@@ -1,4 +1,6 @@
 ﻿using Oracle.ManagedDataAccess.Client;
+using Suyaa.Data.Ensures.Dependency;
+using Suyaa.Data.Kernel.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using System.Data.Common;
 
@@ -27,6 +29,11 @@ namespace Suyaa.Data.Oracle.Providers
         /// Sql仓库供应商
         /// </summary>
         public IDbExecuteProvider ExecuteProvider => _executeProvider ??= new OracleExecuteProvider();
+
+        /// <summary>
+        /// 维护供应商
+        /// </summary>
+        public IDbMaintenanceProvider MaintenanceProvider => throw new System.NotImplementedException();
 
         /// <summary>
         /// 获取数据库连接

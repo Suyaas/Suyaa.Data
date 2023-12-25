@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 using Suyaa.Data.Dependency;
+using Suyaa.Data.Ensures.Dependency;
+using Suyaa.Data.Repositories.Dependency;
 
-namespace Suyaa.Data.Repositories.Dependency
+namespace Suyaa.Data.Kernel.Dependency
 {
     /// <summary>
     /// 数据库供应商
@@ -23,6 +25,10 @@ namespace Suyaa.Data.Repositories.Dependency
         /// Sql脚本仓库供应商
         /// </summary>
         IDbExecuteProvider ExecuteProvider { get; }
+        /// <summary>
+        /// 维护供应商
+        /// </summary>
+        IDbMaintenanceProvider MaintenanceProvider { get; }
         /// <summary>
         /// 获取一个数据库连接
         /// </summary>
