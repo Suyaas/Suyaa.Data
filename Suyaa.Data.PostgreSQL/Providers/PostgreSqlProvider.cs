@@ -1,6 +1,6 @@
 ﻿using Npgsql;
-using Suyaa.Data.Ensures.Dependency;
 using Suyaa.Data.Kernel.Dependency;
+using Suyaa.Data.Maintenances.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using System.Data.Common;
 

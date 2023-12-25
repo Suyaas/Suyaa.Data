@@ -1,80 +1,81 @@
-﻿using Suyaa.Data.Models;
+﻿using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Suyaa.Data.Ensures.Dependency
+namespace Suyaa.Data.Maintenances.Dependency
 {
     /// <summary>
-    /// 数据库维护
+    /// 数据库维护供应商
     /// </summary>
-    public interface IDbMaintenance
+    public interface IDbMaintenanceProvider
     {
         /// <summary>
-        /// 检测Schema是否存在
+        /// 获取Schema检测脚本
         /// </summary>
         /// <param name="schema"></param>
         /// <returns></returns>
-        bool CheckSchemaExists(string schema);
+        string GetSchemaExistsScript(string schema);
         /// <summary>
-        /// 检测表是否存在
+        /// 获取检测表是否存在脚本
         /// </summary>
         /// <param name="table"></param>
         /// <param name="schema"></param>
         /// <returns></returns>
-        bool CheckTableExists(string schema, string table);
+        string GetTableExistsScript(string schema, string table);
         /// <summary>
-        /// 检测字段是否存在
-        /// </summary>
-        /// <param name="schema"></param>
-        /// <param name="table"></param>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        bool CheckFieldExists(string schema, string table, string field);
-        /// <summary>
-        /// 获取所有Schema
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<string> GetSchemas();
-        /// <summary>
-        /// 获取所有表
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<string> GetTables(string schema);
-        /// <summary>
-        /// 获取所有字段
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<string> GetFields(string schema, string table);
-        /// <summary>
-        /// 获取字段类型
+        /// 获取检测字段是否存在脚本
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="table"></param>
         /// <param name="field"></param>
         /// <returns></returns>
-        string GetFieldType(string schema, string table, string field);
+        string GetFieldExistsScript(string schema, string table, string field);
         /// <summary>
-        /// 创建Schema
+        /// 获取所有Schema脚本
+        /// </summary>
+        /// <returns></returns>
+        string GetSchemasScript();
+        /// <summary>
+        /// 获取所有表脚本
+        /// </summary>
+        /// <returns></returns>
+        string GetTablesScript(string schema);
+        /// <summary>
+        /// 获取所有字段脚本
+        /// </summary>
+        /// <returns></returns>
+        string GetFieldsScript(string schema, string table);
+        /// <summary>
+        /// 获取字段类型脚本
         /// </summary>
         /// <param name="schema"></param>
-        void CreateSchema(string schema);
+        /// <param name="table"></param>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        string GetFieldTypeScript(string schema, string table, string field);
         /// <summary>
-        /// 创建表
+        /// 获取创建Schema脚本
+        /// </summary>
+        /// <param name="schema"></param>
+        string GetSchemaCreateScript(string schema);
+        /// <summary>
+        /// 获取创建表脚本
         /// </summary>
         /// <param name="entity"></param>
-        void CreateTable(DbEntityModel entity);
+        string GetTableCreateScript(DbEntityModel entity);
         /// <summary>
-        /// 创建字段
+        /// 获取创建字段脚本
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="field"></param>
-        void CreateField(DbEntityModel entity, FieldModel field);
+        string GetFieldCreateScript(DbEntityModel entity, FieldModel field);
         /// <summary>
-        /// 更新字段类型
+        /// 获取更新字段类型脚本
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="field"></param>
-        void UpdateFieldType(DbEntityModel entity, FieldModel field);
+        string GetFieldTypeUpdateScript(DbEntityModel entity, FieldModel field);
     }
 }

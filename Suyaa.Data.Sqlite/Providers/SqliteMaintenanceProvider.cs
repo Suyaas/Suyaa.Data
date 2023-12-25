@@ -1,4 +1,4 @@
-﻿using Suyaa.Data.Ensures.Dependency;
+﻿using Suyaa.Data.Maintenances.Dependency;
 using Suyaa.Data.Models;
 using System;
 using System.Collections.Generic;

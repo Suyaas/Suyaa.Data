@@ -1,8 +1,9 @@
 ﻿using Suyaa.Data.DbWorks;
 using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.DbWorks.Helpers;
-using Suyaa.Data.Ensures.Dependency;
 using Suyaa.Data.Helpers;
+using Suyaa.Data.Maintenances.Dependency;
+using Suyaa.Data.Maintenances.Helpers;
 using Suyaa.Data.Models;
 using Suyaa.Data.Repositories;
 using Suyaa.Data.Repositories.Dependency;
@@ -11,7 +12,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Text;
 
-namespace Suyaa.Data.Ensures
+namespace Suyaa.Data.Maintenances
 {
     /// <summary>
     /// 数据库维护

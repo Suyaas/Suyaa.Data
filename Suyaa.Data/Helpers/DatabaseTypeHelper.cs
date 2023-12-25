@@ -59,11 +59,11 @@ namespace Suyaa.Data.Helpers
                     providerName = "Suyaa.Data.PostgreSQL.Providers.PostgreSqlProvider";
                     providerDllPath = "Suyaa.Data.PostgreSQL";
                     break;
-                //case DatabaseType.Sqlite:
-                //case DatabaseType.Sqlite3:
-                //    providerName = "Suyaa.Data.Sqlite.SqliteProvider";
-                //    providerDllPath = "Suyaa.Data.Sqlite";
-                //    break;
+                case DatabaseType.Sqlite:
+                case DatabaseType.Sqlite3:
+                    providerName = "Suyaa.Data.Sqlite.Providers.SqliteProvider";
+                    providerDllPath = "Suyaa.Data.Sqlite";
+                    break;
                 case DatabaseType.Oracle:
                     providerName = "Suyaa.Data.Oracle.Providers.OracleProvider";
                     providerDllPath = "Suyaa.Data.Oracle";

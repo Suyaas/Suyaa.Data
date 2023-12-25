@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 using Suyaa.Data.Dependency;
-using Suyaa.Data.Ensures.Dependency;
+using Suyaa.Data.Maintenances.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 
 namespace Suyaa.Data.Kernel.Dependency

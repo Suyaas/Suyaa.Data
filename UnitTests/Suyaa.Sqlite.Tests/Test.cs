@@ -12,6 +12,9 @@ using Suyaa.EFCore;
 using SqlServerDemo.Entities;
 using Suyaa.Data.Enums;
 using Suyaa.EFCore.Contexts;
+using Suyaa.Data.Expressions;
+using Suyaa.Data.Maintenances.Helpers;
+using Suyaa.Data.Sqlite.Helpers;
 
 namespace Suyaa.Sqlite.Tests
 {
@@ -25,20 +28,25 @@ namespace Suyaa.Sqlite.Tests
         }
 
         [Fact]
-        public void Create()
+        public void GetTables()
         {
             // 定义数据
             string connectionString = $"data source={sy.IO.GetExecutionPath("temp.db")}";
-            // 执行方法
-            using (DatabaseConnection conn = new DatabaseConnection(DatabaseType.Sqlite, connectionString))
+            // 创建作业
+            using var work = sy.Data.CreateWork(DatabaseType.Sqlite, connectionString);
+            // 创建数据库维护对象
+            var maintenance = work.GetMaintenance();
+            var tables = maintenance.GetTables();
+            //var repository = sy.Data.CreateRepository<Test, string>(work);
+            //repository.Delete(d => DbValue.IsNull(d.CreationTime));
+            //work.Commit();
+            foreach (var table in tables)
             {
-                conn.Open();
-                conn.TableCreated<Department>().Wait();
-                conn.TableCreated<People>().Wait();
+                _output.WriteLine(table);
             }
-            // 返回结果
-            _output.WriteLine("OK");
         }
+
+
 
         //[Fact]
         //public void Insert()
