@@ -182,7 +182,7 @@ namespace Suyaa.Data.Maintenances
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="field"></param>
-        public void CreateField(DbEntityModel entity, FieldModel field)
+        public void CreateField(DbEntityModel entity, ColumnModel field)
         {
             _dbWork ??= GetDbWork();
             _sqlRepository ??= _dbWork.GetSqlRepository();
@@ -195,7 +195,7 @@ namespace Suyaa.Data.Maintenances
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="field"></param>
-        public void UpdateFieldType(DbEntityModel entity, FieldModel field)
+        public void UpdateFieldType(DbEntityModel entity, ColumnModel field)
         {
             _dbWork ??= GetDbWork();
             _sqlRepository ??= _dbWork.GetSqlRepository();

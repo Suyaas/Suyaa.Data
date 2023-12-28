@@ -35,7 +35,7 @@ namespace Suyaa.Data.Helpers
         {
             var obj = sy.Assembly.Create(entity.Type);
             if (obj is null) throw new DbException("Type '{0}' instance fail.", entity.Type.FullName);
-            foreach (var field in entity.Fields)
+            foreach (var field in entity.Columns)
             {
                 if (!ordinals.ContainsKey(field.Name)) continue;
                 var idx = ordinals[field.Name];
@@ -57,7 +57,7 @@ namespace Suyaa.Data.Helpers
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 string name = reader.GetName(i).ToUpper();
-                foreach (var field in entity.Fields)
+                foreach (var field in entity.Columns)
                 {
                     if (!field.PropertyInfo.CanWrite) continue;
                     if (field.Name.ToUpper() == name) ordinals[field.Name] = i;

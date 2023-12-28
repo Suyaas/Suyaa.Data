@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using Suyaa.Data.Attributes;
 using Suyaa.Data.Enums;
+using Suyaa.Data.Models;
 
 namespace Suyaa.Data.Helpers
 {
@@ -36,7 +37,7 @@ namespace Suyaa.Data.Helpers
         public static bool IsNullable(this PropertyInfo pro)
         {
             if (pro.PropertyType.IsNullable()) return true;
-            return pro.GetCustomAttributes<RequiredAttribute>().Any();
+            return !pro.GetCustomAttributes<RequiredAttribute>().Any();
         }
 
         /// <summary>
@@ -113,6 +114,26 @@ namespace Suyaa.Data.Helpers
             if (columnAttr is null) return pro.Name;
             if (columnAttr.Name.IsNullOrWhiteSpace()) return pro.Name;
             return columnAttr.Name ?? string.Empty;
+        }
+
+        /// <summary>
+        /// 获取列属性名称
+        /// </summary>
+        /// <param name="pro"></param>
+        /// <returns></returns>
+        public static ColumnType? GetColumnType(this PropertyInfo pro)
+        {
+            #region 默认使用自定义Type
+            var columnTypeAttr = pro.GetCustomAttribute<ColumnTypeAttribute>();
+            if (columnTypeAttr != null)
+            {
+                return new ColumnType(columnTypeAttr.Type, columnTypeAttr.Size, columnTypeAttr.Float);
+            }
+            #endregion
+            var columnAttr = pro.GetCustomAttribute<ColumnAttribute>();
+            if (columnAttr is null) return null;
+            if (columnAttr.TypeName.IsNullOrWhiteSpace()) return null;
+            return columnAttr.TypeName.IsNullOrWhiteSpace() ? null : new ColumnType(columnAttr.TypeName!);
         }
 
         /// <summary>

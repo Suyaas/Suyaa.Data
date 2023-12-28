@@ -85,7 +85,7 @@ namespace Suyaa.EFCore.Providers
             var pros = source.Type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var prop in pros)
             {
-                var field = new FieldModel(_dbFactory.GetParamterIndex(), prop);
+                var field = new ColumnModel(_dbFactory.GetParamterIndex(), prop);
                 // 触发供应商事件
                 foreach (var convention in _conventions)
                 {

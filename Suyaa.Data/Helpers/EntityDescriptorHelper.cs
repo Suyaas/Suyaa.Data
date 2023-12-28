@@ -25,7 +25,7 @@ namespace Suyaa.Data.Helpers
         {
             // 生成参数
             DbParameters parameters = new DbParameters();
-            foreach (var field in descriptor.Fields)
+            foreach (var field in descriptor.Columns)
             {
                 parameters.Add("V_" + field.Index, field.PropertyInfo.GetValue(entity));
             }
@@ -33,7 +33,7 @@ namespace Suyaa.Data.Helpers
         }
 
         // 获取字段名称
-        private static string ConvertMemberToString(MemberInfo member, IEnumerable<FieldModel> fields)
+        private static string ConvertMemberToString(MemberInfo member, IEnumerable<ColumnModel> fields)
         {
             var pro = fields.Where(d => d.PropertyInfo.Name == member.Name).FirstOrDefault();
             if (pro is null) throw new NotExistException(member.Name);
@@ -48,7 +48,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="selector"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static List<FieldModel> GetEntityUpdateFields<TEntity>(this DbEntityModel entity, Expression<Func<TEntity, object>> selector)
+        public static List<ColumnModel> GetEntityUpdateFields<TEntity>(this DbEntityModel entity, Expression<Func<TEntity, object>> selector)
         {
             List<string> columns = new List<string>();
             var body = selector.Body;
@@ -56,19 +56,19 @@ namespace Suyaa.Data.Helpers
             {
                 case NewExpression expression: // new语句
                     foreach (var member in expression.Members)
-                        columns.Add(ConvertMemberToString(member, entity.Fields));
+                        columns.Add(ConvertMemberToString(member, entity.Columns));
                     break;
                 case UnaryExpression expression: // 标准语句
                     var operand = (MemberExpression)expression.Operand;
-                    columns.Add(ConvertMemberToString(operand.Member, entity.Fields));
+                    columns.Add(ConvertMemberToString(operand.Member, entity.Columns));
                     break;
                 case MemberExpression expression: // 变量语句
-                    columns.Add(ConvertMemberToString(expression.Member, entity.Fields));
+                    columns.Add(ConvertMemberToString(expression.Member, entity.Columns));
                     break;
                 default:
                     throw new ExpressionNodeNotSupportedException(body.NodeType);
             }
-            return entity.Fields.Where(d => columns.Contains(d.Name)).ToList();
+            return entity.Columns.Where(d => columns.Contains(d.Name)).ToList();
         }
     }
 }

@@ -32,13 +32,13 @@ namespace Suyaa.Data.Helpers
         {
             StringBuilder columns = new StringBuilder();
             StringBuilder values = new StringBuilder();
-            foreach (var field in entity.Fields)
+            foreach (var column in entity.Columns)
             {
-                if (field.IsAutoIncrement) continue;
+                if (column.IsAutoIncrement) continue;
                 if (columns.Length > 0) columns.Append(',');
-                columns.Append(provider.GetName(field.Name));
+                columns.Append(provider.GetName(column.Name));
                 if (values.Length > 0) values.Append(',');
-                values.Append(provider.GetVariable("V_" + field.Index));
+                values.Append(provider.GetVariable("V_" + column.Index));
             }
             // 拼接sql脚本
             StringBuilder sql = new StringBuilder();
@@ -93,7 +93,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="fields"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static string GetEntityUpdate<TEntity>(this IDbScriptProvider provider, DbEntityModel entity, IEnumerable<FieldModel> fields, Expression<Func<TEntity, bool>> predicate)
+        public static string GetEntityUpdate<TEntity>(this IDbScriptProvider provider, DbEntityModel entity, IEnumerable<ColumnModel> fields, Expression<Func<TEntity, bool>> predicate)
         {
             StringBuilder columns = new StringBuilder();
             foreach (var field in fields)
@@ -366,9 +366,9 @@ namespace Suyaa.Data.Helpers
                     if (memberExpression.Expression is ParameterExpression parameterExpression)
                     {
                         // 查询实例属性
-                        var field = entity.Fields.Where(d => d.PropertyInfo.Name == memberExpression.Member.Name).FirstOrDefault();
-                        if (field is null) throw new NotExistException(memberExpression.Member.Name);
-                        return provider.GetName(field.Name);
+                        var column = entity.Columns.Where(d => d.PropertyInfo.Name == memberExpression.Member.Name).FirstOrDefault();
+                        if (column is null) throw new NotExistException(memberExpression.Member.Name);
+                        return provider.GetName(column.Name);
                     }
                     // 变量名称
                     var memberName = memberExpression.Member.Name;

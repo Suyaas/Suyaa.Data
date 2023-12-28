@@ -35,7 +35,7 @@ namespace Suyaa.Data.Models
         /// <summary>
         /// 字段集合
         /// </summary>
-        public IEnumerable<FieldModel> Fields => base.Properties.Where(d => d is FieldModel).Select(d => (FieldModel)d);
+        public IEnumerable<ColumnModel> Columns => base.Properties.Where(d => d is ColumnModel).Select(d => (ColumnModel)d);
 
         /// <summary>
         /// 获取字段名称
@@ -44,14 +44,14 @@ namespace Suyaa.Data.Models
         /// <returns></returns>
         public string GetFieldName(string propertyName)
         {
-            return base.Properties.Where(d => d is FieldModel && d.PropertyInfo.Name == propertyName).Select(d => ((FieldModel)d).Name).FirstOrDefault();
+            return base.Properties.Where(d => d is ColumnModel && d.PropertyInfo.Name == propertyName).Select(d => ((ColumnModel)d).Name).FirstOrDefault();
         }
 
         /// <summary>
         /// 添加字段描述
         /// </summary>
         /// <param name="field"></param>
-        public void AddField(FieldModel field)
+        public void AddField(ColumnModel field)
         {
             base.AddProperty(field);
         }

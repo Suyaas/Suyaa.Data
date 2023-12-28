@@ -9,17 +9,20 @@ namespace Suyaa.Data.Models
     /// <summary>
     /// 字段描述
     /// </summary>
-    public sealed class FieldModel : PropertyInfoModel
+    public sealed class ColumnModel : PropertyInfoModel
     {
         /// <summary>
         /// 字段描述
         /// </summary>
-        public FieldModel(long index, PropertyInfo property) : base(property)
+        public ColumnModel(long index, PropertyInfo property) : base(property)
         {
             Index = index;
             Name = property.GetColumnName();
             IsAutoIncrement = property.IsAutoIncrement();
             Description = property.GetDescription();
+            ColumnType = property.GetColumnType();
+            IsKey = property.IsKey();
+            IsNullable = property.IsNullable();
         }
 
         /// <summary>
@@ -33,6 +36,16 @@ namespace Suyaa.Data.Models
         public long Index { get; }
 
         /// <summary>
+        /// 是否为主键
+        /// </summary>
+        public bool IsKey { get; }
+
+        /// <summary>
+        /// 是否可为空
+        /// </summary>
+        public bool IsNullable { get; }
+
+        /// <summary>
         /// 是否为自增字段
         /// </summary>
         public bool IsAutoIncrement { get; }
@@ -41,6 +54,11 @@ namespace Suyaa.Data.Models
         /// 描述
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public ColumnType? ColumnType { get; }
 
     }
 }

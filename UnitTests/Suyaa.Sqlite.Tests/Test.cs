@@ -15,6 +15,13 @@ using Suyaa.EFCore.Contexts;
 using Suyaa.Data.Expressions;
 using Suyaa.Data.Maintenances.Helpers;
 using Suyaa.Data.Sqlite.Helpers;
+using Suyaa.Data.Factories;
+using Suyaa.Data.Dependency;
+using SuyaaTest.Sqlite.Entities;
+using Suyaa.Data.Helpers;
+using Suyaa.Data.Providers;
+using Suyaa.Data.Repositories.Dependency;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Suyaa.Sqlite.Tests
 {
@@ -37,16 +44,40 @@ namespace Suyaa.Sqlite.Tests
             // 创建数据库维护对象
             var maintenance = work.GetMaintenance();
             var tables = maintenance.GetTables();
-            //var repository = sy.Data.CreateRepository<Test, string>(work);
-            //repository.Delete(d => DbValue.IsNull(d.CreationTime));
-            //work.Commit();
+            // 输出所有表名
             foreach (var table in tables)
             {
                 _output.WriteLine(table);
             }
         }
 
-
+        [Fact]
+        public void CreateTable()
+        {
+            // 定义数据
+            string connectionString = $"data source={sy.IO.GetExecutionPath("temp.db")}";
+            // 创建作业
+            using var work = sy.Data.CreateWork(DatabaseType.Sqlite, connectionString);
+            // 创建数据库维护对象
+            var maintenance = work.GetMaintenance();
+            // 创建数据库工厂
+            var dbFactory = new DbFactory();
+            // 实体建模约定器
+            var entityModelConventions = Enumerable.Empty<IEntityModelConvention>();
+            // 创建工厂
+            var entityModelFactory = new EntityModelFactory(new List<IEntityModelProvider>() {
+                new EntityModelProvider(dbFactory, entityModelConventions),
+                new DbEntityModelProvider(dbFactory, entityModelConventions),
+            });
+            // 获取实体建模
+            var entity = entityModelFactory.GetDbEntity<VersionInfo>();
+            if (!maintenance.CheckTableExists(entity.Name))
+            {
+                maintenance.CreateTable(entity);
+                work.Commit();
+            }
+            _output.WriteLine("OK");
+        }
 
         //[Fact]
         //public void Insert()

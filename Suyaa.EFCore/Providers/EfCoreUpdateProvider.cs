@@ -51,7 +51,7 @@ namespace Suyaa.EFCore.Providers
             // 获取DbSet建模
             var dbSetModel = _entityModelFactory.GetDbSet<TEntity>(dbContext);
             var datas = dbSet.Where(predicate).ToList();
-            foreach (var field in dbSetModel.Fields)
+            foreach (var field in dbSetModel.Columns)
             {
                 foreach (var data in datas)
                 {
@@ -104,7 +104,7 @@ namespace Suyaa.EFCore.Providers
             // 获取DbSet建模
             var dbSetModel = _entityModelFactory.GetDbSet<TEntity>(dbContext);
             var datas = await dbSet.Where(predicate).ToListAsync();
-            foreach (var field in dbSetModel.Fields)
+            foreach (var field in dbSetModel.Columns)
             {
                 foreach (var data in datas)
                 {

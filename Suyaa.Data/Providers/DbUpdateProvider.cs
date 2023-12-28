@@ -47,7 +47,7 @@ namespace Suyaa.Data.Providers
             // 获取数据库供应商
             var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.Fields, predicate);
+            var sql = dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.Columns, predicate);
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本
@@ -85,7 +85,7 @@ namespace Suyaa.Data.Providers
             // 获取数据库供应商
             var dbProvider = work.ConnectionDescriptor.DatabaseType.GetDbProvider();
             // 生成sql
-            var sql = dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.Fields, predicate);
+            var sql = dbProvider.ScriptProvider.GetEntityUpdate(_entity, _entity.Columns, predicate);
             // 生成参数
             var parameters = _entity.GetParameters(entity);
             // 执行脚本

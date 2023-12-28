@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Suyaa" Version="1.7.2312.35" />
+		<PackageReference Include="Suyaa" Version="1.8.2312.36" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 	</ItemGroup>
 

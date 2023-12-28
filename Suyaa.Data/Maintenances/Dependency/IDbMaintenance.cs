@@ -69,12 +69,12 @@ namespace Suyaa.Data.Maintenances.Dependency
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="field"></param>
-        void CreateField(DbEntityModel entity, FieldModel field);
+        void CreateField(DbEntityModel entity, ColumnModel field);
         /// <summary>
         /// 更新字段类型
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="field"></param>
-        void UpdateFieldType(DbEntityModel entity, FieldModel field);
+        void UpdateFieldType(DbEntityModel entity, ColumnModel field);
     }
 }

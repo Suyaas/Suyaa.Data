@@ -70,12 +70,12 @@ namespace Suyaa.Data.Maintenances.Dependency
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="field"></param>
-        string GetFieldCreateScript(DbEntityModel entity, FieldModel field);
+        string GetFieldCreateScript(DbEntityModel entity, ColumnModel field);
         /// <summary>
         /// 获取更新字段类型脚本
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="field"></param>
-        string GetFieldTypeUpdateScript(DbEntityModel entity, FieldModel field);
+        string GetFieldTypeUpdateScript(DbEntityModel entity, ColumnModel field);
     }
 }

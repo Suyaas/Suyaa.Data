@@ -92,7 +92,7 @@ namespace Suyaa.EFCore.Contexts
                     foreach (var property in properties)
                     {
                         if (property.PropertyInfo is null) continue;
-                        var fieldModel = new FieldModel(0, property.PropertyInfo);
+                        var fieldModel = new ColumnModel(0, property.PropertyInfo);
                         dbEntityModel.AddField(fieldModel);
                         foreach (var convention in _conventions)
                         {

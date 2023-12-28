@@ -23,9 +23,9 @@ namespace Suyaa.Data.Sqlite.Helpers
             var dbColumnTypeAttr = pro.GetCustomAttribute<ColumnTypeAttribute>();
             if (dbColumnTypeAttr != null)
             {
-                switch (dbColumnTypeAttr.ColumnType)
+                switch (dbColumnTypeAttr.Type)
                 {
-                    case ColumnValueType.Unknow: return dbColumnTypeAttr.Name;
+                    //case ColumnValueType.Unknow: return dbColumnTypeAttr;
                     case ColumnValueType.Text:
                     case ColumnValueType.Varchar:
                     case ColumnValueType.Char:

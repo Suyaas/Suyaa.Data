@@ -61,7 +61,7 @@ namespace SuyaaTest.PostgreSQL.ModelConventions
 
         public void OnPropertyModeling(EntityModel entity, PropertyInfoModel property)
         {
-            if (property is FieldModel fieldModel)
+            if (property is ColumnModel fieldModel)
             {
                 var columnAttr = property.MetaDatas.Where(d => d is ColumnAttribute).Select(d => (ColumnAttribute)d).FirstOrDefault();
                 if (columnAttr is null)
