@@ -12,7 +12,7 @@ namespace SuyaaTest.Sqlite.Entities
     /// 版本信息
     /// </summary>
     [Table("version_info")]
-    public class VersionInfo : UUIDKeyEntity
+    public class VersionInfo : CommonEntity
     {
         /// <summary>
         /// 名称
@@ -24,5 +24,10 @@ namespace SuyaaTest.Sqlite.Entities
         /// </summary>
         [Column("version")]
         public string Version { get; set; } = string.Empty;
+        /// <summary>
+        /// 描述
+        /// </summary>
+        [Column("description")]
+        public string Description { get; set; } = string.Empty;
     }
 }

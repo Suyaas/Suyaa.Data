@@ -1,13 +1,8 @@
-﻿using Suyaa.Data.Dependency;
-using Suyaa.Data.Models;
+﻿using Suyaa.Data.Models.Dependency;
 using Suyaa.Data.Repositories.Dependency;
-using Suyaa.Data.Sources;
 using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.Models;
 using Suyaa.EFCore.Sources;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Suyaa.Data.Helpers
 {

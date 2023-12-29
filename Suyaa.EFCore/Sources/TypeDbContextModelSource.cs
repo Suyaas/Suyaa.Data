@@ -1,4 +1,4 @@
-﻿using Suyaa.Data.Dependency;
+﻿using Suyaa.Data.Models.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.Dependency;

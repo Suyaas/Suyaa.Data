@@ -1,6 +1,6 @@
 using Suyaa.Data.DbWorks.Helpers;
-using Suyaa.Data.Enums;
 using Suyaa.Data.Helpers;
+using Suyaa.Data.Kernel.Enums;
 using Suyaa.Data.Maintenances.Helpers;
 using Suyaa.Data.Repositories;
 using SuyaaTest.Oracle.Entities;
@@ -74,6 +74,54 @@ namespace SuyaaTest.Oracle
             var productFamily = repo.GetData<ProductFamily>("SELECT * FROM PRODUCTFAMILY PF WHERE PF.PRODUCTFAMILYNAME = :P_1", keys);
             // 返回结果
             _output.WriteLine("Name:" + productFamily?.ProductFamilyName);
+        }
+
+        /// <summary>
+        /// 获取所有Schema
+        /// </summary>
+        [Fact]
+        public void GetSchemas()
+        {
+            // 执行方法
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
+            var maintenance = work.GetMaintenance();
+            var schemas = maintenance.GetSchemas();
+            foreach(var schema in schemas)
+            {
+                _output.WriteLine(schema);
+            }
+        }
+
+        /// <summary>
+        /// 获取所有表
+        /// </summary>
+        [Fact]
+        public void GetTables()
+        {
+            // 执行方法
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
+            var maintenance = work.GetMaintenance();
+            var tables = maintenance.GetTables("MESDB");
+            foreach (var table in tables)
+            {
+                _output.WriteLine(table);
+            }
+        }
+
+        /// <summary>
+        /// 获取所有表
+        /// </summary>
+        [Fact]
+        public void GetColumns()
+        {
+            // 执行方法
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
+            var maintenance = work.GetMaintenance();
+            var columns = maintenance.GetColumns("MESDB","UOM");
+            foreach (var column in columns)
+            {
+                _output.WriteLine(column);
+            }
         }
     }
 }

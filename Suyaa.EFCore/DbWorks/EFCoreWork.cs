@@ -2,8 +2,9 @@
 using Suyaa.Data;
 using Suyaa.Data.DbWorks;
 using Suyaa.Data.DbWorks.Dependency;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.Descriptors.Dependency;
 using Suyaa.Data.Helpers;
+using Suyaa.Data.Models.Dependency;
 using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Helpers;

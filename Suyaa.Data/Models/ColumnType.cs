@@ -1,4 +1,4 @@
-﻿using Suyaa.Data.Enums;
+﻿using Suyaa.Data.Kernel.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,13 +16,13 @@ namespace Suyaa.Data.Models
         /// </summary>
         public ColumnValueType Type { get; set; }
         /// <summary>
-        /// 占用大小
+        /// 长度
         /// </summary>
-        public int Size { get; set; }
+        public int Length { get; set; }
         /// <summary>
         /// 精度
         /// </summary>
-        public int Float { get; set; }
+        public int Precision { get; set; }
         /// <summary>
         /// 自定义名称
         /// </summary>
@@ -34,8 +34,8 @@ namespace Suyaa.Data.Models
         public ColumnType(string customName)
         {
             this.Type = ColumnValueType.Unknow;
-            this.Size = 0;
-            this.Float = 0;
+            this.Length = 0;
+            this.Precision = 0;
             CustomName = customName;
         }
 
@@ -43,13 +43,13 @@ namespace Suyaa.Data.Models
         /// 列类型
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="size"></param>
-        /// <param name="flt"></param>
-        public ColumnType(ColumnValueType type, int size, int flt)
+        /// <param name="length"></param>
+        /// <param name="precision"></param>
+        public ColumnType(ColumnValueType type, int length, int precision)
         {
             this.Type = type;
-            this.Size = size;
-            this.Float = flt;
+            this.Length = length;
+            this.Precision = precision;
             CustomName = string.Empty;
         }
 
@@ -57,12 +57,12 @@ namespace Suyaa.Data.Models
         /// 列类型
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="size"></param>
-        public ColumnType(ColumnValueType type, int size)
+        /// <param name="length"></param>
+        public ColumnType(ColumnValueType type, int length)
         {
             this.Type = type;
-            this.Size = size;
-            this.Float = 0;
+            this.Length = length;
+            this.Precision = 0;
             CustomName = string.Empty;
         }
 
@@ -73,8 +73,8 @@ namespace Suyaa.Data.Models
         public ColumnType(ColumnValueType type)
         {
             this.Type = type;
-            this.Size = 0;
-            this.Float = 0;
+            this.Length = 0;
+            this.Precision = 0;
             CustomName = string.Empty;
         }
     }

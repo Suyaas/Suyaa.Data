@@ -1,6 +1,6 @@
-﻿using Suyaa.Data.Attributes;
-using Suyaa.Data.Entities;
-using Suyaa.Data.Enums;
+﻿using Suyaa.Data.Entities;
+using Suyaa.Data.Kernel.Attributes;
+using Suyaa.Data.Kernel.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

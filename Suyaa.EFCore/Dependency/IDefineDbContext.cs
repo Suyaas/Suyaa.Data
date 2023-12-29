@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.Descriptors.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,16 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
 using Suyaa.Data.DbWorks;
-using Suyaa.Data.Dependency;
-using Suyaa.Data.Enums;
 using Suyaa.Data.Expressions;
-using Suyaa.Data.Factories;
-using Suyaa.Data.Helpers;
-using Suyaa.Data.Providers;
+using Suyaa.Data.Kernel.Enums;
 using Suyaa.Data.Repositories;
 using SuyaaTest.PostgreSQL.Entities;
 using SuyaaTest.PostgreSQL.ModelConventions;
-using System.Configuration;
 using Xunit.Abstractions;
 
 namespace SuyaaTest.PostgreSQL

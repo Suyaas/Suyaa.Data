@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using Suyaa.Data.Enums;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.Descriptors.Dependency;
+using Suyaa.Data.Kernel.Enums;
 
 namespace Suyaa.Data
 {

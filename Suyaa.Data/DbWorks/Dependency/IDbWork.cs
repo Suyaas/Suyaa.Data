@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading.Tasks;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.Descriptors.Dependency;
+using Suyaa.Data.Repositories.Dependency;
 
 namespace Suyaa.Data.DbWorks.Dependency
 {

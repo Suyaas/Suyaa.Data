@@ -1,9 +1,4 @@
-﻿using Suyaa.Data.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Suyaa.Data
+﻿namespace Suyaa.Data
 {
     /// <summary>
     /// 异常 - 数据库供应商未找到

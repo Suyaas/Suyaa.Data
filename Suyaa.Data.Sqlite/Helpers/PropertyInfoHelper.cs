@@ -2,8 +2,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
-using Suyaa.Data.Attributes;
-using Suyaa.Data.Enums;
+using Suyaa.Data.Kernel.Attributes;
+using Suyaa.Data.Kernel.Enums;
 
 namespace Suyaa.Data.Sqlite.Helpers
 {

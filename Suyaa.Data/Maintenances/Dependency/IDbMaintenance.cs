@@ -28,9 +28,9 @@ namespace Suyaa.Data.Maintenances.Dependency
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="table"></param>
-        /// <param name="field"></param>
+        /// <param name="column"></param>
         /// <returns></returns>
-        bool CheckFieldExists(string schema, string table, string field);
+        bool CheckColumnExists(string schema, string table, string column);
         /// <summary>
         /// 获取所有Schema
         /// </summary>
@@ -45,15 +45,15 @@ namespace Suyaa.Data.Maintenances.Dependency
         /// 获取所有字段
         /// </summary>
         /// <returns></returns>
-        IEnumerable<string> GetFields(string schema, string table);
+        IEnumerable<string> GetColumns(string schema, string table);
         /// <summary>
         /// 获取字段类型
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="table"></param>
-        /// <param name="field"></param>
+        /// <param name="column"></param>
         /// <returns></returns>
-        string GetFieldType(string schema, string table, string field);
+        string GetColumnType(string schema, string table, string column);
         /// <summary>
         /// 创建Schema
         /// </summary>
@@ -68,13 +68,13 @@ namespace Suyaa.Data.Maintenances.Dependency
         /// 创建字段
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="field"></param>
-        void CreateField(DbEntityModel entity, ColumnModel field);
+        /// <param name="column"></param>
+        void CreateColumn(DbEntityModel entity, ColumnModel column);
         /// <summary>
         /// 更新字段类型
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="field"></param>
-        void UpdateFieldType(DbEntityModel entity, ColumnModel field);
+        /// <param name="column"></param>
+        void UpdateColumnType(DbEntityModel entity, ColumnModel column);
     }
 }

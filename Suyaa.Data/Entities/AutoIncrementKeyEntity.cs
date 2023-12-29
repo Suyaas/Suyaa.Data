@@ -1,15 +1,4 @@
-﻿using Suyaa.Data.Attributes;
-using Suyaa.Data.Dependency;
-using Suyaa.Data.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Suyaa.Data.Entities
 {

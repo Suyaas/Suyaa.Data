@@ -1,22 +1,18 @@
-﻿using Suyaa;
-using Suyaa.Data;
-using Suyaa.Data.DbWorks;
+﻿using Suyaa.Data.DbWorks;
 using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.DbWorks.Helpers;
-using Suyaa.Data.Dependency;
-using Suyaa.Data.Enums;
-using Suyaa.Data.Factories;
-using Suyaa.Data.Maintenances.Helpers;
-using Suyaa.Data.Providers;
+using Suyaa.Data.Descriptors;
+using Suyaa.Data.Descriptors.Dependency;
+using Suyaa.Data.Descriptors.Providers;
+using Suyaa.Data.Kernel;
+using Suyaa.Data.Models;
+using Suyaa.Data.Models.Dependency;
+using Suyaa.Data.Models.Providers;
 using Suyaa.Data.Repositories.Dependency;
 using Suyaa.EFCore.DbWorks;
 using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Factories;
-using Suyaa.EFCore.Helpers;
 using Suyaa.EFCore.Providers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace sy
 {

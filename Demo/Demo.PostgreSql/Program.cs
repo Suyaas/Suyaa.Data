@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Demo.PostgreSql.Entities;
-using Suyaa.Data.Enums;
+using Suyaa.Data.Kernel.Enums;
 
 Console.WriteLine("Hello, World!");
 

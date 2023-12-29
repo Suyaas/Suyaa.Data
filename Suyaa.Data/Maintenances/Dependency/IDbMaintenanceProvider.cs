@@ -12,70 +12,78 @@ namespace Suyaa.Data.Maintenances.Dependency
     public interface IDbMaintenanceProvider
     {
         /// <summary>
-        /// 获取Schema检测脚本
+        /// 检测Schema是否存在
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="schema"></param>
         /// <returns></returns>
-        string GetSchemaExistsScript(string schema);
+        bool CheckSchemaExists(IDbWork work, string schema);
         /// <summary>
-        /// 获取检测表是否存在脚本
+        /// 检测表是否存在
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="table"></param>
         /// <param name="schema"></param>
         /// <returns></returns>
-        string GetTableExistsScript(string schema, string table);
+        bool CheckTableExists(IDbWork work, string schema, string table);
         /// <summary>
-        /// 获取检测字段是否存在脚本
+        /// 检测字段是否存在
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="schema"></param>
         /// <param name="table"></param>
-        /// <param name="field"></param>
+        /// <param name="column"></param>
         /// <returns></returns>
-        string GetFieldExistsScript(string schema, string table, string field);
+        bool CheckColumnExists(IDbWork work, string schema, string table, string column);
         /// <summary>
-        /// 获取所有Schema脚本
+        /// 获取所有Schema
         /// </summary>
         /// <returns></returns>
-        string GetSchemasScript();
+        IEnumerable<string> GetSchemas(IDbWork work);
         /// <summary>
-        /// 获取所有表脚本
+        /// 获取所有表
         /// </summary>
         /// <returns></returns>
-        string GetTablesScript(string schema);
+        IEnumerable<string> GetTables(IDbWork work, string schema);
         /// <summary>
-        /// 获取所有字段脚本
+        /// 获取所有字段
         /// </summary>
         /// <returns></returns>
-        string GetFieldsScript(string schema, string table);
+        IEnumerable<string> GetColumns(IDbWork work, string schema, string table);
         /// <summary>
-        /// 获取字段类型脚本
+        /// 获取字段类型
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="schema"></param>
         /// <param name="table"></param>
-        /// <param name="field"></param>
+        /// <param name="column"></param>
         /// <returns></returns>
-        string GetFieldTypeScript(string schema, string table, string field);
+        string GetColumnType(IDbWork work, string schema, string table, string column);
         /// <summary>
-        /// 获取创建Schema脚本
+        /// 创建Schema
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="schema"></param>
-        string GetSchemaCreateScript(string schema);
+        void CreateSchema(IDbWork work, string schema);
         /// <summary>
-        /// 获取创建表脚本
+        /// 创建表
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
-        string GetTableCreateScript(DbEntityModel entity);
+        void CreateTable(IDbWork work, DbEntityModel entity);
         /// <summary>
-        /// 获取创建字段脚本
+        /// 创建字段
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
-        /// <param name="field"></param>
-        string GetFieldCreateScript(DbEntityModel entity, ColumnModel field);
+        /// <param name="column"></param>
+        void CreateColumn(IDbWork work, DbEntityModel entity, ColumnModel column);
         /// <summary>
-        /// 获取更新字段类型脚本
+        /// 更新字段类型
         /// </summary>
+        /// <param name="work"></param>
         /// <param name="entity"></param>
-        /// <param name="field"></param>
-        string GetFieldTypeUpdateScript(DbEntityModel entity, ColumnModel field);
+        /// <param name="column"></param>
+        void UpdateColumnType(IDbWork work, DbEntityModel entity, ColumnModel column);
     }
 }

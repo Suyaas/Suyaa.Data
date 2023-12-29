@@ -1,16 +1,9 @@
-﻿using Suyaa.Data;
-using Suyaa.Data.DbWorks.Dependency;
-using Suyaa.Data.Dependency;
-using Suyaa.Data.Enums;
-using Suyaa.Data.Helpers;
-using Suyaa.Data.Providers;
+﻿using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Descriptors.Dependency;
+using Suyaa.Data.Models.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using Suyaa.EFCore.DbWorks;
 using Suyaa.EFCore.Dependency;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
 
 namespace Suyaa.EFCore.Providers
 {

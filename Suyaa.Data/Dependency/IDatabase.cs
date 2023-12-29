@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Suyaa.Data.Enums;
+using Suyaa.Data.Kernel.Enums;
 
 namespace Suyaa.Data.Dependency
 {

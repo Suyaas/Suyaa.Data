@@ -1,27 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using Suyaa.Data;
-using Suyaa.Sqlite.Tests.Entities;
 using Xunit.Abstractions;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using Suyaa.EFCore.Dependency;
-using Suyaa.Data.Queries;
-using Suyaa.Data.Sqlite;
-using Suyaa.EFCore;
-using SqlServerDemo.Entities;
-using Suyaa.Data.Enums;
-using Suyaa.EFCore.Contexts;
-using Suyaa.Data.Expressions;
 using Suyaa.Data.Maintenances.Helpers;
 using Suyaa.Data.Sqlite.Helpers;
-using Suyaa.Data.Factories;
-using Suyaa.Data.Dependency;
 using SuyaaTest.Sqlite.Entities;
 using Suyaa.Data.Helpers;
-using Suyaa.Data.Providers;
-using Suyaa.Data.Repositories.Dependency;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Suyaa.Data.Models.Dependency;
+using Suyaa.Data.Kernel;
+using Suyaa.Data.Models;
+using Suyaa.Data.Kernel.Enums;
+using Suyaa.Data.Models.Providers;
 
 namespace Suyaa.Sqlite.Tests
 {
@@ -52,6 +39,35 @@ namespace Suyaa.Sqlite.Tests
         }
 
         [Fact]
+        public void GetTableColumns()
+        {
+            // 定义数据
+            string connectionString = $"data source={sy.IO.GetExecutionPath("temp.db")}";
+            // 创建作业
+            using var work = sy.Data.CreateWork(DatabaseType.Sqlite, connectionString);
+            // 创建数据库维护对象
+            var maintenance = work.GetMaintenance();
+            // 创建数据库工厂
+            var dbFactory = new DbFactory();
+            // 实体建模约定器
+            var entityModelConventions = Enumerable.Empty<IEntityModelConvention>();
+            // 创建工厂
+            var entityModelFactory = new EntityModelFactory(new List<IEntityModelProvider>() {
+                new EntityModelProvider(dbFactory, entityModelConventions),
+                new DbEntityModelProvider(dbFactory, entityModelConventions),
+            });
+            // 获取实体建模
+            var entity = entityModelFactory.GetDbEntity<VersionInfo>();
+            // 获取所有字段
+            var columns = maintenance.GetColumns(entity.Name);
+            // 输出所有表名
+            foreach (var column in columns)
+            {
+                _output.WriteLine(column);
+            }
+        }
+
+        [Fact]
         public void CreateTable()
         {
             // 定义数据
@@ -74,6 +90,40 @@ namespace Suyaa.Sqlite.Tests
             if (!maintenance.CheckTableExists(entity.Name))
             {
                 maintenance.CreateTable(entity);
+                work.Commit();
+            }
+            _output.WriteLine("OK");
+        }
+
+        [Fact]
+        public void CreateTableColumn()
+        {
+            // 定义数据
+            string connectionString = $"data source={sy.IO.GetExecutionPath("temp.db")}";
+            // 创建作业
+            using var work = sy.Data.CreateWork(DatabaseType.Sqlite, connectionString);
+            // 创建数据库维护对象
+            var maintenance = work.GetMaintenance();
+            // 创建数据库工厂
+            var dbFactory = new DbFactory();
+            // 实体建模约定器
+            var entityModelConventions = Enumerable.Empty<IEntityModelConvention>();
+            // 创建工厂
+            var entityModelFactory = new EntityModelFactory(new List<IEntityModelProvider>() {
+                new EntityModelProvider(dbFactory, entityModelConventions),
+                new DbEntityModelProvider(dbFactory, entityModelConventions),
+            });
+            // 获取实体建模
+            var entity = entityModelFactory.GetDbEntity<VersionInfo>();
+            if (maintenance.CheckTableExists(entity.Name))
+            {
+                foreach (var column in entity.Columns)
+                {
+                    if (!maintenance.CheckColumnExists(entity.Name, column.Name))
+                    {
+                        maintenance.CreateColumn(entity, column);
+                    }
+                }
                 work.Commit();
             }
             _output.WriteLine("OK");

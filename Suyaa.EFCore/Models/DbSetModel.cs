@@ -1,5 +1,5 @@
 ﻿using Suyaa.Data;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.Descriptors.Dependency;
 using Suyaa.Data.Models;
 using Suyaa.EFCore.Contexts;
 using Suyaa.EFCore.Dependency;

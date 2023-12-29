@@ -1,16 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Suyaa.Data.Dependency;
-using Suyaa.Data.Factories;
 using Suyaa.Data.Models;
+using Suyaa.Data.Models.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Models;
 using Suyaa.EFCore.Sources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Suyaa.EFCore.Providers
 {

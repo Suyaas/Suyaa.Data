@@ -1,6 +1,4 @@
-﻿using Suyaa.Data.Attributes;
-using Suyaa.Data.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Suyaa.Data.Entities
 {

@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
 using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Models;
 
 namespace Suyaa.Data.Repositories.Dependency
 {

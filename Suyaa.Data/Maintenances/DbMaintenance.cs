@@ -7,8 +7,10 @@ using Suyaa.Data.Maintenances.Helpers;
 using Suyaa.Data.Models;
 using Suyaa.Data.Repositories;
 using Suyaa.Data.Repositories.Dependency;
+using Suyaa.Usables;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Reflection.Emit;
 using System.Text;
 
@@ -21,7 +23,6 @@ namespace Suyaa.Data.Maintenances
     {
         private readonly IDbWorkManager _dbWorkManager;
         private IDbWork? _dbWork;
-        private ISqlRepository? _sqlRepository;
         private IDbMaintenanceProvider? _dbMaintenanceProvider;
 
         /// <summary>
@@ -64,10 +65,8 @@ namespace Suyaa.Data.Maintenances
         /// <returns></returns>
         public bool CheckSchemaExists(string schema)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetSchemaExistsScript(schema);
-            return _sqlRepository.Any(sql);
+            var work = GetDbWork();
+            return GetMaintenanceProvider(work).CheckSchemaExists(work, schema);
         }
 
         /// <summary>
@@ -78,10 +77,8 @@ namespace Suyaa.Data.Maintenances
         /// <returns></returns>
         public bool CheckTableExists(string schema, string table)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetTableExistsScript(schema, table);
-            return _sqlRepository.Any(sql);
+            var work = GetDbWork();
+            return GetMaintenanceProvider(work).CheckTableExists(work, schema, table);
         }
 
         /// <summary>
@@ -89,14 +86,12 @@ namespace Suyaa.Data.Maintenances
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="table"></param>
-        /// <param name="field"></param>
+        /// <param name="column"></param>
         /// <returns></returns>
-        public bool CheckFieldExists(string schema, string table, string field)
+        public bool CheckColumnExists(string schema, string table, string column)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetFieldExistsScript(schema, table, field);
-            return _sqlRepository.Any(sql);
+            var work = GetDbWork();
+            return GetMaintenanceProvider(work).CheckColumnExists(work, schema, table, column);
         }
 
         /// <summary>
@@ -105,10 +100,8 @@ namespace Suyaa.Data.Maintenances
         /// <returns></returns>
         public IEnumerable<string> GetSchemas()
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetSchemasScript();
-            return _sqlRepository.GetDatas<string>(sql);
+            var work = GetDbWork();
+            return GetMaintenanceProvider(work).GetSchemas(work);
         }
 
         /// <summary>
@@ -118,10 +111,8 @@ namespace Suyaa.Data.Maintenances
         /// <returns></returns>
         public IEnumerable<string> GetTables(string schema)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetTablesScript(schema);
-            return _sqlRepository.GetDatas<string>(sql);
+            var work = GetDbWork();
+            return GetMaintenanceProvider(work).GetTables(work, schema);
         }
 
         /// <summary>
@@ -130,12 +121,10 @@ namespace Suyaa.Data.Maintenances
         /// <param name="schema"></param>
         /// <param name="table"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetFields(string schema, string table)
+        public IEnumerable<string> GetColumns(string schema, string table)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetFieldsScript(schema, table);
-            return _sqlRepository.GetDatas<string>(sql);
+            var work = GetDbWork();
+            return GetMaintenanceProvider(work).GetColumns(work, schema, table);
         }
 
         /// <summary>
@@ -143,14 +132,12 @@ namespace Suyaa.Data.Maintenances
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="table"></param>
-        /// <param name="field"></param>
+        /// <param name="column"></param>
         /// <returns></returns>
-        public string GetFieldType(string schema, string table, string field)
+        public string GetColumnType(string schema, string table, string column)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetFieldTypeScript(schema, table, field);
-            return _sqlRepository.GetData<string>(sql) ?? string.Empty;
+            var work = GetDbWork();
+            return GetMaintenanceProvider(work).GetColumnType(work, schema, table, column);
         }
 
         /// <summary>
@@ -159,10 +146,8 @@ namespace Suyaa.Data.Maintenances
         /// <param name="schema"></param>
         public void CreateSchema(string schema)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetSchemaCreateScript(schema);
-            _sqlRepository.ExecuteNonQuery(sql);
+            var work = GetDbWork();
+            GetMaintenanceProvider(work).CreateSchema(work, schema);
         }
 
         /// <summary>
@@ -171,36 +156,30 @@ namespace Suyaa.Data.Maintenances
         /// <param name="entity"></param>
         public void CreateTable(DbEntityModel entity)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetTableCreateScript(entity);
-            _sqlRepository.ExecuteNonQuery(sql);
+            var work = GetDbWork();
+            GetMaintenanceProvider(work).CreateTable(work, entity);
         }
 
         /// <summary>
         /// 创建字段
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="field"></param>
-        public void CreateField(DbEntityModel entity, ColumnModel field)
+        /// <param name="column"></param>
+        public void CreateColumn(DbEntityModel entity, ColumnModel column)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetFieldCreateScript(entity, field);
-            _sqlRepository.ExecuteNonQuery(sql);
+            var work = GetDbWork();
+            GetMaintenanceProvider(work).CreateColumn(work, entity, column);
         }
 
         /// <summary>
         /// 更新字段类型
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="field"></param>
-        public void UpdateFieldType(DbEntityModel entity, ColumnModel field)
+        /// <param name="column"></param>
+        public void UpdateColumnType(DbEntityModel entity, ColumnModel column)
         {
-            _dbWork ??= GetDbWork();
-            _sqlRepository ??= _dbWork.GetSqlRepository();
-            var sql = GetMaintenanceProvider(_dbWork).GetFieldTypeUpdateScript(entity, field);
-            _sqlRepository.ExecuteNonQuery(sql);
+            var work = GetDbWork();
+            GetMaintenanceProvider(work).UpdateColumnType(work, entity, column);
         }
     }
 }

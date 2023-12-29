@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Suyaa.Data;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.Descriptors.Dependency;
 using Suyaa.Data.Models;
+using Suyaa.Data.Models.Dependency;
 using Suyaa.EFCore.Dependency;
 using Suyaa.EFCore.Helpers;
 using Suyaa.EFCore.Providers;

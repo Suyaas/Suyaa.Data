@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using Suyaa.Data.Dependency;
-using Suyaa.Data.Enums;
+using Suyaa.Data.Kernel.Enums;
 
 namespace Suyaa.Data.PostgreSQL
 {

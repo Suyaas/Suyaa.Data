@@ -8,9 +8,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Suyaa.Data.Attributes;
-using Suyaa.Data.Enums;
 using Suyaa.Data.Models;
+using Suyaa.Data.Kernel.Enums;
+using Suyaa.Data.Kernel.Attributes;
 
 namespace Suyaa.Data.Helpers
 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.Descriptors.Dependency;
 using Suyaa.Data.Factories;
+using Suyaa.Data.Models.Dependency;
 using Suyaa.EFCore.Contexts;
 using SuyaaTest.PostgreSQL.Entities;
 using SuyaaTest.PostgreSQL.ModelConventions;

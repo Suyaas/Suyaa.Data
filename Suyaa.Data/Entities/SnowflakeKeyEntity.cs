@@ -1,8 +1,4 @@
-﻿using Suyaa.Data.Attributes;
-using Suyaa.Data.Enums;
-using System.ComponentModel.DataAnnotations;
-
-namespace Suyaa.Data.Entities
+﻿namespace Suyaa.Data.Entities
 {
     /// <summary>
     /// 带雪花Id主键的实例

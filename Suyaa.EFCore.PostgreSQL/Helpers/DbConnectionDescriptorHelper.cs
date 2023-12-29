@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Suyaa.Data;
-using Suyaa.Data.Dependency;
-using Suyaa.Data.Enums;
+using Suyaa.Data.Descriptors.Dependency;
+using Suyaa.Data.Kernel.Enums;
 using Suyaa.EFCore.Contexts;
 using System;
 using System.Collections.Generic;

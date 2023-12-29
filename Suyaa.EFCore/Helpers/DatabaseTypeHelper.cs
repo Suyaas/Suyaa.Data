@@ -1,6 +1,6 @@
 ﻿using Suyaa.Data;
 using Suyaa.Data.Dependency;
-using Suyaa.Data.Enums;
+using Suyaa.Data.Kernel.Enums;
 using System;
 
 namespace Suyaa.EFCore.Helpers

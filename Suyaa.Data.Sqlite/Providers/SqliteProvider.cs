@@ -2,6 +2,7 @@
 using Suyaa.Data.Kernel.Dependency;
 using Suyaa.Data.Maintenances.Dependency;
 using Suyaa.Data.Repositories.Dependency;
+using Suyaa.Data.Sqlite.Maintenances.Providers;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;

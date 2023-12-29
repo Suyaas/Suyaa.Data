@@ -1,11 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Suyaa.Data;
-using Suyaa.Data.Attributes;
 using Suyaa.Data.Helpers;
 
 namespace Suyaa.EFCore.Helpers

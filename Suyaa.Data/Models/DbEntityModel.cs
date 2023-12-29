@@ -1,8 +1,10 @@
 ﻿using Suyaa.Data.Helpers;
+using Suyaa.Data.Models.Sources;
 using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Suyaa.Data.Models
@@ -20,6 +22,25 @@ namespace Suyaa.Data.Models
         {
             Name = type.GetTableName();
             Schema = type.GetSchemaName() ?? string.Empty;
+        }
+
+        /// <summary>
+        /// 创建一个标准的数据库实体建模
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static DbEntityModel Create(Type type)
+        {
+            // 建立实例描述
+            DbEntityModel entity = new DbEntityModel(type);
+            // 建立字段描述
+            var pros = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var prop in pros)
+            {
+                var field = new ColumnModel(0, prop);
+                entity.AddField(field);
+            }
+            return entity;
         }
 
         /// <summary>

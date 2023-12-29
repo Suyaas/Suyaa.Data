@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Suyaa.Data.Dependency;
+using Suyaa.Data.Descriptors.Dependency;
 
 namespace Suyaa.Data.DbWorks.Dependency
 {

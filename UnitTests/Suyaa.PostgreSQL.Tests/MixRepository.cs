@@ -1,11 +1,11 @@
-﻿using Suyaa.Data.Dependency;
-using Suyaa.Data;
+﻿using Suyaa.Data;
 using System.Linq.Expressions;
 using Suyaa;
-using Suyaa.Data.Providers;
 using Suyaa.EFCore.Providers;
 using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Repositories.Dependency;
+using Suyaa.Data.Models.Dependency;
+using Suyaa.Data.Kernel.Providers;
 
 namespace SuyaaTest.PostgreSQL
 {

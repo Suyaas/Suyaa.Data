@@ -28,11 +28,11 @@ namespace Suyaa.Data.Sqlite.Helpers
         /// </summary>
         /// <param name="maintenance"></param>
         /// <param name="table"></param>
-        /// <param name="field"></param>
+        /// <param name="column"></param>
         /// <returns></returns>
-        public static bool CheckFieldExists(this IDbMaintenance maintenance, string table, string field)
+        public static bool CheckColumnExists(this IDbMaintenance maintenance, string table, string column)
         {
-            return maintenance.CheckFieldExists(string.Empty, table, field);
+            return maintenance.CheckColumnExists(string.Empty, table, column);
         }
 
         /// <summary>
@@ -51,9 +51,9 @@ namespace Suyaa.Data.Sqlite.Helpers
         /// <param name="maintenance"></param>
         /// <param name="table"></param>
         /// <returns></returns>
-        public static IEnumerable<string> GetFields(this IDbMaintenance maintenance, string table)
+        public static IEnumerable<string> GetColumns(this IDbMaintenance maintenance, string table)
         {
-            return maintenance.GetFields(string.Empty, table);
+            return maintenance.GetColumns(string.Empty, table);
         }
     }
 }

@@ -5,8 +5,8 @@ using System.Data.Common;
 using System.Reflection;
 using System.Threading.Tasks;
 using Suyaa.Data.Dependency;
-using Suyaa.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
+using Suyaa.Data.Kernel.Enums;
 
 namespace Suyaa.Data
 {

@@ -1,4 +1,5 @@
 ﻿using Suyaa.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
@@ -10,6 +11,8 @@ namespace Suyaa.Data.Helpers
     /// </summary>
     public static class DbDataReaderHelper
     {
+
+        private static readonly Type _stringType = typeof(string);
 
         /// <summary>
         /// 读取单个数据
@@ -39,7 +42,7 @@ namespace Suyaa.Data.Helpers
             {
                 if (!ordinals.ContainsKey(field.Name)) continue;
                 var idx = ordinals[field.Name];
-                var value = reader[idx].ConvertTo(field.PropertyInfo.DeclaringType);
+                var value = reader[idx].ConvertTo(field.PropertyInfo.PropertyType);
                 field.PropertyInfo.SetValue(obj, value, null);
             }
             return (T)obj;
@@ -78,7 +81,7 @@ namespace Suyaa.Data.Helpers
             // 执行类型反射
             var type = typeof(T);
             DbEntityModel? entity = null;
-            if (!type.IsValueType) entity = new DbEntityModel(type);
+            if (!(type.IsValueType || type == _stringType)) entity = DbEntityModel.Create(type);
             Dictionary<string, int> ordinals = new Dictionary<string, int>();
             // 进行字段名称初始化
             if (entity != null) ordinals = reader.GetEntityOrdinals(entity);
@@ -110,7 +113,7 @@ namespace Suyaa.Data.Helpers
             // 执行类型反射
             var type = typeof(T);
             DbEntityModel? entity = null;
-            if (!type.IsValueType) entity = new DbEntityModel(type);
+            if (!(type.IsValueType || type == _stringType)) entity = DbEntityModel.Create(type);
             Dictionary<string, int> ordinals = new Dictionary<string, int>();
             // 进行字段名称初始化
             if (entity != null) ordinals = reader.GetEntityOrdinals(entity);

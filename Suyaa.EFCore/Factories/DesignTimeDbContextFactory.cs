@@ -1,12 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Suyaa.Data.Dependency;
-using Suyaa.Data.Factories;
+using Suyaa.Data.Descriptors.Dependency;
 
 namespace Suyaa.EFCore.Factories
 {

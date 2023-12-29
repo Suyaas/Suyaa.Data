@@ -1,6 +1,4 @@
-﻿using Suyaa.Data.Attributes;
-using Suyaa.Data.Enums;
-using Suyaa.Data.Repositories.Dependency;
+﻿using Suyaa.Data.Repositories.Dependency;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
