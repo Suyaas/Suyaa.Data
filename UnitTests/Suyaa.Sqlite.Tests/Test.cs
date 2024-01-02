@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
 using Suyaa.Data.Maintenances.Helpers;
 using Suyaa.Data.Sqlite.Helpers;
@@ -222,10 +221,10 @@ namespace Suyaa.Sqlite.Tests
         [Fact]
         public void EFQuery()
         {
-            // 定义数据
-            string connectionString = $"data source={sy.IO.GetExecutionPath("temp.db")}";
-            var optionsBuilder = new DbContextOptionsBuilder<Microsoft.EntityFrameworkCore.DbContext>();
-            optionsBuilder.UseSqlite(connectionString);
+            //// 定义数据
+            //string connectionString = $"data source={sy.IO.GetExecutionPath("temp.db")}";
+            //var optionsBuilder = new DbContextOptionsBuilder<Microsoft.EntityFrameworkCore.DbContext>();
+            //optionsBuilder.UseSqlite(connectionString);
             // 执行方法
             //using (TestDbContext context = new TestDbContext(optionsBuilder.Options, connectionString))
             //{

@@ -1,14 +1,9 @@
-﻿using Microsoft.Data.Sqlite;
-using Suyaa.Data.Kernel.Dependency;
+﻿using Suyaa.Data.Kernel.Dependency;
 using Suyaa.Data.Maintenances.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using Suyaa.Data.Sqlite.Maintenances.Providers;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SQLite;
 
 namespace Suyaa.Data.Sqlite.Providers
 {
@@ -49,7 +44,7 @@ namespace Suyaa.Data.Sqlite.Providers
         /// <returns></returns>
         public DbConnection GetDbConnection(string connectionString)
         {
-            var dbc = new SqliteConnection(connectionString);
+            var dbc = new SQLiteConnection(connectionString);
             dbc.Open();
             return dbc;
         }

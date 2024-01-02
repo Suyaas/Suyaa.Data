@@ -1,11 +1,10 @@
-﻿using Microsoft.Data.Sqlite;
-using Suyaa.Data.DbWorks.Dependency;
+﻿using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Repositories;
 using Suyaa.Data.Repositories.Dependency;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.SQLite;
 
 namespace Suyaa.Data.Sqlite.Providers
 {
@@ -22,9 +21,9 @@ namespace Suyaa.Data.Sqlite.Providers
         /// <exception cref="TypeNotSupportedException"></exception>
         public DbCommand GetDbCommand(IDbWork work)
         {
-            if (work.Connection is SqliteConnection dbc)
+            if (work.Connection is SQLiteConnection dbc)
             {
-                var sqlCommand = new SqliteCommand();
+                var sqlCommand = new SQLiteCommand();
                 sqlCommand.CommandTimeout = 600;
                 sqlCommand.Connection = dbc;
                 return sqlCommand;
@@ -64,7 +63,7 @@ namespace Suyaa.Data.Sqlite.Providers
             command.Parameters.Clear();
             foreach (var param in parameters)
             {
-                command.Parameters.Add(new SqliteParameter("$" + param.Key, param.Value ?? DBNull.Value));
+                command.Parameters.Add(new SQLiteParameter("$" + param.Key, param.Value ?? DBNull.Value));
             }
         }
     }
