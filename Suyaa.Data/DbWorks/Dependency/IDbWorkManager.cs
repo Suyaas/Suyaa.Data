@@ -11,9 +11,14 @@ namespace Suyaa.Data.DbWorks.Dependency
     public interface IDbWorkManager
     {
         /// <summary>
-        /// 连接描述
+        /// 当前连接描述
         /// </summary>
-        IDbConnectionDescriptor ConnectionDescriptor { get; }
+        IDbConnectionDescriptor CurrentConnectionDescriptor { get; }
+        /// <summary>
+        /// 设置当前数据库描述
+        /// </summary>
+        /// <param name="name"></param>
+        void SetCurrentConnectionDescriptor(string name);
         /// <summary>
         /// 创建一个新的作业
         /// </summary>

@@ -1,6 +1,7 @@
 ﻿using Suyaa.Data.Descriptors.Dependency;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace Suyaa.Data.Descriptors
 {
@@ -12,14 +13,28 @@ namespace Suyaa.Data.Descriptors
 
         #region DI注入
 
-        private readonly Dictionary<string, IDbConnectionDescriptor> _descriptors;
+        //private readonly Dictionary<string, IDbConnectionDescriptor> _descriptors;
         private readonly IEnumerable<IDbConnectionDescriptorProvider> _providers;
         private const string KEY_DEFAULT = "default";
 
         /// <summary>
-        /// 默认连接
+        /// 获取默认连接
         /// </summary>
-        public IDbConnectionDescriptor DefaultConnection { get; }
+        public IDbConnectionDescriptor GetDefaultConnection()
+        {
+            IDbConnectionDescriptor? first = null;
+            foreach (var provider in _providers)
+            {
+                var descriptors = provider.GetDbConnections();
+                foreach (var descriptor in descriptors)
+                {
+                    if (descriptor.Name == KEY_DEFAULT) return descriptor;
+                    if (first is null) first = descriptor;
+                }
+            }
+            if (first is null) throw new NotExistException<IDbConnectionDescriptor>();
+            return first;
+        }
 
         /// <summary>
         /// 主机数据库上下文配置工厂
@@ -29,26 +44,6 @@ namespace Suyaa.Data.Descriptors
             )
         {
             _providers = providers;
-            _descriptors = new Dictionary<string, IDbConnectionDescriptor>();
-            foreach (var provider in providers)
-            {
-                var descriptors = provider.GetDbConnections();
-                foreach (var descriptor in descriptors)
-                {
-                    if (_descriptors.ContainsKey(descriptor.Name)) continue;
-                    _descriptors[descriptor.Name] = descriptor;
-                }
-            }
-            // 设置默认连接
-            if (!_descriptors.Any()) throw new NotExistException<IDbConnectionDescriptor>();
-            if (_descriptors.ContainsKey(KEY_DEFAULT))
-            {
-                DefaultConnection = _descriptors[KEY_DEFAULT];
-            }
-            else
-            {
-                DefaultConnection = _descriptors.First().Value;
-            }
         }
         #endregion
 
@@ -59,8 +54,15 @@ namespace Suyaa.Data.Descriptors
         /// <returns></returns>
         public IDbConnectionDescriptor GetConnection(string name)
         {
-            if (_descriptors.ContainsKey(name)) throw new DbException("Option.NotExist", "DbContextOptions '{0}' not found.", name);
-            return _descriptors[name];
+            foreach (var provider in _providers)
+            {
+                var descriptors = provider.GetDbConnections();
+                foreach (var descriptor in descriptors)
+                {
+                    if (descriptor.Name == name) return descriptor;
+                }
+            }
+            throw new DbException("DbConnection.NotExist", "DbConnection '{0}' not found.", name);
         }
     }
 }

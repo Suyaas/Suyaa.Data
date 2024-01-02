@@ -15,6 +15,6 @@
         /// <summary>
         /// 默认主机数据库上下文配置
         /// </summary>
-        IDbConnectionDescriptor DefaultConnection { get; }
+        IDbConnectionDescriptor GetDefaultConnection();
     }
 }

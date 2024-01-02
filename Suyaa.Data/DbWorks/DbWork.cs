@@ -31,7 +31,7 @@ namespace Suyaa.Data.DbWorks
             IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
-            ConnectionDescriptor = dbWorkManager.ConnectionDescriptor;
+            ConnectionDescriptor = dbWorkManager.CurrentConnectionDescriptor;
             _dbFactory = dbFactory;
             _dbWorkInterceptorFactory = dbWorkInterceptorFactory;
             _dbWorkManager = dbWorkManager;

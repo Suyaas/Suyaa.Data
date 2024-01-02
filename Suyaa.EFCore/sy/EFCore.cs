@@ -24,7 +24,8 @@ namespace sy
         // 数据库工厂
         private static IDbFactory? _dbFactory;
         // 数据库连接管理器
-        private static IDbConnectionDescriptorManager? _dbConnectionDescriptorManager;
+        //private static IDbConnectionDescriptorManager? _dbConnectionDescriptorManager;
+        private static IDbConnectionDescriptorFactory? _dbConnectionDescriptorFactory;
         // 数据库连接管理器
         private static DbConnectionDescriptorProvider? _connectionDescriptorProvider;
         // 数据库作业供应商
@@ -90,11 +91,11 @@ namespace sy
             // 添加数据库描述
             _connectionDescriptorProvider.AddDbConnection(descriptor);
             // 创建数据库连接描述工厂
-            var dbConnectionDescriptorFactory = new DbConnectionDescriptorFactory(new List<DbConnectionDescriptorProvider>() { _connectionDescriptorProvider });
-            // 创建数据库连接描述管理器
-            _dbConnectionDescriptorManager = new DbConnectionDescriptorManager(dbConnectionDescriptorFactory);
-            // 设置当前连接
-            _dbConnectionDescriptorManager.SetCurrentConnection(descriptor);
+            _dbConnectionDescriptorFactory = new DbConnectionDescriptorFactory(new List<DbConnectionDescriptorProvider>() { _connectionDescriptorProvider });
+            //// 创建数据库连接描述管理器
+            //_dbConnectionDescriptorManager = new DbConnectionDescriptorManager(dbConnectionDescriptorFactory);
+            //// 设置当前连接
+            //_dbConnectionDescriptorManager.SetCurrentConnection(descriptor);
         }
 
         /// <summary>
@@ -186,8 +187,8 @@ namespace sy
             //    UseEntityProvider(new DbSetModelProvider(_dbFactory, _dbContextFacotry!, new List<IEntityModelConvention>()));
             //}
             _dbWorkProvider ??= new EfCoreWorkProvider(_dbFactory, _dbContextFacotry!, _entityModelConventionFactory, dbWorkInterceptorFactory);
-            var dbWorkManagerProvider = new EfCoreManagerProvider(_dbConnectionDescriptorManager!, _dbFactory, _dbContextFacotry!, _entityModelConventionFactory, dbWorkInterceptorFactory);
-            return dbWorkManagerProvider.CreateManager().CreateWork();
+            var dbWorkManager = new EfCoreWorkManager(_dbConnectionDescriptorFactory!, _dbFactory, _dbContextFacotry!, _entityModelConventionFactory, dbWorkInterceptorFactory);
+            return dbWorkManager.CreateWork();
         }
 
         ///// <summary>

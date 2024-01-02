@@ -14,29 +14,42 @@ namespace Suyaa.Data.DbWorks
     {
         private IDbWork? _work;
         private static readonly object _lock = new object();
+        private readonly IDbConnectionDescriptorFactory _dbConnectionDescriptorFactory;
         private readonly IDbFactory _dbFactory;
-        private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
+        //private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
         private readonly DbWorkProvider _dbWorkProvider;
 
         /// <summary>
         /// 数据库作业管理器
         /// </summary>
         public DbWorkManager(
-            IDbConnectionDescriptorManager dbConnectionDescriptorManager,
+            IDbConnectionDescriptorFactory dbConnectionDescriptorFactory,
+            //IDbConnectionDescriptorManager dbConnectionDescriptorManager,
             IDbFactory dbFactory,
             IDbWorkInterceptorFactory dbWorkInterceptorFactory
             )
         {
+            _dbConnectionDescriptorFactory = dbConnectionDescriptorFactory;
             _dbFactory = dbFactory;
-            _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
+            // _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
             _dbWorkProvider = new DbWorkProvider(_dbFactory, dbWorkInterceptorFactory);
-            ConnectionDescriptor = _dbConnectionDescriptorManager.GetCurrentConnection();
+            // ConnectionDescriptor = _dbConnectionDescriptorManager.GetCurrentConnection();
+            CurrentConnectionDescriptor = _dbConnectionDescriptorFactory.GetDefaultConnection();
         }
 
         /// <summary>
         /// 连接描述
         /// </summary>
-        public IDbConnectionDescriptor ConnectionDescriptor { get; }
+        public IDbConnectionDescriptor CurrentConnectionDescriptor { get; private set; }
+
+        /// <summary>
+        /// 设置当前数据库描述
+        /// </summary>
+        /// <param name="name"></param>
+        public void SetCurrentConnectionDescriptor(string name)
+        {
+            this.CurrentConnectionDescriptor = _dbConnectionDescriptorFactory.GetConnection(name);
+        }
 
         /// <summary>
         /// 创建一个数据库工作者

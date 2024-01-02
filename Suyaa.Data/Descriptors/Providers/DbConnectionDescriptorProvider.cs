@@ -39,5 +39,17 @@ namespace Suyaa.Data.Descriptors.Providers
             if (_descriptors.Contains(dbConnectionDescriptor)) return;
             _descriptors.Add(dbConnectionDescriptor);
         }
+
+        /// <summary>
+        /// 移除数据库连接
+        /// </summary>
+        /// <param name="name"></param>
+        public void RemoveDbConnection(string name)
+        {
+            for (int i = _descriptors.Count - 1; i >= 0; i--)
+            {
+                if (_descriptors[i].Name == name) _descriptors.RemoveAt(i);
+            }
+        }
     }
 }
