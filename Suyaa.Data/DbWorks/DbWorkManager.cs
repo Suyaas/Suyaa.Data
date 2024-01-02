@@ -18,6 +18,7 @@ namespace Suyaa.Data.DbWorks
         private readonly IDbFactory _dbFactory;
         //private readonly IDbConnectionDescriptorManager _dbConnectionDescriptorManager;
         private readonly DbWorkProvider _dbWorkProvider;
+        private IDbConnectionDescriptor? _dbConnectionDescriptor;
 
         /// <summary>
         /// 数据库作业管理器
@@ -34,13 +35,14 @@ namespace Suyaa.Data.DbWorks
             // _dbConnectionDescriptorManager = dbConnectionDescriptorManager;
             _dbWorkProvider = new DbWorkProvider(_dbFactory, dbWorkInterceptorFactory);
             // ConnectionDescriptor = _dbConnectionDescriptorManager.GetCurrentConnection();
-            CurrentConnectionDescriptor = _dbConnectionDescriptorFactory.GetDefaultConnection();
+            _dbConnectionDescriptor = null;
+            // CurrentConnectionDescriptor = _dbConnectionDescriptorFactory.GetDefaultConnection();
         }
 
         /// <summary>
         /// 连接描述
         /// </summary>
-        public IDbConnectionDescriptor CurrentConnectionDescriptor { get; private set; }
+        public IDbConnectionDescriptor CurrentConnectionDescriptor => _dbConnectionDescriptor ??= _dbConnectionDescriptorFactory.GetDefaultConnection();
 
         /// <summary>
         /// 设置当前数据库描述
@@ -48,7 +50,8 @@ namespace Suyaa.Data.DbWorks
         /// <param name="name"></param>
         public void SetCurrentConnectionDescriptor(string name)
         {
-            this.CurrentConnectionDescriptor = _dbConnectionDescriptorFactory.GetConnection(name);
+            //this.CurrentConnectionDescriptor = _dbConnectionDescriptorFactory.GetConnection(name);
+            _dbConnectionDescriptor = _dbConnectionDescriptorFactory.GetConnection(name);
         }
 
         /// <summary>
