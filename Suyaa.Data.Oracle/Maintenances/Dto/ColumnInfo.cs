@@ -37,7 +37,7 @@ namespace Suyaa.Data.Oracle.Maintenances.Dto
         /// 数据精度
         /// </summary>
         [Column("DATA_PRECISION")]
-        public int? DataPrecision { get; set; }
+        public decimal? DataPrecision { get; set; }
         /// <summary>
         /// 可为空
         /// </summary>

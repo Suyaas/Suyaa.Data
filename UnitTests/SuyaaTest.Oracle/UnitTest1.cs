@@ -117,7 +117,7 @@ namespace SuyaaTest.Oracle
             // 执行方法
             using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
             var maintenance = work.GetMaintenance();
-            var columns = maintenance.GetColumns("MESDB","UOM");
+            var columns = maintenance.GetColumns("MESDB", "ACTIVITY");
             foreach (var column in columns)
             {
                 _output.WriteLine(column);
@@ -133,7 +133,7 @@ namespace SuyaaTest.Oracle
             // 执行方法
             using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
             var maintenance = work.GetMaintenance();
-            var dataType = maintenance.GetColumnDataType("MESDB", "ACTIVITY", "ACTIVITYID");
+            var dataType = maintenance.GetColumnDataType("MESDB", "ACTIVITY", "ALLOWREASSIGNMENT");
             _output.WriteLine(dataType);
         }
     }
