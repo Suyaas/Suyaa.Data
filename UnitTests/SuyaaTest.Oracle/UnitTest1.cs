@@ -123,5 +123,18 @@ namespace SuyaaTest.Oracle
                 _output.WriteLine(column);
             }
         }
+
+        /// <summary>
+        /// 获取所有表
+        /// </summary>
+        [Fact]
+        public void GetColumnType()
+        {
+            // 执行方法
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
+            var maintenance = work.GetMaintenance();
+            var dataType = maintenance.GetColumnDataType("MESDB", "ACTIVITY", "ACTIVITYID");
+            _output.WriteLine(dataType);
+        }
     }
 }

@@ -134,10 +134,10 @@ namespace Suyaa.Data.Maintenances
         /// <param name="table"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public string GetColumnType(string schema, string table, string column)
+        public string GetColumnDataType(string schema, string table, string column)
         {
             var work = GetDbWork();
-            return GetMaintenanceProvider(work).GetColumnType(work, schema, table, column);
+            return GetMaintenanceProvider(work).GetColumnDataType(work, schema, table, column);
         }
 
         /// <summary>

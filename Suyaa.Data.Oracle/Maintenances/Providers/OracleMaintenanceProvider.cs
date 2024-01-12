@@ -300,7 +300,7 @@ namespace Suyaa.Data.Oracle.Maintenances.Providers
         /// <param name="table"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public string GetColumnType(IDbWork work, string schema, string table, string column)
+        public string GetColumnDataType(IDbWork work, string schema, string table, string column)
         {
             // 获取表所有字段信息
             var columnInfo = GetColumnInfo(work, schema, table, column);

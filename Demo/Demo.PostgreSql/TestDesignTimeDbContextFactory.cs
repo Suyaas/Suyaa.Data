@@ -1,14 +1,7 @@
 ﻿using Suyaa.Data.Descriptors.Dependency;
-using Suyaa.Data.Factories;
+using Suyaa.Data.Models;
 using Suyaa.Data.Models.Dependency;
-using Suyaa.Data.Providers;
 using Suyaa.EFCore.Factories;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Demo.PostgreSql
 {
@@ -22,8 +15,8 @@ namespace Demo.PostgreSql
 
         public override TestDbContext CreateDbContext(IDbConnectionDescriptorFactory dbConnectionDescriptorFactory, string[] args)
         {
-            Console.WriteLine(dbConnectionDescriptorFactory.DefaultConnection.ToConnectionString());
-            return new TestDbContext(dbConnectionDescriptorFactory.DefaultConnection, new EntityModelConventionFactory(Enumerable.Empty<IEntityModelConvention>()));
+            Console.WriteLine(dbConnectionDescriptorFactory.GetDefaultConnection().ToConnectionString());
+            return new TestDbContext(dbConnectionDescriptorFactory.GetDefaultConnection(), new EntityModelConventionFactory(Enumerable.Empty<IEntityModelConvention>()));
         }
     }
 }

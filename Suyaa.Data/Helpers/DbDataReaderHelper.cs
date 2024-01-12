@@ -42,6 +42,8 @@ namespace Suyaa.Data.Helpers
             {
                 if (!ordinals.ContainsKey(field.Name)) continue;
                 var idx = ordinals[field.Name];
+                var ordinalValue = reader[idx];
+                if (ordinalValue is DBNull) continue;
                 var value = reader[idx].ConvertTo(field.PropertyInfo.PropertyType);
                 field.PropertyInfo.SetValue(obj, value, null);
             }

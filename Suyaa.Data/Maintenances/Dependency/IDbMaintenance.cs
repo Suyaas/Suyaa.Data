@@ -53,7 +53,7 @@ namespace Suyaa.Data.Maintenances.Dependency
         /// <param name="table"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        string GetColumnType(string schema, string table, string column);
+        string GetColumnDataType(string schema, string table, string column);
         /// <summary>
         /// 创建Schema
         /// </summary>
