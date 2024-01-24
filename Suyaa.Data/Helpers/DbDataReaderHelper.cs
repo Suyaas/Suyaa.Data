@@ -1,4 +1,5 @@
-﻿using Suyaa.Data.Models;
+﻿using Suyaa.Data.Entities;
+using Suyaa.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -46,7 +47,7 @@ namespace Suyaa.Data.Helpers
         /// <param name="ordinals"></param>
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
-        public static T ToInstance<T>(this DbDataReader reader, DbEntityModel entity, IDictionary<string, int> ordinals)
+        public static T ToInstance<T>(this DbDataReader reader, EntityModel entity, IDictionary<string, int> ordinals)
         {
             return (T)reader.ToInstance(entity, ordinals);
         }
@@ -59,18 +60,33 @@ namespace Suyaa.Data.Helpers
         /// <param name="ordinals"></param>
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
-        public static object ToInstance(this DbDataReader reader, DbEntityModel entity, IDictionary<string, int> ordinals)
+        public static object ToInstance(this DbDataReader reader, EntityModel entity, IDictionary<string, int> ordinals)
         {
             var obj = sy.Assembly.Create(entity.Type);
             if (obj is null) throw new DbException("Type '{0}' instance fail.", entity.Type.FullName);
-            foreach (var field in entity.Columns)
+            if (entity is DbEntityModel dbEntityModel)
             {
-                if (!ordinals.ContainsKey(field.Name)) continue;
-                var idx = ordinals[field.Name];
-                var ordinalValue = reader[idx];
-                if (ordinalValue is DBNull) continue;
-                var value = ordinalValue.ConvertTo(field.PropertyInfo.PropertyType);
-                field.PropertyInfo.SetValue(obj, value, null);
+                foreach (var field in dbEntityModel.Columns)
+                {
+                    if (!ordinals.ContainsKey(field.Name)) continue;
+                    var idx = ordinals[field.Name];
+                    var ordinalValue = reader[idx];
+                    if (ordinalValue is DBNull) continue;
+                    var value = ordinalValue.ConvertTo(field.PropertyInfo.PropertyType);
+                    field.PropertyInfo.SetValue(obj, value, null);
+                }
+            }
+            else
+            {
+                foreach (var field in entity.Properties)
+                {
+                    if (!ordinals.ContainsKey(field.PropertyInfo.Name)) continue;
+                    var idx = ordinals[field.PropertyInfo.Name];
+                    var ordinalValue = reader[idx];
+                    if (ordinalValue is DBNull) continue;
+                    var value = ordinalValue.ConvertTo(field.PropertyInfo.PropertyType);
+                    field.PropertyInfo.SetValue(obj, value, null);
+                }
             }
             return obj;
         }
@@ -81,16 +97,31 @@ namespace Suyaa.Data.Helpers
         /// <param name="reader"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static Dictionary<string, int> GetEntityOrdinals(this DbDataReader reader, DbEntityModel entity)
+        public static Dictionary<string, int> GetEntityOrdinals(this DbDataReader reader, EntityModel entity)
         {
             Dictionary<string, int> ordinals = new Dictionary<string, int>();
-            for (int i = 0; i < reader.FieldCount; i++)
+            if (entity is DbEntityModel dbEntityModel)
             {
-                string name = reader.GetName(i).ToUpper();
-                foreach (var field in entity.Columns)
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    if (!field.PropertyInfo.CanWrite) continue;
-                    if (field.Name.ToUpper() == name) ordinals[field.Name] = i;
+                    string name = reader.GetName(i).ToUpper();
+                    foreach (var field in dbEntityModel.Columns)
+                    {
+                        if (!field.PropertyInfo.CanWrite) continue;
+                        if (field.Name.ToUpper() == name) ordinals[field.Name] = i;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    string name = reader.GetName(i).ToUpper();
+                    foreach (var field in entity.Properties)
+                    {
+                        if (!field.PropertyInfo.CanWrite) continue;
+                        if (field.PropertyInfo.Name.ToUpper() == name) ordinals[field.PropertyInfo.Name] = i;
+                    }
                 }
             }
             return ordinals;
@@ -164,6 +195,33 @@ namespace Suyaa.Data.Helpers
             {
                 return reader.ToInstance(entity, ordinals);
             }
+        }
+
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="model"></param>
+        /// <param name="data"></param>
+        public static bool ReadData(this DbDataReader reader, EntityModel model, out object? data)
+        {
+            data = null;
+            // 无内容则退出
+            if (!reader.HasRows) return false;
+            // 读取内容
+            if (!reader.Read()) return false;
+            // 跳过无字段
+            if (reader.FieldCount <= 0) return false;
+            // 处理值类型
+            if (model.IsValueType)
+            {
+                data = reader.ToValue(model.Type);
+                return true;
+            }
+            // 进行字段名称初始化
+            Dictionary<string, int> ordinals = reader.GetEntityOrdinals(model);
+            data = reader.ToInstance(model, ordinals);
+            return true;
         }
     }
 }

@@ -12,6 +12,9 @@ namespace Suyaa.Data.Models
     /// </summary>
     public class EntityModel : TypeModel
     {
+        // 字符串
+        private static readonly Type _stringType = typeof(string);
+
         /// <summary>
         /// 属性集合
         /// </summary>
@@ -22,9 +25,18 @@ namespace Suyaa.Data.Models
         /// </summary>
         public EntityModel(Type type) : base(type)
         {
+            // 判断是否值类型
+            IsValueType = false;
+            if (type.IsValueType) IsValueType = true;
+            if (type.IsBased(_stringType)) IsValueType = true;
             // 初始化字段集合
             _properties = new List<PropertyInfoModel>();
         }
+
+        /// <summary>
+        /// 是否值类型
+        /// </summary>
+        public bool IsValueType { get; }
 
         /// <summary>
         /// 属性集合

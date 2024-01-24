@@ -1,5 +1,8 @@
 ﻿using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Expressions;
+using Suyaa.Data.Models;
+using Suyaa.Data.Models.Dependency;
+using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,11 +51,24 @@ namespace Suyaa.Data.Queries
         /// 可查询对象
         /// </summary>
         /// <param name="provider"></param>
-        public EntityQueryable(IQueryProvider provider)
+        /// <param name="dbEntityModel"></param>
+        public EntityQueryable(IQueryProvider provider, DbEntityModel dbEntityModel)
         {
             Provider = provider;
             ElementType = typeof(T);
-            Expression = new QueryRootExpression(ElementType);
+            Expression = new EntityQueryRootExpression(dbEntityModel);
+        }
+
+        /// <summary>
+        /// 可查询对象
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="entityModelFactory"></param>
+        public EntityQueryable(IQueryProvider provider, IEntityModelFactory entityModelFactory)
+        {
+            Provider = provider;
+            ElementType = typeof(T);
+            Expression = new EntityQueryRootExpression<T>(entityModelFactory);
         }
 
         /// <summary>

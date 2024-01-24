@@ -46,7 +46,7 @@ namespace Suyaa.Data.Kernel.Providers
         /// <exception cref="NotImplementedException"></exception>
         public IQueryable<TEntity> Query(IDbWork work)
         {
-            return new EntityQueryable<TEntity>(new EntityQueryProvider(work));
+            return new EntityQueryable<TEntity>(new EntityQueryProvider(_entityModelFactory, work), _entity);
         }
     }
 }

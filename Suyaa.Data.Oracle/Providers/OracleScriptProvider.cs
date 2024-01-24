@@ -1,4 +1,5 @@
-﻿using Suyaa.Data.Repositories.Dependency;
+﻿using Suyaa.Data.Expressions;
+using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -29,16 +30,6 @@ namespace Suyaa.Data.Oracle.Providers
         public string GetVariable(string name)
         {
             return ":" + name;
-        }
-
-        /// <summary>
-        /// 获取语句
-        /// </summary>
-        /// <param name="expression"></param>
-        /// <returns></returns>
-        public string GetStatement(Expression expression)
-        {
-            return string.Empty;
         }
     }
 }

@@ -148,10 +148,10 @@ namespace SuyaaTest.Oracle
             var repository = sy.Data.CreateRepository<ProductFamily>(work);
             //var query = from pf in repository.Query()
             //            select pf;
-            var list = repository.Query().ToList();
+            var list = repository.Query().Select(d => d.ProductFamilyName).ToList();
             foreach (var item in list)
             {
-                _output.WriteLine(item.ProductFamilyName);
+                _output.WriteLine(item);
             }
         }
     }
