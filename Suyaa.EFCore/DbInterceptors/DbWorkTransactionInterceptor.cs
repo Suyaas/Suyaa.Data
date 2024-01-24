@@ -28,11 +28,26 @@ namespace Suyaa.EFCore.DbInterceptors
             _work = work;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <param name="eventData"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public override InterceptionResult TransactionCommitting(DbTransaction transaction, TransactionEventData eventData, InterceptionResult result)
         {
             return base.TransactionCommitting(transaction, eventData, result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <param name="eventData"></param>
+        /// <param name="result"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override ValueTask<InterceptionResult> TransactionCommittingAsync(DbTransaction transaction, TransactionEventData eventData, InterceptionResult result, CancellationToken cancellationToken = default)
         {
             return base.TransactionCommittingAsync(transaction, eventData, result, cancellationToken);

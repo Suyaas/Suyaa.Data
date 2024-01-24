@@ -14,10 +14,6 @@ namespace Suyaa.Data.Kernel.Dependency
     public interface IDbProvider
     {
         /// <summary>
-        /// 表达式供应商
-        /// </summary>
-        IDbExpressionProvider ExpressionProvider { get; }
-        /// <summary>
         /// 脚本供应商
         /// </summary>
         IDbScriptProvider ScriptProvider { get; }

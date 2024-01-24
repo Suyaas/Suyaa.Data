@@ -27,6 +27,18 @@ namespace Suyaa.Data.Helpers
         }
 
         /// <summary>
+        /// 读取单个数据
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="DbException"></exception>
+        public static object ToValue(this DbDataReader reader, Type type)
+        {
+            return reader[0].ConvertTo(type);
+        }
+
+        /// <summary>
         /// 转化为泛型实例
         /// </summary>
         /// <param name="reader"></param>
@@ -35,6 +47,19 @@ namespace Suyaa.Data.Helpers
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
         public static T ToInstance<T>(this DbDataReader reader, DbEntityModel entity, IDictionary<string, int> ordinals)
+        {
+            return (T)reader.ToInstance(entity, ordinals);
+        }
+
+        /// <summary>
+        /// 转化为泛型实例
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="entity"></param>
+        /// <param name="ordinals"></param>
+        /// <returns></returns>
+        /// <exception cref="DbException"></exception>
+        public static object ToInstance(this DbDataReader reader, DbEntityModel entity, IDictionary<string, int> ordinals)
         {
             var obj = sy.Assembly.Create(entity.Type);
             if (obj is null) throw new DbException("Type '{0}' instance fail.", entity.Type.FullName);
@@ -47,7 +72,7 @@ namespace Suyaa.Data.Helpers
                 var value = ordinalValue.ConvertTo(field.PropertyInfo.PropertyType);
                 field.PropertyInfo.SetValue(obj, value, null);
             }
-            return (T)obj;
+            return obj;
         }
 
         /// <summary>
@@ -110,26 +135,34 @@ namespace Suyaa.Data.Helpers
         [return: MaybeNull]
         public static T GetData<T>(this DbDataReader reader)
         {
+            return (T)reader.GetData(typeof(T));
+        }
+
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="type"></param>
+        public static object? GetData(this DbDataReader reader, Type type)
+        {
             // 无内容则退出
-            if (!reader.HasRows) return default;
-            // 执行类型反射
-            var type = typeof(T);
+            if (!reader.HasRows) return null;
             DbEntityModel? entity = null;
             if (!(type.IsValueType || type == _stringType)) entity = DbEntityModel.Create(type);
             Dictionary<string, int> ordinals = new Dictionary<string, int>();
             // 进行字段名称初始化
             if (entity != null) ordinals = reader.GetEntityOrdinals(entity);
             // 读取内容
-            if (!reader.Read()) return default;
+            if (!reader.Read()) return null;
             // 跳过无字段
-            if (reader.FieldCount <= 0) return default;
+            if (reader.FieldCount <= 0) return null;
             if (entity is null)
             {
-                return reader.ToValue<T>();
+                return reader.ToValue(type);
             }
             else
             {
-                return reader.ToInstance<T>(entity, ordinals);
+                return reader.ToInstance(entity, ordinals);
             }
         }
     }

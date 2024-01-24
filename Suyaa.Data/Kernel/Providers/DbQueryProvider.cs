@@ -1,8 +1,10 @@
 ﻿using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.Entities;
+using Suyaa.Data.Expressions;
 using Suyaa.Data.Helpers;
 using Suyaa.Data.Models;
 using Suyaa.Data.Models.Dependency;
+using Suyaa.Data.Queries;
 using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
@@ -44,7 +46,7 @@ namespace Suyaa.Data.Kernel.Providers
         /// <exception cref="NotImplementedException"></exception>
         public IQueryable<TEntity> Query(IDbWork work)
         {
-            throw new NotImplementedException();
+            return new EntityQueryable<TEntity>(new EntityQueryProvider(work));
         }
     }
 }

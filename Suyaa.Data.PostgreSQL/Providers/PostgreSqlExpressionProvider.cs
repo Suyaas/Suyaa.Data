@@ -15,6 +15,18 @@ namespace Suyaa.Data.PostgreSQL.Providers
     public class PostgreSqlExpressionProvider : IDbExpressionProvider
     {
         /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetScript<TResult>(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// 获取
         /// </summary>
         /// <typeparam name="TResult"></typeparam>

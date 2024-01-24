@@ -86,7 +86,7 @@ namespace SuyaaTest.Oracle
             using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
             var maintenance = work.GetMaintenance();
             var schemas = maintenance.GetSchemas();
-            foreach(var schema in schemas)
+            foreach (var schema in schemas)
             {
                 _output.WriteLine(schema);
             }
@@ -135,6 +135,24 @@ namespace SuyaaTest.Oracle
             var maintenance = work.GetMaintenance();
             var dataType = maintenance.GetColumnDataType("MESDB", "ACTIVITY", "ALLOWREASSIGNMENT");
             _output.WriteLine(dataType);
+        }
+
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        [Fact]
+        public void QueryList()
+        {
+            // 执行方法
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
+            var repository = sy.Data.CreateRepository<ProductFamily>(work);
+            //var query = from pf in repository.Query()
+            //            select pf;
+            var list = repository.Query().ToList();
+            foreach (var item in list)
+            {
+                _output.WriteLine(item.ProductFamilyName);
+            }
         }
     }
 }

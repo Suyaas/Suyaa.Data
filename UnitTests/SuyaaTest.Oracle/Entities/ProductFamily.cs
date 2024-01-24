@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Suyaa.Data.Models;
+using Suyaa.Data.Repositories.Dependency;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace SuyaaTest.Oracle.Entities
     /// 机型
     /// </summary>
     [Table("PRODUCTFAMILY")]
-    public sealed class ProductFamily
+    public sealed class ProductFamily : IDbEntity
     {
         /// <summary>
         /// 机型名称

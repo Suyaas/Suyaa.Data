@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Suyaa.Data.Repositories.Dependency
@@ -21,5 +22,11 @@ namespace Suyaa.Data.Repositories.Dependency
         /// <param name="name"></param>
         /// <returns></returns>
         string GetVariable(string name);
+        /// <summary>
+        /// 获取语句
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        string GetStatement(Expression expression);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Suyaa.Data.Expressions;
+﻿using Suyaa.Data.DbWorks.Dependency;
+using Suyaa.Data.Expressions;
 using System;
 using System.Collections;
 using System.Collections.Generic;

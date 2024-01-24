@@ -1,6 +1,7 @@
 ﻿using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Suyaa.Data.PostgreSQL.Providers
@@ -18,6 +19,17 @@ namespace Suyaa.Data.PostgreSQL.Providers
         public string GetName(string name)
         {
             return "\"" + name + "\"";
+        }
+
+        /// <summary>
+        /// 获取语句
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetStatement(Expression expression)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

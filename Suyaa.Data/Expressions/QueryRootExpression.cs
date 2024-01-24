@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Suyaa.Data.Queries;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -27,7 +28,19 @@ namespace Suyaa.Data.Expressions
         /// <param name="entityType"></param>
         public QueryRootExpression(Type entityType)
         {
-            Type = typeof(IQueryable<>).MakeGenericType(entityType);
+            Type = typeof(EntityQueryable<>).MakeGenericType(entityType);
         }
+    }
+
+    /// <summary>
+    /// 查询根表达式
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class QueryRootExpression<T> : QueryRootExpression
+    {
+        /// <summary>
+        /// 查询根表达式
+        /// </summary>
+        public QueryRootExpression() : base(typeof(T)) { }
     }
 }

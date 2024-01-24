@@ -12,15 +12,9 @@ namespace Suyaa.Data.Oracle.Providers
     /// </summary>
     public class OracleProvider : IDbProvider
     {
-        private OracleExpressionProvider? _expressionProvider;
         private OracleScriptProvider? _scriptProvider;
         private OracleExecuteProvider? _executeProvider;
         private IDbMaintenanceProvider? _maintenanceProvider;
-
-        /// <summary>
-        /// 查询供应商
-        /// </summary>
-        public IDbExpressionProvider ExpressionProvider => _expressionProvider ??= new OracleExpressionProvider();
 
         /// <summary>
         /// 脚本供应商
@@ -28,7 +22,7 @@ namespace Suyaa.Data.Oracle.Providers
         public IDbScriptProvider ScriptProvider => _scriptProvider ??= new OracleScriptProvider();
 
         /// <summary>
-        /// Sql仓库供应商
+        /// 执行供应商
         /// </summary>
         public IDbExecuteProvider ExecuteProvider => _executeProvider ??= new OracleExecuteProvider();
 

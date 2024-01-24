@@ -11,11 +11,10 @@ namespace Suyaa.Data.Repositories.Dependency
     public interface IDbExpressionProvider
     {
         /// <summary>
-        /// 执行查询
+        /// 获取脚本
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
-        TResult Query<TResult>(Expression expression);
+        string GetScript<TResult>(Expression expression);
     }
 }
