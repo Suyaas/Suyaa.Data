@@ -154,5 +154,41 @@ namespace SuyaaTest.Oracle
                 _output.WriteLine(item);
             }
         }
+
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        [Fact]
+        public void QuerySelect()
+        {
+            // 执行方法
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
+            var repository = sy.Data.CreateRepository<ProductFamily>(work);
+            //var query = from pf in repository.Query()
+            //            select pf;
+            var list = repository.Query().Select(d => new ProductFamilyDto { Name = d.ProductFamilyName }).ToList();
+            foreach (var item in list)
+            {
+                _output.WriteLine(item.Name);
+            }
+        }
+
+        /// <summary>
+        /// 带条件查询列表
+        /// </summary>
+        [Fact]
+        public void QueryWhereSelect()
+        {
+            // 执行方法
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
+            var repository = sy.Data.CreateRepository<ProductFamily>(work);
+            //var query = from pf in repository.Query()
+            //            select pf;
+            var list = repository.Query().Where(d => d.ProductFamilyName.Contains("in")).Select(d => new ProductFamilyDto { Name = d.ProductFamilyName }).ToList();
+            foreach (var item in list)
+            {
+                _output.WriteLine(item.Name);
+            }
+        }
     }
 }

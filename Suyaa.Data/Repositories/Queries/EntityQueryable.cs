@@ -56,7 +56,7 @@ namespace Suyaa.Data.Queries
         {
             Provider = provider;
             ElementType = typeof(T);
-            Expression = new EntityQueryRootExpression(dbEntityModel);
+            Expression = new QueryRootExpression(dbEntityModel);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Suyaa.Data.Queries
         {
             Provider = provider;
             ElementType = typeof(T);
-            Expression = new EntityQueryRootExpression<T>(entityModelFactory);
+            Expression = new QueryRootExpression<T>(entityModelFactory);
         }
 
         /// <summary>

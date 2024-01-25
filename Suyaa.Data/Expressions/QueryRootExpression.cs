@@ -1,4 +1,6 @@
-﻿using Suyaa.Data.Helpers;
+﻿using Suyaa.Data.Compilers.Dependency;
+using Suyaa.Data.Expressions.Dependency;
+using Suyaa.Data.Helpers;
 using Suyaa.Data.Models;
 using Suyaa.Data.Models.Dependency;
 using Suyaa.Data.Queries;
@@ -14,7 +16,7 @@ namespace Suyaa.Data.Expressions
     /// <summary>
     /// 查询根表达式
     /// </summary>
-    public class EntityQueryRootExpression : Expression
+    public class QueryRootExpression : Expression, IHaveAlias
     {
         /// <summary>
         /// 表达式类型
@@ -29,13 +31,18 @@ namespace Suyaa.Data.Expressions
         /// <summary>
         /// 类型建模
         /// </summary>
-        public EntityModel Model { get; }
+        public DbEntityModel Model { get; }
+
+        /// <summary>
+        /// 别名
+        /// </summary>
+        public string Alias { get; set; } = string.Empty;
 
         /// <summary>
         /// 查询根表达式
         /// </summary>
         /// <param name="model"></param>
-        public EntityQueryRootExpression(EntityModel model)
+        public QueryRootExpression(DbEntityModel model)
         {
             Type = typeof(EntityQueryable<>).MakeGenericType(model.Type);
             Model = model;
@@ -46,12 +53,12 @@ namespace Suyaa.Data.Expressions
     /// 查询根表达式
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class EntityQueryRootExpression<T> : EntityQueryRootExpression
+    public class QueryRootExpression<T> : QueryRootExpression
     {
         /// <summary>
         /// 查询根表达式
         /// </summary>
-        public EntityQueryRootExpression(IEntityModelFactory entityModelFactory) : base(entityModelFactory.GetEntity<T>())
+        public QueryRootExpression(IEntityModelFactory entityModelFactory) : base((DbEntityModel)entityModelFactory.GetEntity<T>())
         {
         }
     }

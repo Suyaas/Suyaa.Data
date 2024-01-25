@@ -1,7 +1,9 @@
-﻿using Suyaa.Data.DbWorks.Dependency;
+﻿using Suyaa.Data.Compilers;
+using Suyaa.Data.DbWorks.Dependency;
 using Suyaa.Data.DbWorks.Helpers;
 using Suyaa.Data.Expressions;
 using Suyaa.Data.Helpers;
+using Suyaa.Data.Models;
 using Suyaa.Data.Models.Dependency;
 using Suyaa.Data.Repositories.Dependency;
 using System;
@@ -21,6 +23,7 @@ namespace Suyaa.Data.Queries
         private readonly IEntityModelFactory _entityModelFactory;
         private readonly IDbWork _work;
         private static readonly Type _enumerableType = typeof(IEnumerable<>);
+        private static readonly Type _queryableType = typeof(Queryable);
 
         // 数据库查询供应商
         private readonly IDbScriptProvider _dbScriptProvider;
@@ -52,6 +55,26 @@ namespace Suyaa.Data.Queries
             throw new NotImplementedException();
         }
 
+        // 获取函数执行表达式
+        private Expression GetMethodCallExpression(MethodCallExpression methodCallExpression, EntityModel model)
+        {
+            // Queryable函数
+            if (methodCallExpression.Method.DeclaringType == _queryableType)
+            {
+                var methodCallName = methodCallExpression.Method.Name;
+                switch (methodCallName)
+                {
+                    // Select
+                    case nameof(Queryable.Select):
+                        return new SelectExpression(model, methodCallExpression.Arguments[0], methodCallExpression.Arguments[1]);
+                    // Where
+                    case nameof(Queryable.Where):
+                        return new WhereExpression(model, methodCallExpression.Arguments[0], methodCallExpression.Arguments[1]);
+                }
+            }
+            return methodCallExpression;
+        }
+
         /// <summary>
         /// 创建查询
         /// </summary>
@@ -60,7 +83,13 @@ namespace Suyaa.Data.Queries
         /// <returns></returns>
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
-            return new EntityQueryable<TElement>(this, expression);
+            var model = _entityModelFactory.GetEntity(typeof(TElement));
+            var treatExpression = expression switch
+            {
+                MethodCallExpression methodCallExpression => GetMethodCallExpression(methodCallExpression, model),
+                _ => expression,
+            };
+            return new EntityQueryable<TElement>(this, treatExpression);
         }
 
         /// <summary>
@@ -93,7 +122,7 @@ namespace Suyaa.Data.Queries
                 if (genericTypeDefinition == _enumerableType)
                 {
                     var genericType = type.GenericTypeArguments[0];
-                    var model = _entityModelFactory.GetDbEntity(genericType);
+                    var model = _entityModelFactory.GetEntity(genericType);
                     var typeList = typeof(List<>);
                     var typeInstance = typeList.MakeGenericType(type.GenericTypeArguments);
                     var mothedAdd = typeInstance.GetMethod("Add");
