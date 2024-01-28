@@ -1,4 +1,5 @@
-﻿using Suyaa.Data.Entities;
+﻿using Suyaa.Data.Compilers.Sets;
+using Suyaa.Data.Entities;
 using Suyaa.Data.Expressions;
 using Suyaa.Data.Models;
 using Suyaa.Data.Repositories.Dependency;
@@ -260,13 +261,14 @@ namespace Suyaa.Data.Helpers
         /// 获取脚本字符串值
         /// </summary>
         /// <param name="provider"></param>
-        /// <param name="value"></param>
+        /// <param name="valueSet"></param>
         /// <returns></returns>
-        public static string GetScriptValue(this IDbScriptProvider provider, object? value)
+        public static string GetScriptValue(this IDbScriptProvider provider, ValueSet valueSet)
         {
-            if (value is null) return "NULL";
-            if (value is string str) return provider.GetStringValue(str);
-            return Convert.ToString(value);
+            if (valueSet.ValueType == Compilers.Sets.ValueType.Null) return "NULL";
+            if (valueSet.ValueType == Compilers.Sets.ValueType.StringValue) return provider.GetStringValue((string)valueSet.Value!);
+            if (valueSet.ValueType == Compilers.Sets.ValueType.RegularValue) return Convert.ToString(valueSet.Value);
+            return (string)valueSet.Value!;
         }
 
         // 从对象字段或属性中获取内容

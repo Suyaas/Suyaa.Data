@@ -16,8 +16,11 @@ namespace Suyaa.Data.Expressions
     /// <summary>
     /// 查询根表达式
     /// </summary>
-    public class QueryRootExpression : Expression, IHaveAlias
+    public class QueryRootExpression : Expression, IHaveAlias, IHaveModel
     {
+        private readonly DbEntityModel _model;
+        private QueryRootModel? _queryRootModel;
+
         /// <summary>
         /// 表达式类型
         /// </summary>
@@ -31,7 +34,7 @@ namespace Suyaa.Data.Expressions
         /// <summary>
         /// 类型建模
         /// </summary>
-        public DbEntityModel Model { get; }
+        public QueryRootModel Model => _queryRootModel ??= new QueryRootModel(_model, Alias);
 
         /// <summary>
         /// 别名
@@ -45,7 +48,7 @@ namespace Suyaa.Data.Expressions
         public QueryRootExpression(DbEntityModel model)
         {
             Type = typeof(EntityQueryable<>).MakeGenericType(model.Type);
-            Model = model;
+            _model = model;
         }
     }
 

@@ -17,6 +17,11 @@ namespace Suyaa.Data.Expressions
         public override ExpressionType NodeType => ExpressionType.Call;
 
         /// <summary>
+        /// 类型
+        /// </summary>
+        public override Type Type { get; }
+
+        /// <summary>
         /// 实体建模
         /// </summary>
         public EntityModel Model { get; }
@@ -34,8 +39,9 @@ namespace Suyaa.Data.Expressions
         /// <summary>
         /// Select表达式
         /// </summary>
-        public SelectExpression(EntityModel model, Expression query, Expression selector)
+        public SelectExpression(Type type, EntityModel model, Expression query, Expression selector)
         {
+            Type = type;
             Model = model;
             Query = query;
             Selector = selector;

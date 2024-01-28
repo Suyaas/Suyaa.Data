@@ -1,4 +1,5 @@
 ﻿using Suyaa.Data.Compilers.Sets;
+using Suyaa.Data.Expressions;
 using Suyaa.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,6 @@ namespace Suyaa.Data.Compilers.Dependency
         /// <param name="expression"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        IEnumerable<SelectColumnSet> GetColumns(T expression, DbEntityModel model);
+        IEnumerable<SelectColumnSet> GetColumns(T expression, QueryRootModel model);
     }
 }

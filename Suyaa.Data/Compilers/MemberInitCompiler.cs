@@ -18,7 +18,7 @@ namespace Suyaa.Data.Compilers
     public sealed class MemberInitCompiler : ExpressionCompiler<MemberInitExpression>, IColumnsable<MemberInitExpression>
     {
         // 获取列信息
-        private SelectColumnSet GetMemberAssignmentColumn(MemberAssignment memberAssignment, DbEntityModel model)
+        private SelectColumnSet GetMemberAssignmentColumn(MemberAssignment memberAssignment, QueryRootModel model)
         {
             var member = memberAssignment.Member;
             var expression = memberAssignment.Expression;
@@ -38,7 +38,7 @@ namespace Suyaa.Data.Compilers
         /// <param name="expression"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public IEnumerable<SelectColumnSet> GetColumns(MemberInitExpression expression, DbEntityModel model)
+        public IEnumerable<SelectColumnSet> GetColumns(MemberInitExpression expression, QueryRootModel model)
         {
             List<SelectColumnSet> columns = new List<SelectColumnSet>();
             var memberBindings = expression.Bindings;

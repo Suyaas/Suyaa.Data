@@ -1,11 +1,13 @@
 ﻿using Suyaa.Data.Compilers.Builders;
 using Suyaa.Data.Compilers.Dependency;
+using Suyaa.Data.Compilers.Sets;
 using Suyaa.Data.Expressions;
 using Suyaa.Data.Models;
 using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -63,6 +65,58 @@ namespace Suyaa.Data.Compilers
             where TExpression : Expression
         {
             return StatementBuilder.Create(Provider, expression).SetVariableBuilder(VariableBuilder);
+        }
+
+        /// <summary>
+        /// 获取表达式的值
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="NullException"></exception>
+        /// <exception cref="ExpressionNodeNotSupportedException"></exception>
+        public ValueSet GetExpressionValue(Expression expression, QueryRootModel model)
+        {
+            switch (expression)
+            {
+                // 一元表达式
+                case UnaryExpression unaryExpression:
+                    return CreateStatementBuilder(unaryExpression).GetValue<UnaryCompiler>(model);
+                // 二元表达式
+                case BinaryExpression binaryExpression:
+                    return ValueSet.Create(Sets.ValueType.Expression, "(" + CreateStatementBuilder(binaryExpression).GetValue<BinaryCompiler>(model).ToString() + ")");
+                // 函数表达式
+                case MethodCallExpression methodCallExpression:
+                    return CreateStatementBuilder(methodCallExpression).GetValue<MethodCallCompiler>(model);
+                // 成员变量
+                case MemberExpression memberExpression:
+                    return CreateStatementBuilder(memberExpression).GetValue<MemberCompiler>(model);
+                // 常量
+                case ConstantExpression constantExpression:
+                    return CreateStatementBuilder(constantExpression).GetValue<ConstantCompiler>(model);
+                // 建模参数
+                case ParameterExpression _:
+                    return ValueSet.Create(Sets.ValueType.Object, model);
+                default: throw new ExpressionNodeNotSupportedException(expression.NodeType);
+            }
+        }
+
+        /// <summary>
+        /// 从对象字段或属性中获取内容
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        protected static object? GetFieldOrPropertyValue(object obj, string name)
+        {
+            Type type = obj.GetType();
+            // 尝试从字段获取
+            var field = type.GetField(name);
+            if (field != null) return field.GetValue(obj);
+            // 尝试从属性获取
+            var pro = type.GetProperty(name);
+            if (pro != null) return pro.GetValue(obj);
+            return null;
         }
     }
 

@@ -23,7 +23,7 @@ namespace Suyaa.Data.Compilers
         /// <param name="expression"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public IEnumerable<SelectColumnSet> GetColumns(NewExpression expression, DbEntityModel model)
+        public IEnumerable<SelectColumnSet> GetColumns(NewExpression expression, QueryRootModel model)
         {
             List<SelectColumnSet> columns = new List<SelectColumnSet>();
             foreach (var member in expression.Members)

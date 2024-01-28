@@ -66,10 +66,10 @@ namespace Suyaa.Data.Queries
                 {
                     // Select
                     case nameof(Queryable.Select):
-                        return new SelectExpression(model, methodCallExpression.Arguments[0], methodCallExpression.Arguments[1]);
+                        return new SelectExpression(methodCallExpression.Type, model, methodCallExpression.Arguments[0], methodCallExpression.Arguments[1]);
                     // Where
                     case nameof(Queryable.Where):
-                        return new WhereExpression(model, methodCallExpression.Arguments[0], methodCallExpression.Arguments[1]);
+                        return new WhereExpression(methodCallExpression.Type, model, methodCallExpression.Arguments[0], methodCallExpression.Arguments[1]);
                 }
             }
             return methodCallExpression;
