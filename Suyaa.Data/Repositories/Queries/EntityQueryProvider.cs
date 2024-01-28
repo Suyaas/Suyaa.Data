@@ -104,6 +104,16 @@ namespace Suyaa.Data.Queries
         }
 
         /// <summary>
+        /// 获取Sql语句
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        public string GetSqlStatement(Expression expression)
+        {
+            return _compiler.GetStatement(expression);
+        }
+
+        /// <summary>
         /// 执行查询
         /// </summary>
         /// <typeparam name="TResult"></typeparam>

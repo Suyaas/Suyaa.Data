@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -72,6 +73,35 @@ namespace Suyaa.Data.Compilers
             return $"{name} = {value}";
         }
 
+        // 获取函数查询条件
+        private string GetMemberMethodPredicate(MemberExpression memberExpression, MethodInfo method, ReadOnlyCollection<Expression> argExpressions, QueryRootModel model)
+        {
+            var obj = CreateStatementBuilder(memberExpression).GetValue<MemberCompiler>(model);
+            if (obj.ValueType != Sets.ValueType.Object) throw new ExpressionNodeNotSupportedException($"Call.{method.Name}");
+            List<object?> args = new List<object?>();
+            foreach (var expression in argExpressions)
+            {
+                var arg = GetExpressionValue(expression, model);
+                args.Add(arg.Value);
+            }
+            var value = method.Invoke(obj.Value, args.ToArray());
+            if (value is null) return "NULL";
+            if (value is string str) return Provider.GetStringValue(str);
+            return Convert.ToString(value);
+        }
+
+        // 获取函数查询条件
+        private string GetMethodPredicate(Expression expression, MethodInfo method, ReadOnlyCollection<Expression> args, QueryRootModel model)
+        {
+            Type type = expression.GetType();
+            switch (expression)
+            {
+                case MemberExpression memberExpression:
+                    return GetMemberMethodPredicate(memberExpression, method, args, model);
+            }
+            throw new ExpressionNodeNotSupportedException($"Call.{method.Name}");
+        }
+
         /// <summary>
         /// 获取查询条件
         /// </summary>
@@ -98,7 +128,7 @@ namespace Suyaa.Data.Compilers
             {
                 "Contains" => GetContainsMethodScript(expression, model),
                 "Equals" => GetEqualsMethodScrip(expression, model),
-                _ => throw new ExpressionNodeNotSupportedException($"Call.{callMethod.Name}"),
+                _ => GetMethodPredicate(expression.Object, callMethod, expression.Arguments, model),
             };
         }
 

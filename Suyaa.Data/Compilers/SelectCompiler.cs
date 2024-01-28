@@ -125,8 +125,9 @@ namespace Suyaa.Data.Compilers
                     string unaryStatement = GetWhereStatement(unaryExpression, whereExpression.Query);
                     if (!unaryStatement.IsNullOrWhiteSpace())
                     {
-                        sb.Append(" AND ");
+                        sb.Append(" AND (");
                         sb.Append(unaryStatement);
+                        sb.Append(')');
                     }
                     break;
             }

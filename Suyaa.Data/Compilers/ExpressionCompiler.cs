@@ -104,18 +104,19 @@ namespace Suyaa.Data.Compilers
         /// <summary>
         /// 从对象字段或属性中获取内容
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="valueSet"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        protected static object? GetFieldOrPropertyValue(object obj, string name)
+        protected static object? GetFieldOrPropertyValue(ValueSet valueSet, string name)
         {
-            Type type = obj.GetType();
+            if (valueSet.Value is null) return null;
+            Type type = valueSet.Value.GetType();
             // 尝试从字段获取
             var field = type.GetField(name);
-            if (field != null) return field.GetValue(obj);
+            if (field != null) return field.GetValue(valueSet.Value);
             // 尝试从属性获取
             var pro = type.GetProperty(name);
-            if (pro != null) return pro.GetValue(obj);
+            if (pro != null) return pro.GetValue(valueSet.Value);
             return null;
         }
     }

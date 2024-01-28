@@ -6,6 +6,7 @@ using Suyaa.Data.Repositories.Dependency;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -39,7 +40,9 @@ namespace Suyaa.Data.Queries
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this.Provider.Execute<IEnumerable<T>>(Expression).GetEnumerator();
+            var list = this.Provider.Execute<IEnumerable<T>>(Expression);
+            if (list is null) list = new List<T>();
+            return list.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -52,7 +55,7 @@ namespace Suyaa.Data.Queries
         /// </summary>
         /// <param name="provider"></param>
         /// <param name="dbEntityModel"></param>
-        public EntityQueryable(IQueryProvider provider, DbEntityModel dbEntityModel)
+        public EntityQueryable(EntityQueryProvider provider, DbEntityModel dbEntityModel)
         {
             Provider = provider;
             ElementType = typeof(T);
@@ -64,7 +67,7 @@ namespace Suyaa.Data.Queries
         /// </summary>
         /// <param name="provider"></param>
         /// <param name="entityModelFactory"></param>
-        public EntityQueryable(IQueryProvider provider, IEntityModelFactory entityModelFactory)
+        public EntityQueryable(EntityQueryProvider provider, IEntityModelFactory entityModelFactory)
         {
             Provider = provider;
             ElementType = typeof(T);
@@ -76,7 +79,7 @@ namespace Suyaa.Data.Queries
         /// </summary>
         /// <param name="provider"></param>
         /// <param name="expression"></param>
-        public EntityQueryable(IQueryProvider provider, Expression expression)
+        public EntityQueryable(EntityQueryProvider provider, Expression expression)
         {
             Provider = provider;
             ElementType = typeof(T);

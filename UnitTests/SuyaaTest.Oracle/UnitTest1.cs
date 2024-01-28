@@ -6,6 +6,7 @@ using Suyaa.Data.Repositories;
 using SuyaaTest.Oracle.Entities;
 using System.Configuration;
 using Xunit.Abstractions;
+using Suyaa.Data.Repositories.Helpers;
 
 namespace SuyaaTest.Oracle
 {
@@ -200,9 +201,59 @@ namespace SuyaaTest.Oracle
             // 执行方法
             using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
             var repository = sy.Data.CreateRepository<ProductFamily>(work);
-            //var query = from pf in repository.Query()
-            //            select pf;
-            var list = repository.Query().Where(d => d.ProductFamilyName == "90080").Select(d => new ProductFamilyDto { Name = d.ProductFamilyName }).ToList();
+            var query = from pf in repository.Query()
+                        where pf.ProductFamilyName == "90080"
+                        select new ProductFamilyDto { Name = pf.ProductFamilyName };
+            var sql = query.ToSql();
+            _output.WriteLine(sql);
+            var list = query.ToList();
+            //var list = repository.Query().Where(d => d.ProductFamilyName == "90080").Select(d => new ProductFamilyDto { Name = d.ProductFamilyName }).ToList();
+            foreach (var item in list)
+            {
+                _output.WriteLine(item.Name);
+            }
+        }
+
+        /// <summary>
+        /// 带条件查询列表
+        /// </summary>
+        [Fact]
+        public void QueryWhere2Select()
+        {
+            // 执行方法
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
+            var repository = sy.Data.CreateRepository<ProductFamily>(work);
+            List<string> names = new List<string>() { "90080" };
+            var query = from pf in repository.Query()
+                        where pf.ProductFamilyName == names[0]
+                        select new ProductFamilyDto { Name = pf.ProductFamilyName };
+            var sql = query.ToSql();
+            _output.WriteLine(sql);
+            var list = query.ToList();
+            //var list = repository.Query().Where(d => d.ProductFamilyName == "90080").Select(d => new ProductFamilyDto { Name = d.ProductFamilyName }).ToList();
+            foreach (var item in list)
+            {
+                _output.WriteLine(item.Name);
+            }
+        }
+
+        /// <summary>
+        /// 带条件查询列表
+        /// </summary>
+        [Fact]
+        public void QueryWhere3Select()
+        {
+            // 执行方法
+            using var work = sy.Data.CreateWork(DatabaseType.Oracle, ConnectionString);
+            var repository = sy.Data.CreateRepository<ProductFamily>(work);
+            string name = "90080";
+            var query = from pf in repository.Query()
+                        where pf.ProductFamilyName != null && pf.ProductFamilyName == name
+                        select new ProductFamilyDto { Name = pf.ProductFamilyName };
+            var sql = query.ToSql();
+            _output.WriteLine(sql);
+            var list = query.ToList();
+            //var list = repository.Query().Where(d => d.ProductFamilyName == "90080").Select(d => new ProductFamilyDto { Name = d.ProductFamilyName }).ToList();
             foreach (var item in list)
             {
                 _output.WriteLine(item.Name);
