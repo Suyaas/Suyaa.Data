@@ -13,6 +13,11 @@ namespace Suyaa.Data.Sqlite.Providers
     /// </summary>
     public class SqliteExpressionProvider : IDbExpressionProvider
     {
+        public string GetScript<TResult>(Expression expression)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// 获取
         /// </summary>
